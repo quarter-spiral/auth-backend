@@ -34,3 +34,12 @@ Doorkeeper.configure do
   # Check out the wiki for mor information on customization
   # client_credentials :from_basic, :from_params
 end
+
+make_doorkeeper_apps_administrable = lambda do
+  Doorkeeper::Application.class_eval do
+    attr_accessible :name, :redirect_uri, :uid, :secret, as: :admin
+  end
+end
+make_doorkeeper_apps_administrable.call
+
+ActionDispatch::Callbacks.to_prepare(make_doorkeeper_apps_administrable) if Rails.env == 'development'
