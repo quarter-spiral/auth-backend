@@ -19,7 +19,7 @@ gem 'doorkeeper', '~> 0.4.2'
 gem 'devise'
 gem 'uuid'
 gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails'
-gem 'activeadmin'
+gem 'typus', :git => 'git://github.com/fesplugas/typus.git'
 
 gem 'pg'
 
