@@ -2,7 +2,8 @@ Doorkeeper.configure do
   # This block will be called to check whether the
   # resource owner is authenticated or not
   resource_owner_authenticator do |routes|
-    current_user || redirect_to(routes.new_user_session_url)
+    redirect_uri = "#{request.protocol}#{request.host_with_port}#{request.fullpath}"
+    current_user || redirect_to(routes.new_user_session_url(redirect_uri: redirect_uri))
   end
 
   # If you want to restrict the access to the web interface for
