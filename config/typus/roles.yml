@@ -5,4 +5,4 @@ Role:
     default: name
     form: name
   relationships: user_roles, users
-  application: Application
+  application:
