@@ -8,13 +8,12 @@ class ApplicationController < ActionController::Base
     redirect_url = raw_after_sign_in_path_for(resource_or_scope)
 
     params_url = params[:redirect_uri]
+    referer_url = request.env['HTTP_REFERER']
 
     if params_url && request.host == URI.parse(params_url).host
       redirect_url = params_url
-    else
-      referer = request.env['HTTP_REFERER']
-      referer_uri = URI.parse(referer)
-      redirect_url = referer if request.host == URI.parse(referer).host
+    elsif referer_url && request.host == URI.parse(referer_url).host
+      redirect_url = referer_url
     end
 
     redirect_url
