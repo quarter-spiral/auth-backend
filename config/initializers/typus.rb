@@ -24,6 +24,9 @@ Typus.setup do |config|
   # Authentication: +:none+, +:http_basic+
   # Run `rails g typus:migration` if you need an advanced authentication system.
   # config.authentication = :none
+  config.authentication = :devise
+  config.user_class_name = "User"
+
 
   # Define username and password for +:http_basic+ authentication.
   # config.username = "admin"
@@ -37,4 +40,25 @@ Typus.setup do |config|
   # config.pagination = { :previous_label => "&larr; " + Typus::I18n.t("Previous"),
   #                       :next_label => Typus::I18n.t("Next") + " &rarr;" }
 
+end
+
+module Typus
+  module Authentication
+    module Devise
+
+      protected
+
+      include Base
+
+      def admin_user
+        current_user
+      end
+
+      def authenticate
+        authenticate_user!
+        redirect_to root_path if current_user && !current_user.admin?
+      end
+
+    end
+  end
 end

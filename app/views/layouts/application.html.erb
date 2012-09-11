@@ -48,8 +48,9 @@
           </div>
           <div class="nav-collapse">
             <ul class="nav">
-              <li><a href="#">Bla</a></li>
-              <li><a href="#">Blub</a></li>
+              <% if current_user && current_user.admin? %>
+                <li><a href="/admin">Administration</a></li>
+              <% end %>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

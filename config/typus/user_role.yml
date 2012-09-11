@@ -1,8 +1,0 @@
-# Use the README file as a reference to customize settings.
-
-UserRole:
-  fields:
-    default: role
-    form: user, role
-  relationships:
-  application: 
