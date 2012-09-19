@@ -13,3 +13,10 @@
  *= require responsive
  *= require_tree .
  */
+
+
+ footer {
+  margin-top:4em;
+  padding-top:1em;
+  border-top:1px solid #DDD;
+}
