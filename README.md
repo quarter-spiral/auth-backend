@@ -1,29 +1,34 @@
 # Auth::Backend
 
-TODO: Write a gem description
+Authentication backend
 
-## Installation
+## Test interface
 
-Add this line to your application's Gemfile:
+For using the ``Auth::Backend`` in tests of other services it is possible to enable a test interface that gives access to a very basic CRUD interface for users that can be reached without any authentication. You should be very careful when using this. All your data is at stake! :scream_cat:!
 
-    gem 'auth-backend'
+As an example to access the backend with the enabled test interface via Rack::Client use:
 
-And then execute:
+```ruby
+client = Rack::Client.new {run Auth::Backend::App.new(test: true)}
+```
 
-    $ bundle
+### Test API
 
-Or install it yourself as:
+All parameters most be sent form encoded.
 
-    $ gem install auth-backend
+#### Add a user
 
-## Usage
+**POST** to ``/_tests_/users``
 
-TODO: Write usage instructions here
+Possible parameters: ``name``, ``email``, ``password``,
+``password_confirmation``, ``admin``.
 
-## Contributing
+#### List all users
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+**GET** to ``/_tests_/users``.
+
+Response is an JSON array.
+
+#### Delete a user
+
+**DELETE** to ``/_tests_/users/:id``
