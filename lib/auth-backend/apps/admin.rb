@@ -73,19 +73,19 @@ module Auth::Backend
       end
 
       get '/apps' do
-        @apps = Songkick::OAuth2::Model::Client.page(params[:page])
+        @apps = OauthApp.page(params[:page])
 
         erb :'admin/apps/index'
       end
 
       get '/apps/new' do
-        @app = Songkick::OAuth2::Model::Client.new
+        @app = OauthApp.new
 
         erb :'admin/apps/new'
       end
 
       post '/apps' do
-        @app = Songkick::OAuth2::Model::Client.new(params[:app])
+        @app = OauthApp.new(params[:app])
 
         if @app.save
           flash[:success] = "App created. App secret is: #{@app.client_secret} This information will not be stored!"
@@ -97,13 +97,13 @@ module Auth::Backend
       end
 
       get '/apps/:id/edit' do
-        @app = Songkick::OAuth2::Model::Client.find(params[:id])
+        @app = OauthApp.find(params[:id])
 
         erb :'admin/apps/edit'
       end
 
       put '/apps/:id' do
-        @app = Songkick::OAuth2::Model::Client.find(params[:id])
+        @app = OauthApp.find(params[:id])
 
         @app.update_attributes(params[:app])
 
@@ -117,7 +117,7 @@ module Auth::Backend
       end
 
       delete '/apps/:id' do
-        @app = Songkick::OAuth2::Model::Client.find(params[:id])
+        @app = OauthApp.find(params[:id])
         @app.destroy
 
         flash[:success] = "App deleted."

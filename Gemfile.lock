@@ -10,7 +10,7 @@ GIT
 
 GIT
   remote: https://github.com/quarter-spiral/sinatra_warden.git
-  revision: d9b33b027913e551d83863bbebd93e2931c01a64
+  revision: 70d3037017c2ca6f69849e4e1e6deb438f242f16
   specs:
     sinatra_warden (0.3.2)
       sinatra (>= 1.0.0)
