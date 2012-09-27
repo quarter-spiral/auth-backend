@@ -1,0 +1,11 @@
+<div class="control-group">
+  <label class="control-label" for="input<%=h id.capitalize %>"><%=h label %></label>
+  <div class="controls">
+    <% if type == 'checkbox' %>
+      <input type="hidden" name="<%= namespace %>[<%=h id %>]" value="false" />
+      <input type="<%=h type %>" id="input<%=h id.capitalize %>" placeholder="<%=h label %>" name="<%= namespace %>[<%=h id %>]" value="true" <% if value %>checked="checked"<% end %> />
+    <% else %>
+      <input type="<%=h type %>" id="input<%=h id.capitalize %>" placeholder="<%=h label %>" name="<%= namespace %>[<%=h id %>]" value="<%=h value %>" />
+    <% end %>
+  </div>
+</div>

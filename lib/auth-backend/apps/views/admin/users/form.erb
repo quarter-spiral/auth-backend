@@ -1,0 +1,27 @@
+<% if current_user.admin? %>
+  <% url = @user.new_record? ? '/admin/users' : "/admin/users/#{@user.id}" %>
+  <% method = @user.new_record? ? 'post' : 'put' %>
+<% else %>
+  <% url = "/profile" %>
+  <% method = "put" %>
+<% end %>
+
+<form action="<%=h url %>" method="POST" class="form-horizontal">
+  <input type="hidden" name="_method" value="<%= method %>"/>
+
+  <legend><%= title %></legend>
+
+  <%= form_field 'user', 'name', 'Name', @user.name %>
+
+  <%= form_field 'user', 'email', 'eMail', @user.email, type: 'email' %>
+
+  <%= form_field 'user', 'password', 'Password', '', type: 'password' %>
+
+  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
+
+  <% if current_user.admin? && current_user != @user %>
+    <%= form_field 'user', 'admin', 'Admin', @user.admin, type: 'checkbox' %>
+  <% end %>
+
+  <button class="btn"><%= button_label %></button>
+</form>

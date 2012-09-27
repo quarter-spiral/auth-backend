@@ -1,0 +1,23 @@
+<p>The application <%= @oauth2.client.name %> wants the following permissions:</p>
+
+<ul>
+  <% @oauth2.scopes.each do |scope| %>
+    <li><%= PERMISSION_UI_STRINGS[scope] %></li>
+  <% end %>
+</ul>
+
+<form action="/oauth/allow" method="post">
+  <% @oauth2.params.each do |key, value| %>
+    <input type="hidden" name="<%= key %>" value="<%= value %>" />
+  <% end %>
+  <input type="hidden" name="allow" value='1' />
+  <button class="btn btn-success">Allow</button>
+</form>
+
+<form action="/oauth/allow" method="post">
+  <% @oauth2.params.each do |key, value| %>
+    <input type="hidden" name="<%= key %>" value="<%= value %>" />
+  <% end %>
+  <input type="hidden" name="allow" value='0' />
+  <button class="btn btn-danger">Deny</button>
+</form>

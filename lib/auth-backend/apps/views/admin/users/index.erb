@@ -1,0 +1,38 @@
+<h1>Users</h1>
+
+<a class="btn btn-success" href="/admin/users/new">
+  <i class="icon-plus-sign"></i> Add User
+</a>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>eMail</th>
+      <th>UUID</th>
+      <th>Role</th>
+      <th>Tools</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%=h user.name %></td>
+        <td><%=h user.email %></td>
+        <td><%=h user.uuid %></td>
+        <td><%= user.admin ? 'Admin' : 'User' %></td>
+        <td>
+          <a href="/admin/users/<%= user.id %>/edit" class="btn">
+            <i class="icon-pencil"></i> Edit
+          </a>
+
+          <a href="/admin/users/<%= user.id %>" data-method="delete" data-confirm="Delete user?" class="btn btn-danger">
+            <i class="icon-trash"></i>
+          </a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @users %>

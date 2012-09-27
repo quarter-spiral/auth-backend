@@ -1,0 +1,12 @@
+<form action="/signup" method="POST" class="form-horizontal">
+  <legend>Sign Up</legend>
+  <%= form_field 'user', 'name', 'Name', @user.name %>
+
+  <%= form_field 'user', 'email', 'eMail', @user.email, type: 'email' %>
+
+  <%= form_field 'user', 'password', 'Password', '', type: 'password' %>
+
+  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
+
+  <button class="btn btn-success">Sign up</button>
+</form>
