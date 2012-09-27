@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:quarter-spiral/oauth2-provider.git
+  remote: https://github.com/quarter-spiral/oauth2-provider.git
   revision: 5a3add849c4cba541c373ce7aea96bf384761104
   specs:
     songkick-oauth2-provider (0.10.0)
@@ -9,7 +9,7 @@ GIT
       rack
 
 GIT
-  remote: git@github.com:quarter-spiral/sinatra_warden
+  remote: https://github.com/quarter-spiral/sinatra_warden.git
   revision: d9b33b027913e551d83863bbebd93e2931c01a64
   specs:
     sinatra_warden (0.3.2)

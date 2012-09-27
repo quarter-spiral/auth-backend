@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in auth-backend.gemspec
 gemspec
 
-gem 'sinatra_warden', git: 'git@github.com:quarter-spiral/sinatra_warden'
-gem 'songkick-oauth2-provider', git: 'git@github.com:quarter-spiral/oauth2-provider.git'
+gem 'sinatra_warden', git: 'https://github.com/quarter-spiral/sinatra_warden.git'
+gem 'songkick-oauth2-provider', git: 'https://github.com/quarter-spiral/oauth2-provider.git'
 
 group :development do
   gem 'rake'
