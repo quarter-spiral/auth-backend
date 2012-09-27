@@ -19,7 +19,7 @@ GIT
 PATH
   remote: .
   specs:
-    auth-backend (0.0.1)
+    auth-backend (0.0.2)
       activerecord
       bcrypt-ruby
       json
