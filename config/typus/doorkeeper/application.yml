@@ -1,8 +1,0 @@
-# Use the README file as a reference to customize settings.
-
-Doorkeeper::Application:
-  fields:
-    default: name, uid, secret
-    form: name, uid, secret, redirect_uri
-  relationships:
-  application: Application
