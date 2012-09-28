@@ -135,16 +135,30 @@ describe "Authentication" do
       response.status.must_equal 403
     end
 
-    it "can get a token with valid credentials" do
-      username = @user['name']
-      password = @password
+    describe "correctly authenticated" do
+      before do
+        username = @user['name']
+        password = @password
 
-      authed_client = Rack::Client.new {
-        run Rack::Client::Auth::Basic.new(APP, username, password, true)
-      }
-      response = authed_client.post("http://auth-backend.dev/api/v1/token")
-      response.status.must_equal 201
-      JSON.parse(response.body)['token'].wont_be_nil
+        authed_client = Rack::Client.new {
+          run Rack::Client::Auth::Basic.new(APP, username, password, true)
+        }
+        @response = authed_client.post("http://auth-backend.dev/api/v1/token")
+        @token = JSON.parse(@response.body)['token']
+      end
+      it "can get a token with valid credentials" do
+        @response.status.must_equal 201
+        @token.wont_be_nil
+      end
+
+      it "returns information about the token owner" do
+        response = client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{@token}")
+        response.status.must_equal 200
+        user = JSON.parse(response.body)
+        user['name'].must_equal @user['name']
+        user['email'].must_equal @user['email']
+        user['uuid'].must_equal @user['uuid']
+      end
     end
   end
 
