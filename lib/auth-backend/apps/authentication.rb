@@ -72,6 +72,31 @@ module Auth::Backend
         end
       end
 
+      post '/api/v1/token' do
+        content_type :json
+
+        auth = Rack::Auth::Basic::Request.new(env)
+        unless auth.provided?
+          error(403, {error: 'Authenticate with HTTP basic auth!'}.to_json)
+        end
+        username, password = auth.credentials
+
+        user = User.authenticate(username, password)
+
+        unless user
+          error(403, {error: 'Authentication failed!'}.to_json)
+        end
+
+        oauth = Songkick::OAuth2::Model::Authorization.new
+        oauth.owner = user
+        oauth.client = OauthApp.api_client
+        oauth.save!
+        token = oauth.generate_access_token
+
+        status 201
+        {token: token}.to_json
+      end
+
       {'/oauth/authorize' => :get, '/oauth/token' => :post}.each do |route, method|
         __send__(method, route) do
 

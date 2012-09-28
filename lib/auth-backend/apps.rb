@@ -4,6 +4,7 @@ module Auth::Backend
       setup_db!
       setup_warden!
       setup_logging!
+      setup_oauth_api_client_app!
     end
 
     def self.setup_warden!
@@ -48,6 +49,12 @@ module Auth::Backend
       path = File.expand_path("./#{Auth::Backend.env}.log", dir)
 
       ActiveRecord::Base.logger = Logger.new(File.open(path, 'a'))
+    end
+
+    def self.setup_oauth_api_client_app!
+      unless OauthApp.api_client
+        OauthApp.create_api_client
+      end
     end
   end
 end

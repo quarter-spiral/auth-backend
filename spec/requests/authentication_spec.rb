@@ -6,7 +6,8 @@ require 'uri'
 
 include Auth::Backend
 
-CLIENT = Rack::Client.new {run App.new(test: true)}
+APP = App.new(test: true)
+CLIENT = Rack::Client.new {run APP}
 def client
   @client ||= CLIENT
 end
@@ -89,6 +90,8 @@ describe "Authentication" do
     User.destroy_all
     @password = 'schackalacka'
     @user = add_user(password: @password)
+
+    Apps.setup_oauth_api_client_app!
   end
 
   it "is being redirected to login when not logged in" do
@@ -112,6 +115,37 @@ describe "Authentication" do
 
     response = client.get("http://auth-backend.dev/", {'Cookie' => cookie})
     response.status.must_equal 200
+  end
+
+  describe "OAuth API" do
+    it "can't get a token without credentials" do
+      response = client.post("http://auth-backend.dev/api/v1/token")
+      response.status.must_equal 403
+    end
+
+    it "can't get a token with wrong credentials" do
+      username = @user['name']
+      password = @password.reverse
+
+      authed_client = Rack::Client.new {
+        run Rack::Client::Auth::Basic.new(APP, username, password, true)
+      }
+
+      response = authed_client.post("http://auth-backend.dev/api/v1/token")
+      response.status.must_equal 403
+    end
+
+    it "can get a token with valid credentials" do
+      username = @user['name']
+      password = @password
+
+      authed_client = Rack::Client.new {
+        run Rack::Client::Auth::Basic.new(APP, username, password, true)
+      }
+      response = authed_client.post("http://auth-backend.dev/api/v1/token")
+      response.status.must_equal 201
+      JSON.parse(response.body)['token'].wont_be_nil
+    end
   end
 
   describe "Administration" do
