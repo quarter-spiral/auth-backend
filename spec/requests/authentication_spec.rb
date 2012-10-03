@@ -159,6 +159,14 @@ describe "Authentication" do
         user['email'].must_equal @user['email']
         user['uuid'].must_equal @user['uuid']
       end
+
+      it "can verify a token" do
+        response = client.get("http://auth-backend.dev/api/v1/verify", 'Authorization' => "Bearer #{@token.reverse}")
+        response.status.wont_equal 200
+
+        response = client.get("http://auth-backend.dev/api/v1/verify", 'Authorization' => "Bearer #{@token}")
+        response.status.must_equal 200
+      end
     end
   end
 

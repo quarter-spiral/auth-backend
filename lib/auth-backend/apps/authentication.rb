@@ -123,6 +123,12 @@ module Auth::Backend
         end
       end
 
+      get '/api/v1/verify' do
+        token = Songkick::OAuth2::Provider.access_token(nil, [], env)
+        status token.valid? ? 200 : 403
+        ''
+      end
+
       post '/api/v1/token' do
         content_type :json
 
