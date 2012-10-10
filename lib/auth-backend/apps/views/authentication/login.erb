@@ -1,22 +1,36 @@
-<form action="/login" method="post" class="form-horizontal">
-  <legend>Sign In</legend>
-  <div class="control-group">
-    <label class="control-label" for="inputName">Name</label>
-    <div class="controls">
-      <input type="text" id="inputName" placeholder="Name" name="name">
+<div class="narrow">
+  <div class="page">
+    <div class="header">
+      <h1>Log in</h1>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="inputPassword">Password</label>
-    <div class="controls">
-      <input type="password" id="inputPassword" placeholder="Password" name="password">
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="controls">
-      <button type="submit" class="btn">Sign in</button>
-    </div>
-  </div>
-</form>
 
-Not yet a member? <a href="/signup">Sign up!</a>
+    <div class="body">
+
+      <form action="/login" method="post" class="form">
+        <div class="control-group">
+          <label class="control-label" for="inputName">Name</label>
+          <div class="controls">
+            <input type="text" id="inputName" placeholder="Name" name="name">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword">Password</label>
+          <div class="controls">
+            <input type="password" id="inputPassword" placeholder="Password" name="password">
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn btn-success">Log in</button>
+          </div>
+        </div>
+      </form>
+
+      <p class="option">Not yet a member? <a href="/signup">Sign up...</a></p>
+    </div>
+  </div>
+  <div class="footer">
+    <p>This is sparta!</p>
+  </div>
+</div>
+

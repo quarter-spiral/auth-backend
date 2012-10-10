@@ -1,10 +1,13 @@
 <% url = @app.new_record? ? '/admin/apps' : "/admin/apps/#{@app.id}" %>
 <% method = @app.new_record? ? 'post' : 'put' %>
 
+<h1><%= title %></h1>
+
+
 <form action="<%=h url %>" method="POST" class="form-horizontal">
   <input type="hidden" name="_method" value="<%= method %>"/>
 
-  <legend><%= title %></legend>
+  
 
   <%= form_field 'app', 'name', 'Name', @app.name %>
 

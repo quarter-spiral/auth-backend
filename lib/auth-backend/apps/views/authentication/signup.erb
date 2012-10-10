@@ -1,12 +1,31 @@
-<form action="/signup" method="POST" class="form-horizontal">
-  <legend>Sign Up</legend>
-  <%= form_field 'user', 'name', 'Name', @user.name %>
+<div class="narrow">
+	<div class="page">
+	  <div class="header">
+	    <h1>Sign Up</h1>
+	    <p></p>
 
-  <%= form_field 'user', 'email', 'eMail', @user.email, type: 'email' %>
+	  </div>
 
-  <%= form_field 'user', 'password', 'Password', '', type: 'password' %>
+	  <div class="body">
 
-  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
+			<form action="/signup" method="POST" class="form">
 
-  <button class="btn btn-success">Sign up</button>
-</form>
+			  <%= form_field 'user', 'name', 'Name', @user.name %>
+
+			  <%= form_field 'user', 'email', 'eMail', @user.email, type: 'email' %>
+
+			  <%= form_field 'user', 'password', 'Password', '', type: 'password' %>
+
+			  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
+
+			  <button class="btn btn-success">Sign up</button>
+			</form>
+
+			<p class="option">Already registered? <a href="/login">Log in...</a></p>
+
+		</div>
+	</div>
+	<div class="footer">
+    <p>This is sparta!</p>
+  </div>
+</div>

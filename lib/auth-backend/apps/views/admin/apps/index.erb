@@ -1,35 +1,43 @@
-<h1>Apps</h1>
+<div class="container">
+  <div class="row">
+    <div class="span12">
 
-<a class="btn btn-success" href="/admin/apps/new">
-  <i class="icon-plus-sign"></i> Add App
-</a>
+      <h1>Apps</h1>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>ID</th>
-      <th>Tools</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @apps.each do |app| %>
-      <tr>
-        <td><%=h app.name %></td>
-        <td><%=h app.client_id %></td>
-        <td>
-          <a href="/admin/apps/<%= app.id %>/edit" class="btn">
-            <i class="icon-pencil"></i> Edit
-          </a>
+      <a class="btn btn-success" href="/admin/apps/new">
+        <i class="icon-plus-sign"></i> Add App
+      </a>
 
-          <a href="/admin/apps/<%= app.id %>" data-method="delete" data-confirm="Delete app?" class="btn btn-danger">
-            <i class="icon-trash"></i>
-          </a>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Tools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @apps.each do |app| %>
+            <tr>
+              <td><%=h app.name %></td>
+              <td><%=h app.client_id %></td>
+              <td>
+                <a href="/admin/apps/<%= app.id %>/edit" class="btn">
+                  <i class="icon-pencil"></i> Edit
+                </a>
 
-<%= paginate @apps %>
+                <a href="/admin/apps/<%= app.id %>" data-method="delete" data-confirm="Delete app?" class="btn btn-danger">
+                  <i class="icon-trash"></i>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
 
+      <%= paginate @apps %>
+
+
+    </div>
+  </div>
+</div>

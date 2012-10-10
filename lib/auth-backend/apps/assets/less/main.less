@@ -1,0 +1,66 @@
+@import "mixins";
+
+body {
+	background:#000000 url('../images/stars_dark.jpg') no-repeat left top;
+	padding-top:20px;
+}
+
+.narrow {
+	width:600px;
+	margin:0px auto;
+}
+
+.page {
+	margin-top:40px;
+	margin-bottom: 20px;
+	background-color:#DDD;
+	.box-shadow(0px, 2px, 4px, rgba(0,0,0,0.5));
+	.gradient(#B9D7D9,#FFF);
+}
+
+
+
+.header {
+	width:300px;
+	float:left;
+	.text-shadow(0px, 1px, 0px, rgba(255,255,255,0.7));
+	h1 {
+		padding:20px 30px;
+		margin:0px;
+		color:#668284;
+	}
+	p {
+		padding:20px 30px;
+	}
+}
+
+.footer {
+	text-align: center;
+	font-size:1.2em;
+	color:#AAA;
+}
+
+.body {
+	border-left:1px solid #B9D7D9;
+	margin-left: 300px;
+	background-color:#FFF;
+	padding:20px;
+	form {
+	}
+	p.option {
+		margin-top:20px;
+		font-size:0.9em;
+		color:#999;
+		text-align:right;
+	}
+	p.large {
+		font-size:1.2em;
+		line-height:1.5em;
+		margin-bottom:20px;
+	}
+	ul {
+		margin:10px 0px 30px 20px;
+		color:#999;
+	}
+
+}

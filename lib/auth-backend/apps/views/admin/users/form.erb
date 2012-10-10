@@ -6,10 +6,9 @@
   <% method = "put" %>
 <% end %>
 
-<form action="<%=h url %>" method="POST" class="form-horizontal">
+<h1><%= title %></h1>
+<form action="<%=h url %>" method="POST" class="form">
   <input type="hidden" name="_method" value="<%= method %>"/>
-
-  <legend><%= title %></legend>
 
   <%= form_field 'user', 'name', 'Name', @user.name %>
 
