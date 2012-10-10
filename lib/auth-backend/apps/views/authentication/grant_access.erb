@@ -1,23 +1,31 @@
-<p>The application <%= @oauth2.client.name %> wants the following permissions:</p>
+<div class="narrow">
+  <div class="page">
+    <div class="header">
+      <h1>Authorization Request</h1>
+    </div>
 
-<ul>
-  <% @oauth2.scopes.each do |scope| %>
-    <li><%= PERMISSION_UI_STRINGS[scope] %></li>
-  <% end %>
-</ul>
+    <div class="body">
 
-<form action="/oauth/allow" method="post">
-  <% @oauth2.params.each do |key, value| %>
-    <input type="hidden" name="<%= key %>" value="<%= value %>" />
-  <% end %>
-  <input type="hidden" name="allow" value='1' />
-  <button class="btn btn-success">Allow</button>
-</form>
+      <p class="large"><strong><%= @oauth2.client.name %></strong> would like to access your Quarter Spiral Accout.</p>
 
-<form action="/oauth/allow" method="post">
-  <% @oauth2.params.each do |key, value| %>
-    <input type="hidden" name="<%= key %>" value="<%= value %>" />
-  <% end %>
-  <input type="hidden" name="allow" value='0' />
-  <button class="btn btn-danger">Deny</button>
-</form>
+      <ul>
+        <% @oauth2.scopes.each do |scope| %>
+          <li><%= PERMISSION_UI_STRINGS[scope] %></li>
+        <% end %>
+        <li>hey</li>
+        <li>Hello no!</li>
+      </ul>
+
+      <form action="/oauth/allow" method="post">
+        <% @oauth2.params.each do |key, value| %>
+          <input type="hidden" name="<%= key %>" value="<%= value %>" />
+        <% end %>
+        <button class="btn btn-success" name="allow" value='1'>Allow</button>
+        <button class="btn btn-danger" name="allow" value='0'>Deny</button>
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
