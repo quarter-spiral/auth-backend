@@ -22,7 +22,8 @@ module Auth::Backend
       {
         name: name,
         email: email,
-        uuid: uuid
+        uuid: uuid,
+        type: 'user'
       }
     end
 

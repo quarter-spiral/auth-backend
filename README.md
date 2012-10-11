@@ -9,14 +9,36 @@ token, get basic information about a token owner or verify a token.
 
 ### Get a new OAuth token
 
-#### Request
+You can request an OAuth token for either a user or a registered app.
+
+#### Users
+
+##### Request
 
 **POST** to ``/api/v1/token``
 
-Use HTTP basic auth to authenticate the user on who's behalf the token
-is issued.
+Use HTTP basic auth to authenticate the user on who's behalf the token is issued.
 
-#### Response
+##### Response
+
+The response comes as JSON like this:
+
+```javascript
+{
+  "token": "abcdef1234567890"
+}
+```
+
+#### Apps
+
+##### Request
+
+**POST** to ``/api/v1/token/app``
+
+Use HTTP basic auth and pass the app's id in as the username and the
+app's secret as the password.
+
+##### Response
 
 The response comes as JSON like this:
 
@@ -43,6 +65,7 @@ The response comes as JSON like tis:
 {
   "name":  "John",
   "email": "john@example.com",
+  "type": "user",
   "uuid":  "71e276f0-eb8d-012f-66ce-58b035f5cdfb"
 }
 ```

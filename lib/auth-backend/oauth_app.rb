@@ -1,5 +1,13 @@
 require 'delegate'
 
+class Songkick::OAuth2::Model::Client
+    def private_info
+      {
+        type: 'app'
+      }
+    end
+end
+
 module Auth::Backend
   class OauthApp < DelegateClass(Songkick::OAuth2::Model::Client)
     API_CLIENT_APP_NAME = 'API Client App'

@@ -158,6 +158,7 @@ describe "Authentication" do
         user['name'].must_equal @user['name']
         user['email'].must_equal @user['email']
         user['uuid'].must_equal @user['uuid']
+        user['type'].must_equal 'user'
       end
 
       it "can verify a token" do
@@ -167,6 +168,33 @@ describe "Authentication" do
         response = client.get("http://auth-backend.dev/api/v1/verify", 'Authorization' => "Bearer #{@token}")
         response.status.must_equal 200
       end
+    end
+
+    it "can get a token on behalf of an app" do
+      User.destroy_all
+      @user = add_user(name: @user['name'], password: @password, admin: 'true')
+      cookie = login
+      Songkick::OAuth2::Model::Client.destroy_all
+      response = client.post('http://auth-backend.dev/admin/apps', {'Cookie' => cookie}, 'app[name]' => 'Some App', 'app[redirect_uri]' => 'http://example.com/some_app')
+      cookie = response['Set-Cookie']
+      response = client.get('http://auth-backend.dev/admin/apps', 'Cookie' => cookie)
+      apps = Nokogiri::HTML(response.body)
+      secret = apps.css('.alert.alert-success').first.text.gsub(/.*App secret is: /m, '').gsub(/ .*$/, '').chomp
+      id = apps.css("td:contains('Some App')").first.parent.css('td')[1].text
+
+      authed_client = Rack::Client.new {
+        run Rack::Client::Auth::Basic.new(APP, id, secret, true)
+      }
+      response = authed_client.post('http://auth-backend.dev/api/v1/token/app')
+      token = JSON.parse(response.body)['token']
+      token.wont_be_empty
+
+      response = client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{token}")
+      info = JSON.parse(response.body)
+      info['type'].must_equal 'app'
+
+      response = client.get("http://auth-backend.dev/api/v1/verify", 'Authorization' => "Bearer #{token}")
+      response.status.must_equal 200
     end
   end
 
