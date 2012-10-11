@@ -1,4 +1,5 @@
 body{background:#000000 url('../images/stars_dark.jpg') no-repeat left top;padding-top:20px;}
+body.controller-admin{background: #FFF;}
 .narrow{width:600px;margin:0px auto;}
 .page{margin-top:40px;margin-bottom:20px;background-color:#DDD;-moz-box-shadow:0px 2px 4px rgba(0, 0, 0, 0.5);-webkit-box-shadow:0px 2px 4px rgba(0, 0, 0, 0.5);box-shadow:0px 2px 4px rgba(0, 0, 0, 0.5);background-image:linear-gradient(bottom, #ffffff 0%, #b9d7d9 100%);background-image:-o-linear-gradient(bottom, #ffffff 0%, #b9d7d9 100%);background-image:-moz-linear-gradient(bottom, #ffffff 0%, #b9d7d9 100%);background-image:-webkit-linear-gradient(bottom, #ffffff 0%, #b9d7d9 100%);background-image:-ms-linear-gradient(bottom, #ffffff 0%, #b9d7d9 100%);}
 .header{width:300px;float:left;-moz-text-shadow:0px 1px 0px rgba(255, 255, 255, 0.7);-webkit-text-shadow:0px 1px 0px rgba(255, 255, 255, 0.7);text-shadow:0px 1px 0px rgba(255, 255, 255, 0.7);}.header h1{padding:20px 30px;margin:0px;color:#668284;}
