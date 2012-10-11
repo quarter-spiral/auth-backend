@@ -20,9 +20,7 @@
     <link rel="shortcut icon" href="/assets/ico/favicon.ico">
   </head>
 
-  <body>
-
-
+  <body class="<%= @controller_id ? "controller-#{@controller_id}" : '' %>">
     <% if current_user && current_user.admin? %>
       <div class="container">
         <div class="row">
@@ -44,7 +42,7 @@
         </div>
       </div>
     <% end %>
-    
+
     <% if flash[:error] %>
       <div class="alert">
         <button type="button" class="close" data-dismiss="alert">×</button>

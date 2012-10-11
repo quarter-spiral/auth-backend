@@ -8,8 +8,9 @@ module Auth::Backend
 
         authorize!('/login')
         redirect('/login') unless current_user.admin?
-      end
 
+        @controller_id = 'admin'
+      end
 
       get '/' do
         erb :'admin/index'
