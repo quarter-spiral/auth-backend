@@ -54,7 +54,7 @@ module Auth::Backend
         authorize!('/login')
 
         @user = current_user
-        erb :'admin/users/edit'
+        erb :'authentication/profile'
       end
 
       put '/profile' do
@@ -68,7 +68,7 @@ module Auth::Backend
           redirect '/profile'
         else
           flash.now[:error] = "Could not save your profile"
-          erb :'admin/users/edit'
+          erb :'authentication/profile'
         end
       end
 
