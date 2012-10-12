@@ -24,7 +24,7 @@ module Auth::Backend
       ]
 
       apps.each do |app|
-        Songkick::OAuth2::Model::Client.where(client_id: uid).first.try(:destroy)
+        Songkick::OAuth2::Model::Client.where(client_id: app[:uid]).first.try(:destroy)
         a = Songkick::OAuth2::Model::Client.new(name: app[:name], redirect_uri: app[:redirect_uri])
         a.save!
         a.client_id = app[:uid]
