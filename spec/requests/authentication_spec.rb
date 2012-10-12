@@ -14,30 +14,12 @@ end
 
 TEST_MOUNT = '/_tests_'
 
-def add_user(options = {})
-  options[:name] ||= "John"
-  options[:email] ||= "john@example.com"
-  options[:password] ||= "testtest"
-
-  JSON.parse(client.post("#{TEST_MOUNT}/users", {}, options).body)['user']
-end
-
-def delete_user(id)
-  client.delete("#{TEST_MOUNT}/users/#{id}")
-end
-
-def list_users
-  JSON.parse(client.get("#{TEST_MOUNT}/users").body).map {|u| u['user']}
-end
+require 'auth-backend/test_helpers'
+test_helpers = TestHelpers.new(APP)
 
 def must_redirect_to(path, response)
   response.status.must_equal 302
   URI.parse(response.headers['Location']).path.must_equal path
-end
-
-def login
-  response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
-  cookie = response.headers["Set-Cookie"]
 end
 
 describe "Test Only Interface" do
@@ -46,22 +28,22 @@ describe "Test Only Interface" do
   end
 
   it "can create users" do
-    user = add_user
+    user = test_helpers.create_user!
     User.count.must_equal 1
     user['id'].wont_be_nil
   end
 
   it "can delete users" do
-    user = add_user
-    delete_user(user['id'])
+    user = test_helpers.create_user!
+    test_helpers.delete_user(user['id'])
     User.count.must_equal 0
   end
 
   it "can list users" do
-    user = add_user(name: "John One", email: "johnone@example.com")
-    user = add_user(name: "John Two", email: "johntwo@example.com")
+    user = test_helpers.create_user!(name: "John One", email: "johnone@example.com")
+    user = test_helpers.create_user!(name: "John Two", email: "johntwo@example.com")
 
-    users = list_users
+    users = test_helpers.list_users
     users.size.must_equal 2
     john1 = users.detect {|u| u['name'] == 'John One'}
     john2 = users.detect {|u| u['name'] == 'John Two'}
@@ -75,7 +57,7 @@ describe "Test Only Interface" do
     User.count.must_equal 0
     response.status.must_equal 404
 
-    user = add_user
+    user = test_helpers.create_user!
     response = normal_client.delete("#{TEST_MOUNT}/users/#{user['id']}")
     User.count.must_equal 1
     response.status.must_equal 404
@@ -89,7 +71,7 @@ describe "Authentication" do
   before do
     User.destroy_all
     @password = 'schackalacka'
-    @user = add_user(password: @password)
+    @user = test_helpers.create_user!(password: @password, admin: 'false')
 
     Apps.setup_oauth_api_client_app!
   end
@@ -171,19 +153,10 @@ describe "Authentication" do
     end
 
     it "can get a token on behalf of an app" do
-      User.destroy_all
-      @user = add_user(name: @user['name'], password: @password, admin: 'true')
-      cookie = login
-      Songkick::OAuth2::Model::Client.destroy_all
-      response = client.post('http://auth-backend.dev/admin/apps', {'Cookie' => cookie}, 'app[name]' => 'Some App', 'app[redirect_uri]' => 'http://example.com/some_app')
-      cookie = response['Set-Cookie']
-      response = client.get('http://auth-backend.dev/admin/apps', 'Cookie' => cookie)
-      apps = Nokogiri::HTML(response.body)
-      secret = apps.css('.alert.alert-success').first.text.gsub(/.*App secret is: /m, '').gsub(/ .*$/, '').chomp
-      id = apps.css("td:contains('Some App')").first.parent.css('td')[1].text
+      app = test_helpers.create_app!
 
       authed_client = Rack::Client.new {
-        run Rack::Client::Auth::Basic.new(APP, id, secret, true)
+        run Rack::Client::Auth::Basic.new(APP, app[:id], app[:secret], true)
       }
       response = authed_client.post('http://auth-backend.dev/api/v1/token/app')
       token = JSON.parse(response.body)['token']
@@ -206,7 +179,7 @@ describe "Authentication" do
 
      describe "logged in" do
        before do
-         @cookie = login
+         @cookie = test_helpers.login(@user['name'], @password)
        end
      end
 
@@ -223,8 +196,8 @@ describe "Authentication" do
     describe "with a logged in admin" do
       before do
         User.destroy_all
-        @user = add_user(name: @user['name'], password: @password, admin: 'true')
-        @cookie = login
+        @user = test_helpers.create_user!(name: @user['name'], password: @password, admin: 'true')
+        @cookie = test_helpers.login(@user['name'], @password)
       end
 
       it "can reach the admin interface" do
@@ -242,7 +215,7 @@ describe "Authentication" do
           before do
             @users = [@user]
             5.times do |i|
-              @users << add_user(name: "Tester #{i}", email: "tester-#{i}@example.com")
+              @users << test_helpers.create_user!(name: "Tester #{i}", email: "tester-#{i}@example.com")
             end
           end
 
@@ -258,7 +231,7 @@ describe "Authentication" do
             last_user = @users.last
             response = client.put("http://auth-backend.dev/admin/users/#{last_user['id']}", {'Cookie' => @cookie}, 'user[name]' => 'Updated User')
 
-            last_user = list_users.detect {|u| u['id'] == last_user['id']}
+            last_user = test_helpers.list_users.detect {|u| u['id'] == last_user['id']}
             last_user['name'].must_equal 'Updated User'
           end
 
@@ -266,17 +239,17 @@ describe "Authentication" do
             last_user = @users.last
             response = client.delete("http://auth-backend.dev/admin/users/#{last_user['id']}", {'Cookie' => @cookie})
 
-            users = list_users.map {|e| e['id']}
+            users = test_helpers.list_users.map {|e| e['id']}
             users.wont_include last_user['id']
           end
 
           it "can create a user" do
-            users = list_users.map {|e| e['name']}
+            users = test_helpers.list_users.map {|e| e['name']}
             users.wont_include 'John New'
 
             client.post("http://auth-backend.dev/admin/users", {'Cookie' => @cookie}, 'user[name]' => 'John New', 'user[email]' => 'john.new@example.com', 'user[password]' => 'test', 'user[password_confirmation]' => 'test')
 
-            users = list_users.map {|e| e['name']}
+            users = test_helpers.list_users.map {|e| e['name']}
             users.must_include 'John New'
           end
         end

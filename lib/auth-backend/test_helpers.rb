@@ -1,7 +1,15 @@
+require 'nokogiri'
+
 module Auth::Backend
   class TestHelpers
-    USERNAME = "John"
-    PASSWORD = "quarterspiral"
+    DEFAULT_USER = {
+      name: "John",
+      email: "john@example.com",
+      admin: 'true',
+      password: 'quarterspiral'
+    }
+
+    attr_reader :client
 
     def initialize(app)
       @client = Rack::Client.new {
@@ -13,24 +21,24 @@ module Auth::Backend
       Auth::Backend::Apps.setup!
 
       delete_existing_users!
-      create_user!
+      user = create_user!
 
-      @authed_client = Rack::Client.new {run Rack::Client::Auth::Basic.new(AUTH_APP, USERNAME, PASSWORD, true)}
+      @authed_client = Rack::Client.new {run Rack::Client::Auth::Basic.new(app, user['name'], user['password'], true)}
     end
 
     def get_token
       JSON.parse(@authed_client.post("#{@host}/api/v1/token").body)['token']
     end
 
-    def user_data
-      JSON.parse(@client.get("#{@host}/_tests_/users").body).detect {|u| u['user']['name'] == USERNAME}['user']
+    def user_data(name = nil)
+      name ||= DEFAULT_USER[:name]
+      JSON.parse(@client.get("#{@host}/_tests_/users").body).detect {|u| u['user']['name'] == name}['user']
     end
 
     def cleanup!
       `rm -rf #{File.dirname(@db_file)}` unless @db_dir_existed
     end
 
-    protected
     def migrate_db!
       Apps.setup_db!
       @db_file = ENV['DATABASE_URL'].gsub(/^sqlite3:\//, '')
@@ -47,8 +55,46 @@ module Auth::Backend
       end
     end
 
-    def create_user!
-      user  = JSON.parse(@client.post("#{@host}/_tests_/users", {}, name: USERNAME, password: PASSWORD, password_confirmation: PASSWORD, email: 'john@quarterspiral.com', admin: 'true').body)
+    def create_user!(options = {})
+      options = DEFAULT_USER.merge(options)
+
+      user = JSON.parse(client.post("/_tests_/users", {}, options).body)['user']
+
+      user['password'] = options[:password]
+      user
+    end
+
+    def login(user, password)
+      response = client.post("http://auth-backend.dev/login", {}, name: user, password: password)
+      cookie = response.headers["Set-Cookie"]
+    end
+
+    def delete_user(id)
+      client.delete("/_tests_/users/#{id}")
+    end
+
+    def list_users
+      JSON.parse(client.get("/_tests_/users").body).map {|u| u['user']}
+    end
+
+    def create_app!
+      password = 'testtest'
+      name = nil
+      while !name || User.where(name: name).first
+        name = (0...12).map{65.+(rand(25)).chr}.join
+      end
+      app_name = "app-for-#{name}"
+      user = create_user!(name: name, email: "#{name}@example.com", password: password, admin: 'true')
+
+      cookie = login(user['name'], user['password'])
+      response = client.post('/admin/apps', {'Cookie' => cookie}, 'app[name]' => app_name, 'app[redirect_uri]' => 'http://example.com/some_app')
+      cookie = response['Set-Cookie']
+      response = client.get('/admin/apps', 'Cookie' => cookie)
+      apps = Nokogiri::HTML(response.body)
+
+      secret = apps.css('.alert.alert-success').first.text.gsub(/.*App secret is: /m, '').gsub(/ .*$/, '').chomp
+      id = apps.css("td:contains('#{app_name}')").first.parent.css('td')[1].text
+      {id: id, secret: secret}
     end
   end
 end
