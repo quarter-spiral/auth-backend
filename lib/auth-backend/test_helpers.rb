@@ -21,6 +21,8 @@ module Auth::Backend
       migrate_db!
       Auth::Backend::Apps.setup!
 
+      OauthApp.destroy_all
+
       delete_existing_users!
       user = create_user!
 
@@ -35,6 +37,10 @@ module Auth::Backend
       app = @app
       authed_client = Rack::Client.new {run Rack::Client::Auth::Basic.new(app, app_id, app_secret, true)}
       JSON.parse(authed_client.post("#{@host}/api/v1/token/app").body)['token']
+    end
+
+    def expire_all_tokens!
+      Songkick::OAuth2::Model::Authorization.destroy_all
     end
 
     def user_data(name = nil)
