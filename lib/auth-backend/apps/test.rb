@@ -11,6 +11,7 @@ module Auth::Backend
           user.send("#{key}=", value)
         end
         user.save!
+
         user.to_json
       end
 

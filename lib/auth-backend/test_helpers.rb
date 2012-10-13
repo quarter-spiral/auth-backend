@@ -12,6 +12,7 @@ module Auth::Backend
     attr_reader :client
 
     def initialize(app)
+      @app = app
       @client = Rack::Client.new {
         run app
       }
@@ -28,6 +29,12 @@ module Auth::Backend
 
     def get_token
       JSON.parse(@authed_client.post("#{@host}/api/v1/token").body)['token']
+    end
+
+    def get_app_token(app_id, app_secret)
+      app = @app
+      authed_client = Rack::Client.new {run Rack::Client::Auth::Basic.new(app, app_id, app_secret, true)}
+      JSON.parse(authed_client.post("#{@host}/api/v1/token/app").body)['token']
     end
 
     def user_data(name = nil)
