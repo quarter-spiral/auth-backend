@@ -1,21 +1,7 @@
 require_relative '../spec_helper.rb'
 
-require 'rack/client'
 require 'json'
 require 'uri'
-
-include Auth::Backend
-
-APP = App.new(test: true)
-CLIENT = Rack::Client.new {run APP}
-def client
-  @client ||= CLIENT
-end
-
-TEST_MOUNT = '/_tests_'
-
-require 'auth-backend/test_helpers'
-test_helpers = TestHelpers.new(APP)
 
 def must_redirect_to(path, response)
   response.status.must_equal 302
@@ -28,22 +14,22 @@ describe "Test Only Interface" do
   end
 
   it "can create users" do
-    user = test_helpers.create_user!
+    user = TEST_HELPERS.create_user!
     User.count.must_equal 1
     user['id'].wont_be_nil
   end
 
   it "can delete users" do
-    user = test_helpers.create_user!
-    test_helpers.delete_user(user['id'])
+    user = TEST_HELPERS.create_user!
+    TEST_HELPERS.delete_user(user['id'])
     User.count.must_equal 0
   end
 
   it "can list users" do
-    user = test_helpers.create_user!(name: "John One", email: "johnone@example.com")
-    user = test_helpers.create_user!(name: "John Two", email: "johntwo@example.com")
+    user = TEST_HELPERS.create_user!(name: "John One", email: "johnone@example.com")
+    user = TEST_HELPERS.create_user!(name: "John Two", email: "johntwo@example.com")
 
-    users = test_helpers.list_users
+    users = TEST_HELPERS.list_users
     users.size.must_equal 2
     john1 = users.detect {|u| u['name'] == 'John One'}
     john2 = users.detect {|u| u['name'] == 'John Two'}
@@ -57,7 +43,7 @@ describe "Test Only Interface" do
     User.count.must_equal 0
     response.status.must_equal 404
 
-    user = test_helpers.create_user!
+    user = TEST_HELPERS.create_user!
     response = normal_client.delete("#{TEST_MOUNT}/users/#{user['id']}")
     User.count.must_equal 1
     response.status.must_equal 404
@@ -71,7 +57,7 @@ describe "Authentication" do
   before do
     User.destroy_all
     @password = 'schackalacka'
-    @user = test_helpers.create_user!(password: @password, admin: 'false')
+    @user = TEST_HELPERS.create_user!(password: @password, admin: 'false')
 
     Apps.setup_oauth_api_client_app!
   end
@@ -107,7 +93,7 @@ describe "Authentication" do
 
      describe "logged in" do
        before do
-         @cookie = test_helpers.login(@user['name'], @password)
+         @cookie = TEST_HELPERS.login(@user['name'], @password)
        end
      end
 
@@ -124,8 +110,8 @@ describe "Authentication" do
     describe "with a logged in admin" do
       before do
         User.destroy_all
-        @user = test_helpers.create_user!(name: @user['name'], password: @password, admin: 'true')
-        @cookie = test_helpers.login(@user['name'], @password)
+        @user = TEST_HELPERS.create_user!(name: @user['name'], password: @password, admin: 'true')
+        @cookie = TEST_HELPERS.login(@user['name'], @password)
       end
 
       it "can reach the admin interface" do
@@ -143,7 +129,7 @@ describe "Authentication" do
           before do
             @users = [@user]
             5.times do |i|
-              @users << test_helpers.create_user!(name: "Tester #{i}", email: "tester-#{i}@example.com")
+              @users << TEST_HELPERS.create_user!(name: "Tester #{i}", email: "tester-#{i}@example.com")
             end
           end
 
@@ -159,7 +145,7 @@ describe "Authentication" do
             last_user = @users.last
             response = client.put("http://auth-backend.dev/admin/users/#{last_user['id']}", {'Cookie' => @cookie}, 'user[name]' => 'Updated User')
 
-            last_user = test_helpers.list_users.detect {|u| u['id'] == last_user['id']}
+            last_user = TEST_HELPERS.list_users.detect {|u| u['id'] == last_user['id']}
             last_user['name'].must_equal 'Updated User'
           end
 
@@ -167,17 +153,17 @@ describe "Authentication" do
             last_user = @users.last
             response = client.delete("http://auth-backend.dev/admin/users/#{last_user['id']}", {'Cookie' => @cookie})
 
-            users = test_helpers.list_users.map {|e| e['id']}
+            users = TEST_HELPERS.list_users.map {|e| e['id']}
             users.wont_include last_user['id']
           end
 
           it "can create a user" do
-            users = test_helpers.list_users.map {|e| e['name']}
+            users = TEST_HELPERS.list_users.map {|e| e['name']}
             users.wont_include 'John New'
 
             client.post("http://auth-backend.dev/admin/users", {'Cookie' => @cookie}, 'user[name]' => 'John New', 'user[email]' => 'john.new@example.com', 'user[password]' => 'test', 'user[password_confirmation]' => 'test')
 
-            users = test_helpers.list_users.map {|e| e['name']}
+            users = TEST_HELPERS.list_users.map {|e| e['name']}
             users.must_include 'John New'
           end
         end

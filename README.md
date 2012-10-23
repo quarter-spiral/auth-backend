@@ -48,6 +48,44 @@ The response comes as JSON like this:
 }
 ```
 
+#### Venues
+
+Apps can request an OAuth token for a user identified by it's ID on any supported venue. These requests must be authenticated by an app's OAuth token.
+
+If there is no user associated for the given venue and venue ID a new one will be created and associated with that venue ID.
+
+##### Request
+
+**POST** to ``/api/v1/token/venue/:VENUE:``
+
+###### Parameters
+
+- **VENUE** [REQUIRED]: The id of the venue (e.g. ``facebook`` or ``galaxy-spiral``)
+
+###### Body
+
+The request body is a JSON encoded hash like this:
+
+```javascript
+{
+  "venue-id": "1234567",
+  "name": "Peter Smith",
+  "email": "peter@example.com"
+}
+```
+
+``venue-id`` and ``name`` are mandatory keys.
+
+##### Response
+
+The response comes as JSON like this:
+
+```javascript
+{
+  "token": "abcdef1234567890"
+}
+```
+
 ### Get information about a token owner
 
 #### Request

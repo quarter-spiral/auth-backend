@@ -7,4 +7,15 @@ require 'nokogiri'
 
 require 'auth-backend'
 
-Auth::Backend::Apps.setup!
+require 'rack/client'
+include Auth::Backend
+
+APP = App.new(test: true)
+CLIENT = Rack::Client.new {run APP}
+def client
+  @client ||= CLIENT
+end
+TEST_MOUNT = '/_tests_'
+
+require 'auth-backend/test_helpers'
+TEST_HELPERS = TestHelpers.new(APP)

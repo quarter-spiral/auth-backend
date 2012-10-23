@@ -15,6 +15,23 @@ module Auth::Backend
             error(403, {error: 'Authenticate with HTTP basic auth!'}.to_json)
           end
         end
+
+        def issue_token_for_user(user)
+          oauth = Songkick::OAuth2::Model::Authorization.new
+          oauth.owner = user
+          oauth.client = OauthApp.api_client
+          oauth.save!
+          oauth.generate_access_token
+        end
+
+        def respond_with_token(token)
+          status 201
+          {token: token}.to_json
+        end
+
+        def request_token
+          @request_token ||= Songkick::OAuth2::Provider.access_token(nil, [], env)
+        end
       end
 
       before do
@@ -22,10 +39,8 @@ module Auth::Backend
       end
 
       get '/me' do
-        token = Songkick::OAuth2::Provider.access_token(nil, [], env)
-
-        if token.valid?
-          token.owner.private_info.to_json
+        if request_token.valid?
+          request_token.owner.private_info.to_json
         else
           status 403
           {error: 'Not authorized!'}.to_json
@@ -33,8 +48,7 @@ module Auth::Backend
       end
 
       get '/verify' do
-        token = Songkick::OAuth2::Provider.access_token(nil, [], env)
-        status token.valid? ? 200 : 403
+        status request_token.valid? ? 200 : 403
         ''
       end
 
@@ -48,14 +62,8 @@ module Auth::Backend
           error(403, {error: 'Authentication failed!'}.to_json)
         end
 
-        oauth = Songkick::OAuth2::Model::Authorization.new
-        oauth.owner = user
-        oauth.client = OauthApp.api_client
-        oauth.save!
-        token = oauth.generate_access_token
-
-        status 201
-        {token: token}.to_json
+        token = issue_token_for_user(user)
+        respond_with_token(token)
       end
 
       post '/token/app' do
@@ -73,8 +81,39 @@ module Auth::Backend
         oauth.save!
         token = oauth.generate_access_token
 
-        status 201
-        {token: token}.to_json
+        respond_with_token(token)
+      end
+
+      post '/token/venue/:venue' do
+        ensure_authentication!
+
+        unless request_token.valid?
+          error(403, {error: "Not authorized!"}.to_json)
+        end
+
+        unless request_token.owner.private_info['type'] == 'app'
+          error(403, {error: "Forbidden as a user"}.to_json)
+        end
+
+        actual_params = JSON.parse(request.body.string).merge(params)
+
+        venue = actual_params['venue']
+        venue_id = actual_params['venue-id']
+        name = actual_params['name']
+        email = actual_params['email']
+
+        error(422, {error: 'Please provide name and venue-id'}) if venue_id.blank? || name.blank?
+
+        venue_identity = VenueIdentity.where(venue: venue, venue_id: venue_id).first
+
+        unless venue_identity
+          user = User.new(name: name, email: email)
+          user.save!(validate: false)
+          venue_identity = VenueIdentity.create(user_id: user.id, venue: venue, venue_id: venue_id)
+        end
+
+        token = issue_token_for_user(venue_identity.user)
+        respond_with_token(token)
       end
     end
   end

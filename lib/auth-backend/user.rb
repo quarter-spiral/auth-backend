@@ -12,6 +12,8 @@ module Auth::Backend
     validates :name, presence: true, uniqueness: true
     validates :email, presence: true, uniqueness: true
 
+    has_many :venue_identities
+
     before_create :set_uuid
 
     def self.authenticate(name, password)
@@ -20,10 +22,10 @@ module Auth::Backend
 
     def private_info
       {
-        name: name,
-        email: email,
-        uuid: uuid,
-        type: 'user'
+        'name' => name,
+        'email' => email,
+        'uuid' => uuid,
+        'type' => 'user'
       }
     end
 

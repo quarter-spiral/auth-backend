@@ -3,7 +3,7 @@ require 'delegate'
 class Songkick::OAuth2::Model::Client
     def private_info
       {
-        type: 'app'
+        'type' => 'app'
       }
     end
 end
