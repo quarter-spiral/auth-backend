@@ -23,7 +23,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'activerecord'
   gem.add_dependency 'sinatra-activerecord'
   gem.add_dependency 'uuid'
-  gem.add_dependency 'pg'
   gem.add_dependency 'json'
   gem.add_dependency 'kaminari'
   gem.add_dependency 'padrino-helpers'

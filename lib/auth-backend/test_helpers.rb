@@ -59,6 +59,10 @@ module Auth::Backend
       `mkdir -p #{File.dirname(@db_file)}`
       `touch #{@db_file}`
       migration_dir = `bundle show --paths auth-backend`.chomp
+      migration_dirs = migration_dir.split("\n")
+      if migration_dirs.length > 1
+        migration_dir = migration_dirs.detect {|d| d =~ /auth-backend$/}
+      end
       ActiveRecord::Migrator.migrate(migration_dir, nil)
     end
 

@@ -25,7 +25,6 @@ PATH
       json
       kaminari
       padrino-helpers
-      pg
       sinatra
       sinatra-activerecord
       sinatra-flash
@@ -122,8 +121,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-jdbcsqlite3-adapter
   auth-backend!
   nokogiri
+  pg
   rack-client
   rake
   sinatra_warden!

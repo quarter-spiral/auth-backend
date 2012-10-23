@@ -4,7 +4,6 @@ rvm:
   - 1.9.2
   - jruby-19mode # JRuby in 1.9 mode
   - rbx-19mode
-before_script: bundle exec rake db:migrate
 notifications:
   email: false
   campfire: "rumspringa:c0a20e6caab984176e5c72f84241b5f419662257@504871"
