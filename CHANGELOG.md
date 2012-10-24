@@ -1,3 +1,7 @@
+# 0.0.7
+
+* Adds an API endpoint to create OAuth tokens for players authenticated by a Mission Kontrol app and identified by the data the venue provides (e.g. ID on that venue and a name)
+
 # 0.0.6
 
 * Makes it possible to expire OAuth tokens with the test helpers
