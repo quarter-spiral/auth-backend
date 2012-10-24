@@ -109,7 +109,7 @@ describe "Authentication API" do
           token = JSON.parse(response.body)['token']
         end
 
-        it "can't be created by apps" do
+        it "can't be created by bullshit tokens" do
           response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer 1337"}, JSON.dump(@venue_data))
           response.status.must_equal 403
         end
@@ -125,6 +125,17 @@ describe "Authentication API" do
           token = JSON.parse(response.body)['token']
 
           client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{token}"}, JSON.dump(@venue_data)).status.must_equal 403
+        end
+
+        it "can't be created for bullshit venues" do
+          response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
+          response.status.must_equal 201
+
+          response = client.post("http://auth-backend.dev/api/v1/token/venue/galaxy-spiral", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
+          response.status.must_equal 201
+
+          response = client.post("http://auth-backend.dev/api/v1/token/venue/bullshit", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
+          response.status.wont_equal 201
         end
 
         describe "with a created venue user" do
@@ -149,8 +160,6 @@ describe "Authentication API" do
 
             uuid1.must_equal uuid2
           end
-
-          #TODO: check if only apps can do it
         end
       end
     end

@@ -107,10 +107,14 @@ module Auth::Backend
         venue_identity = VenueIdentity.where(venue: venue, venue_id: venue_id).first
 
         unless venue_identity
-          User.transaction do
-            user = User.new(name: name, email: email)
-            user.save!(validate: false)
-            venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id)
+          begin
+            User.transaction do
+              user = User.new(name: name, email: email)
+              user.save!(validate: false)
+              venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id)
+            end
+          rescue ActiveRecord::RecordInvalid => e
+            error(422, {error: 'Could not create a token on the given venue with the given venue data'}.to_json)
           end
         end
 
