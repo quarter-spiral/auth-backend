@@ -107,9 +107,11 @@ module Auth::Backend
         venue_identity = VenueIdentity.where(venue: venue, venue_id: venue_id).first
 
         unless venue_identity
-          user = User.new(name: name, email: email)
-          user.save!(validate: false)
-          venue_identity = VenueIdentity.create(user_id: user.id, venue: venue, venue_id: venue_id)
+          User.transaction do
+            user = User.new(name: name, email: email)
+            user.save!(validate: false)
+            venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id)
+          end
         end
 
         token = issue_token_for_user(venue_identity.user)

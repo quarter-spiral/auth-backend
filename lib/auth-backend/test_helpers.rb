@@ -22,6 +22,8 @@ module Auth::Backend
       Auth::Backend::Apps.setup!
 
       OauthApp.destroy_all
+      VenueIdentity.destroy_all
+      Auth::Backend::Apps.setup_oauth_api_client_app!
 
       delete_existing_users!
       user = create_user!
