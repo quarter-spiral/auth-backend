@@ -5,6 +5,8 @@ require 'sinatra/activerecord'
 require 'kaminari/sinatra'
 require 'kaminari/helpers/sinatra_helpers'
 
+require 'auth-backend/fix_rbx_thread'
+
 module Kaminari::Helpers::SinatraHelpers
   module HelperMethods
     def paginate(scope, options = {}, &block)
