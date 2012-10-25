@@ -95,7 +95,9 @@ module Auth::Backend
           error(403, {error: "Forbidden as a user"}.to_json)
         end
 
-        actual_params = JSON.parse(request.body.string).merge(params)
+        body = request.body
+        body =body.read if body.respond_to?(:read)
+        actual_params = JSON.parse(body).merge(params)
 
         venue = actual_params['venue']
         venue_id = actual_params['venue-id']
