@@ -1,3 +1,7 @@
+# 0.0.8
+
+* Fixes a problem to read request bodies when running on an actual web server
+
 # 0.0.7
 
 * Adds an API endpoint to create OAuth tokens for players authenticated by a Mission Kontrol app and identified by the data the venue provides (e.g. ID on that venue and a name)
