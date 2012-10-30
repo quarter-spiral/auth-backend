@@ -1,3 +1,7 @@
+# 0.0.9 WIP
+
+* Improves API error method for unauthenticated requests
+
 # 0.0.8
 
 * Fixes a problem to read request bodies when running on an actual web server

@@ -12,7 +12,7 @@ module Auth::Backend
 
         def ensure_authentication!
           unless auth.provided?
-            error(403, {error: 'Authenticate with HTTP basic auth!'}.to_json)
+            error(403, {error: 'Authentication missing!'}.to_json)
           end
         end
 
@@ -36,6 +36,15 @@ module Auth::Backend
 
       before do
         content_type :json
+        headers 'Access-Control-Allow-Origin' => request.env['HTTP_ORIGIN'] || '*'
+      end
+
+      options '/*' do
+        headers(
+          'Access-Control-Allow-Headers' => 'origin, x-requested-with, content-type, accept, authorization',
+          'Access-Control-Allow-Methods' => 'GET,POST'
+        )
+        ''
       end
 
       get '/me' do
