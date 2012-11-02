@@ -157,7 +157,7 @@ module Auth::Backend
         venue = actual_params['venue']
         venue_id = actual_params['venue-id']
         name = actual_params['name']
-        email = actual_params['email']
+        email = actual_params['email'] unless actual_params['email'].blank?
 
         error(422, {error: 'Please provide name and venue-id'}) if venue_id.blank? || name.blank?
 
