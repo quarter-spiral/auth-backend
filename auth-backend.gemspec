@@ -26,4 +26,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'json'
   gem.add_dependency 'kaminari'
   gem.add_dependency 'padrino-helpers'
+  gem.add_dependency 'graph-client'
 end

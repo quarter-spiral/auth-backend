@@ -242,6 +242,17 @@ describe "Authentication API" do
           response.status.wont_equal 201
         end
 
+        it "adds a player role to the created user" do
+          response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
+          response.status.must_equal 201
+          token = JSON.parse(response.body)['token']
+
+          uuid = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", {"Authorization" => "Bearer #{token}"}).body)['uuid']
+
+          connection = Connection.create('http://graph-backend.dev')
+          connection.graph.uuids_by_role(@app_token, 'player').must_include uuid
+        end
+
         describe "with a created venue user" do
           before do
             @token = JSON.parse(client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data)).body)['token']

@@ -24,4 +24,5 @@ group :development do
   end
   gem 'rack-client'
   gem 'nokogiri'
+  gem 'graph-backend', path: '../graph-backend'
 end

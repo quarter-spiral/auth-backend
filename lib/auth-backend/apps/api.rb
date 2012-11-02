@@ -6,6 +6,21 @@ module Auth::Backend
       register Base
 
       helpers do
+        def connection
+          @connection ||= Connection.create(ENV['QS_GRAPH_BACKEND_URL'])
+        end
+
+        def own_token
+          return @own_token if @own_token
+
+          app = OauthApp.where(name: 'Auth Backend').first
+          unless app
+            app = OauthApp.create!(name: 'Auth Backend', redirect_uri: 'http://auth-backend.example.com/')
+          end
+
+          @own_token = issue_token_for_app(app)
+        end
+
         def auth
           @auth ||= Rack::Auth::Basic::Request.new(env)
         end
@@ -20,6 +35,14 @@ module Auth::Backend
           oauth = Songkick::OAuth2::Model::Authorization.new
           oauth.owner = user
           oauth.client = OauthApp.api_client
+          oauth.save!
+          oauth.generate_access_token
+        end
+
+        def issue_token_for_app(app)
+          oauth = Songkick::OAuth2::Model::Authorization.new
+          oauth.owner = app
+          oauth.client = app
           oauth.save!
           oauth.generate_access_token
         end
@@ -111,11 +134,7 @@ module Auth::Backend
           error(403, {error: 'Authentication failed!'}.to_json)
         end
 
-        oauth = Songkick::OAuth2::Model::Authorization.new
-        oauth.owner = app
-        oauth.client = app
-        oauth.save!
-        token = oauth.generate_access_token
+        token = issue_token_for_app(app)
 
         respond_with_token(token)
       end
@@ -132,7 +151,7 @@ module Auth::Backend
         end
 
         body = request.body
-        body =body.read if body.respond_to?(:read)
+        body = body.read if body.respond_to?(:read)
         actual_params = JSON.parse(body).merge(params)
 
         venue = actual_params['venue']
@@ -150,6 +169,7 @@ module Auth::Backend
               user = User.new(name: name, email: email)
               user.save!(validate: false)
               venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id, email: email, name: name)
+              connection.graph.add_role(user.uuid, own_token, 'player')
             end
           rescue ActiveRecord::RecordInvalid => e
             error(422, {error: 'Could not create a token on the given venue with the given venue data'}.to_json)
