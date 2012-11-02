@@ -47,6 +47,33 @@ module Auth::Backend
         ''
       end
 
+      get "/users/batch/identities" do
+        ensure_authentication!
+        unless request_token.valid?
+          error(403, {error: "Not authorized!"}.to_json)
+        end
+
+        body = request.body
+        body = body.read if body.respond_to?(:read)
+
+        users = JSON.parse(body).map {|uuid| User.where(uuid: uuid).first}
+        error(404, {error: "A user does not exist!"}) unless users.select {|u| u.nil?}.empty?
+
+        Hash[users.map {|u| [u.uuid, {uuid: u.uuid, venues: u.venues}]}].to_json
+      end
+
+      get "/users/:uuid/identities" do
+        ensure_authentication!
+        unless request_token.valid?
+          error(403, {error: "Not authorized!"}.to_json)
+        end
+
+        user = User.where(uuid: params[:uuid]).first
+        error(404, {error: "User does not exist!"}.to_json) unless user
+
+        {uuid: user.uuid, venues: user.venues}.to_json
+      end
+
       get '/me' do
         if request_token.valid?
           request_token.owner.private_info.to_json
@@ -122,7 +149,7 @@ module Auth::Backend
             User.transaction do
               user = User.new(name: name, email: email)
               user.save!(validate: false)
-              venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id)
+              venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id, email: email, name: name)
             end
           rescue ActiveRecord::RecordInvalid => e
             error(422, {error: 'Could not create a token on the given venue with the given venue data'}.to_json)

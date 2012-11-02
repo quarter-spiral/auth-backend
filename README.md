@@ -2,6 +2,94 @@
 
 Authentication backend
 
+## User API
+
+### Get all venue identities of a user
+
+#### Request
+
+**GET** to ``/api/v1/user/:UUID:/identities``
+
+##### Parameters
+
+- **UUID** [REQUIRED]: The UUID of the player you want to retrieve the venue IDs about.
+
+##### Body
+
+Empty.
+
+#### Response
+
+##### Body
+
+JSON encoded object like this:
+
+```javascript
+{
+  "uuid": "12347890",
+  "venues": {
+    "facebook": {
+      "id": "12345",
+      "name": "Peter S"
+    },
+    "galaxy-spiral": {
+       "id": "67890",
+       "name": "P Smith"
+    }
+  }
+}
+```
+
+### Get all venue identities of a batch of users at once
+
+#### Request
+
+**GET** to ``/api/v1/user/batch/identities``
+
+##### Body
+
+JSON encoded array of UUIDs like this:
+
+```javascript
+["12345", "3264877", "43298854297"]
+```
+
+#### Response
+
+JSON encoded object like this:
+
+```javascript
+{
+  "12345": {
+    "uuid": "12347890",
+    "venues": {
+      "facebook": {
+        "id": "12345",
+        "name": "Peter S"
+      },
+      "galaxy-spiral": {
+         "id": "67890",
+         "name": "P Smith"
+      }
+    }
+  },
+  "3264877": {
+    "uuid": "4578934569",
+    "venues": {
+      "facebook": {
+        "id": "238957",
+        "name": "Sam Samson"
+      }
+    }
+  },
+  "43298854297": {
+    "uuid": "0972648",
+    "venues": {
+    }
+  }
+}
+```
+
 ## OAuth API
 
 Besides the normal web flow there is an API to obtain a new OAuth

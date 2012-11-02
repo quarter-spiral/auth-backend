@@ -1,5 +1,6 @@
 # 0.0.9 WIP
 
+* Adds venue identity API endpoint
 * Improves API error method for unauthenticated requests
 
 # 0.0.8

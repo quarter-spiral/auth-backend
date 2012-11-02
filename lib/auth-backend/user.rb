@@ -29,6 +29,10 @@ module Auth::Backend
       }
     end
 
+    def venues
+      Hash[venue_identities.map {|vi| [vi.venue, {id: vi.venue_id, name: vi.name}]}]
+    end
+
     protected
     def set_uuid
       self.uuid = UUID.new.generate
