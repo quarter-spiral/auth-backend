@@ -55,6 +55,30 @@ module Auth::Backend
         def request_token
           @request_token ||= Songkick::OAuth2::Provider.access_token(nil, [], env)
         end
+
+        def create_venue_identity(venue, venue_id, name, email)
+          User.transaction do
+            user = User.new(name: name, email: email)
+            user.save!(validate: false)
+            venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id, email: email, name: name)
+            connection.graph.add_role(user.uuid, own_token, 'player')
+            venue_identity
+          end
+        rescue ActiveRecord::RecordInvalid => e
+          error(422, {error: 'Could not create a token on the given venue with the given venue data'}.to_json)
+        end
+
+        def find_or_create_venue_identity(venue, params)
+          venue_id = params['venue-id']
+          name = params['name']
+          email = params['email'].blank? ? 'unknown@example.com' : params['email']
+
+          error(422, {error: 'Please provide name and venue-id'}) if venue_id.blank? || name.blank?
+
+          venue_identity = VenueIdentity.where(venue: venue, venue_id: venue_id).first
+
+          venue_identity ||= create_venue_identity(venue, venue_id, name, email)
+        end
       end
 
       before do
@@ -95,6 +119,24 @@ module Auth::Backend
         error(404, {error: "User does not exist!"}.to_json) unless user
 
         {uuid: user.uuid, venues: user.venues}.to_json
+      end
+
+      post "/uuids/batch" do
+        body = request.body
+        body = body.read if body.respond_to?(:read)
+        venue_information = JSON.parse(body)
+
+        result = {}
+        venue_information.each do |venue, identities|
+          venue_result = {}
+          identities.each do |identity|
+            venue_identity = find_or_create_venue_identity(venue, identity)
+            venue_result[venue_identity.venue_id] = venue_identity.user.uuid
+          end
+          result[venue] = venue_result
+        end
+
+        result.to_json
       end
 
       get '/me' do
@@ -154,27 +196,7 @@ module Auth::Backend
         body = body.read if body.respond_to?(:read)
         actual_params = JSON.parse(body).merge(params)
 
-        venue = actual_params['venue']
-        venue_id = actual_params['venue-id']
-        name = actual_params['name']
-        email = actual_params['email'] unless actual_params['email'].blank?
-
-        error(422, {error: 'Please provide name and venue-id'}) if venue_id.blank? || name.blank?
-
-        venue_identity = VenueIdentity.where(venue: venue, venue_id: venue_id).first
-
-        unless venue_identity
-          begin
-            User.transaction do
-              user = User.new(name: name, email: email)
-              user.save!(validate: false)
-              venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id, email: email, name: name)
-              connection.graph.add_role(user.uuid, own_token, 'player')
-            end
-          rescue ActiveRecord::RecordInvalid => e
-            error(422, {error: 'Could not create a token on the given venue with the given venue data'}.to_json)
-          end
-        end
+        venue_identity = find_or_create_venue_identity(actual_params['venue'], actual_params)
 
         token = issue_token_for_user(venue_identity.user)
         respond_with_token(token)

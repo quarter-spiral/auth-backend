@@ -275,6 +275,30 @@ describe "Authentication API" do
 
             uuid1.must_equal uuid2
           end
+
+          it "can translate a list of venue information into QS UUIDs" do
+            venue_data2 = {
+              "venue-id" => "54632465",
+              "name" => "Sam Jackson"
+            }
+
+            response = client.post "http://auth-backend/api/v1/uuids/batch", {"Authorization" => "Bearer #{@app_token}"}, JSON.dump('facebook' => [@venue_data, venue_data2])
+            response.status.must_equal 200
+            uuid_mapping = JSON.parse(response.body)
+
+            response = client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{@token}")
+            uuid1 = JSON.parse(response.body)['uuid']
+
+            token2 = JSON.parse(client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(venue_data2)).body)['token']
+            response = client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{token2}")
+            uuid2 = JSON.parse(response.body)['uuid']
+
+            uuid_mapping.keys.size.must_equal 1
+            facebook_uuids = uuid_mapping['facebook']
+            facebook_uuids.keys.size.must_equal 2
+            facebook_uuids[@venue_data['venue-id']].must_equal uuid1
+            facebook_uuids[venue_data2['venue-id']].must_equal uuid2
+          end
         end
       end
     end

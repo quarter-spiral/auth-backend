@@ -174,6 +174,48 @@ The response comes as JSON like this:
 }
 ```
 
+### Get or create UUIDs of a batch of users identified by their venue information
+
+Used to translate a batch of users on a venue to their identities in our system. E.g. get the QS identity of a bunch of facebook friends of a user.
+
+#### Request
+
+**POST** to ``/api/v1/uuids/batch``
+
+##### Body
+
+JSON encoded object of venue information like this:
+
+```javascript
+{
+  "facebook": [
+    {
+      "venue-id": "1234567",
+      "name": "Peter Smith",
+      "email": "peter@example.com"
+    },
+    {
+      "venue-id": "4395798",
+      "name": "Sam Jackson",
+      "email": "sam@example.com"
+    }
+  ]
+}
+```
+
+#### Response
+
+##### Body
+
+A JSON encoded object mapping venue ids to QS UUIDs like this:
+
+```javascript
+{
+  "1234567": "726762439",
+  "4395798": "348897438"
+}
+```
+
 ### Get information about a token owner
 
 #### Request

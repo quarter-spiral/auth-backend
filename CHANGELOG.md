@@ -1,5 +1,6 @@
 # 0.0.9 WIP
 
+* Adds batch UUID retrieval endpoint for venue identified users
 * Fixes venue token creation without an email address
 * Adds a ``player`` role in the graph to each user created via the venue token endpoint
 * Adds venue identity API endpoint
