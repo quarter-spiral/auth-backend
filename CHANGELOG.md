@@ -1,4 +1,4 @@
-# 0.0.9 WIP
+# 0.0.9
 
 * Adds batch UUID retrieval endpoint for venue identified users
 * Fixes venue token creation without an email address
