@@ -31,17 +31,9 @@ PATH
       sinatra-flash
       uuid
 
-PATH
-  remote: ../graph-backend
-  specs:
-    graph-backend (0.0.10)
-      auth-client (>= 0.0.6)
-      grape (= 0.2.0)
-      json (= 1.7.4)
-      neography (= 0.0.29)
-
 GEM
   remote: https://rubygems.org/
+  remote: https://user:We267RFF7BfwVt4LdqFA@privategems.herokuapp.com/
   specs:
     actionpack (3.2.8)
       activemodel (= 3.2.8)
@@ -80,6 +72,11 @@ GEM
       multi_xml
       rack
       rack-mount
+    graph-backend (0.0.10)
+      auth-client (>= 0.0.6)
+      grape (= 0.2.0)
+      json (= 1.7.4)
+      neography (= 0.0.29)
     graph-client (0.0.5)
       commander
       service-client (>= 0.0.6)
@@ -169,7 +166,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-jdbcsqlite3-adapter
   auth-backend!
-  graph-backend!
+  graph-backend (~> 0.0.10)
   nokogiri
   pg
   rack-client

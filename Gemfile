@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source "https://user:We267RFF7BfwVt4LdqFA@privategems.herokuapp.com/"
 
 # Specify your gem's dependencies in auth-backend.gemspec
 gemspec
@@ -24,5 +25,5 @@ group :development do
   end
   gem 'rack-client'
   gem 'nokogiri'
-  gem 'graph-backend', path: '../graph-backend'
+  gem 'graph-backend', '~> 0.0.10'
 end
