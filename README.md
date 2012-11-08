@@ -8,7 +8,7 @@ Authentication backend
 
 #### Request
 
-**GET** to ``/api/v1/user/:UUID:/identities``
+**GET** to ``/api/v1/users/:UUID:/identities``
 
 ##### Parameters
 
@@ -44,7 +44,7 @@ JSON encoded object like this:
 
 #### Request
 
-**GET** to ``/api/v1/user/batch/identities``
+**GET** to ``/api/v1/users/batch/identities``
 
 ##### Body
 
@@ -89,6 +89,41 @@ JSON encoded object like this:
   }
 }
 ```
+
+### Attach a venue identity to an existing user
+
+#### Request
+
+**POST** to ``/api/v1/users/:UUID:/identities``
+
+##### Parameters
+
+- **UUID** [REQUIRED]: The UUID of the player you want to attach the venue identity to
+
+##### Body
+
+JSON encoded object of the venue identity information you want to attach. E.g.:
+
+```javascript
+{
+  "facebook": {
+    "venue-id": "237954",
+    "name": "Peter Smith"
+  }
+}
+```
+
+#### Response
+
+##### Body
+
+Same response as described in the _Get all venue identities of a user_ section.
+
+##### Error
+
+A 422 status code is returned with an according error message when the specified venue identity already exists.
+
+A 422 status code is returned with an according error message when the specified user already has an identity on one of the specified venues.
 
 ## OAuth API
 

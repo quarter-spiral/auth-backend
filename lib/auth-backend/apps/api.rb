@@ -31,6 +31,10 @@ module Auth::Backend
           end
         end
 
+        def not_authorized!
+          error(403, {error: "Not authorized!"}.to_json)
+        end
+
         def issue_token_for_user(user)
           oauth = Songkick::OAuth2::Model::Authorization.new
           oauth.owner = user
@@ -56,7 +60,13 @@ module Auth::Backend
           @request_token ||= Songkick::OAuth2::Provider.access_token(nil, [], env)
         end
 
-        def create_venue_identity(venue, venue_id, name, email)
+        def create_venue_identity(venue, params)
+          venue_id = params['venue-id']
+          name = params['name']
+          email = params['email'].blank? ? 'unknown@example.com' : params['email']
+
+          error(422, {error: 'Please provide venue-id and name'}) if venue_id.blank? || name.blank?
+
           User.transaction do
             user = User.new(name: name, email: email)
             user.save!(validate: false)
@@ -68,16 +78,20 @@ module Auth::Backend
           error(422, {error: 'Could not create a token on the given venue with the given venue data'}.to_json)
         end
 
-        def find_or_create_venue_identity(venue, params)
+        def find_venue_identity(venue, params)
           venue_id = params['venue-id']
-          name = params['name']
-          email = params['email'].blank? ? 'unknown@example.com' : params['email']
+          error(422, {error: 'Please provide venue-id'}) if venue_id.blank?
 
-          error(422, {error: 'Please provide name and venue-id'}) if venue_id.blank? || name.blank?
+          VenueIdentity.where(venue: venue, venue_id: venue_id).first
+        end
 
-          venue_identity = VenueIdentity.where(venue: venue, venue_id: venue_id).first
+        def find_or_create_venue_identity(venue, params)
+          venue_identity = find_venue_identity(venue, params) ||
+                           create_venue_identity(venue, params)
+        end
 
-          venue_identity ||= create_venue_identity(venue, venue_id, name, email)
+        def user_info(user)
+          {uuid: user.uuid, venues: user.venues}.to_json
         end
       end
 
@@ -96,9 +110,7 @@ module Auth::Backend
 
       get "/users/batch/identities" do
         ensure_authentication!
-        unless request_token.valid?
-          error(403, {error: "Not authorized!"}.to_json)
-        end
+        not_authorized! unless request_token.valid?
 
         body = request.body
         body = body.read if body.respond_to?(:read)
@@ -111,14 +123,38 @@ module Auth::Backend
 
       get "/users/:uuid/identities" do
         ensure_authentication!
-        unless request_token.valid?
-          error(403, {error: "Not authorized!"}.to_json)
-        end
+        not_authorized! unless request_token.valid?
 
         user = User.where(uuid: params[:uuid]).first
         error(404, {error: "User does not exist!"}.to_json) unless user
 
-        {uuid: user.uuid, venues: user.venues}.to_json
+        user_info(user)
+      end
+
+      post "/users/:uuid/identities" do
+        ensure_authentication!
+        not_authorized! unless request_token.valid?
+
+        body = request.body
+        body = body.read if body.respond_to?(:read)
+        data = JSON.parse(body)
+
+        user = request_token.owner
+
+        VenueIdentity.transaction do
+          data.each do |venue, venue_information|
+            existing_identity = find_venue_identity(venue, venue_information)
+
+            error(422, {error: "Venue identity for #{venue} id #{existing_identity.venue_id} already exists!"}.to_json) if existing_identity
+
+            error(422, {error: "User already has an identity on #{venue}!"}.to_json) if user.venue_identities.where(venue: venue).first
+
+            VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_information['venue-id'], email: venue_information['email'] || 'unknown@example.com', name: venue_information['name'])
+          end
+        end
+
+        status 201
+        user_info(user)
       end
 
       post "/uuids/batch" do
@@ -140,12 +176,9 @@ module Auth::Backend
       end
 
       get '/me' do
-        if request_token.valid?
-          request_token.owner.private_info.to_json
-        else
-          status 403
-          {error: 'Not authorized!'}.to_json
-        end
+        not_authorized! unless request_token.valid?
+
+        request_token.owner.private_info.to_json
       end
 
       get '/verify' do

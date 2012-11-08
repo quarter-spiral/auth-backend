@@ -1,3 +1,8 @@
+# 0.0.10 WIP
+
+* Adds an endpoint to attach venue identities to users
+* Fixes some wrong URLs in the README
+
 # 0.0.9
 
 * Adds batch UUID retrieval endpoint for venue identified users

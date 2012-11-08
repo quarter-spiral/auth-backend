@@ -119,6 +119,42 @@ describe "Authentication API" do
         }
       })
     end
+
+    it "can attach a venue identity to a user" do
+      uuid = @user['uuid']
+      response = client.get("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"})
+      identities = JSON.parse(response.body)
+      identities['venues'].empty?.must_equal true
+
+      client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('facebook' => @facebook_data))
+      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('galaxy-spiral' => @galaxy_spiral_data))
+      posting_body = response.body
+
+      response = client.get("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"})
+      posting_body.must_equal response.body
+      identities = JSON.parse(response.body)
+      identities['venues'].size.must_equal 2
+      identities['venues']['facebook']['id'].must_equal @facebook_data['venue-id']
+      identities['venues']['galaxy-spiral']['id'].must_equal @galaxy_spiral_data['venue-id']
+    end
+
+    it "can not attach a venue identity twice" do
+      uuid = @user['uuid']
+      response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@facebook_data))
+      response.status.must_equal 201
+
+      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('facebook' => @facebook_data))
+      response.status.must_equal 422
+    end
+
+    it "can only add one identity per venue to any user" do
+      uuid = @user['uuid']
+      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('facebook' => @facebook_data))
+      response.status.must_equal 201
+
+      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('facebook' => @galaxy_spiral_data))
+      response.status.must_equal 422
+    end
   end
 
   describe "OAuth API" do
@@ -187,7 +223,6 @@ describe "Authentication API" do
       end
 
       it "can get a token on behalf of an app" do
-
         response = client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{@app_token}")
         info = JSON.parse(response.body)
         info['type'].must_equal 'app'
