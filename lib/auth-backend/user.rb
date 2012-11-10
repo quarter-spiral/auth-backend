@@ -12,7 +12,7 @@ module Auth::Backend
     validates :name, presence: true, uniqueness: true
     validates :email, presence: true, uniqueness: true
 
-    has_many :venue_identities
+    has_many :venue_identities, dependent: :destroy
 
     before_create :set_uuid
 
