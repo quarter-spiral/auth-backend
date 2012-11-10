@@ -20,6 +20,12 @@ module Auth::Backend
           uid: 'bmycruwwc96b5otil3fipgh8rcoj9z',
           secret: 'rcghf9way9i7lbdzyakaecly5ow9fau',
           redirect_uri: ENV['QS_CANVAS_APP_URL']
+        },
+        {
+          name: "Playercenter",
+          uid: '953apz80uziz6618hkheki4eub4w6cy',
+          secret: 'm2ona42hvh7xthauditt63ri21qe1up',
+          redirect_uri: "#{ENV['QS_PLAYERCENTER_BACKEND_URL']}"
         }
       ]
 
