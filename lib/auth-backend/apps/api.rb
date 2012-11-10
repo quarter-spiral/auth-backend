@@ -67,11 +67,12 @@ module Auth::Backend
 
           error(422, {error: 'Please provide venue-id and name'}) if venue_id.blank? || name.blank?
 
+          token = own_token
           User.transaction do
             user = User.new(name: name, email: email)
             user.save!(validate: false)
             venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id, email: email, name: name)
-            connection.graph.add_role(user.uuid, own_token, 'player')
+            connection.graph.add_role(user.uuid, token, 'player')
             venue_identity
           end
         rescue ActiveRecord::RecordInvalid => e
