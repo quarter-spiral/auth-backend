@@ -1,5 +1,8 @@
-# 0.0.10 WIP
+# 0.0.10
 
+* Adds OAuth credentials for the playercenter on metaserver
+* Destroys venue identities of a user along with him
+* Fixes a bug which caused authentication errors in graph due to transactions
 * Adds an endpoint to attach venue identities to users
 * Fixes some wrong URLs in the README
 
