@@ -26,6 +26,12 @@ module Auth::Backend
           uid: '953apz80uziz6618hkheki4eub4w6cy',
           secret: 'm2ona42hvh7xthauditt63ri21qe1up',
           redirect_uri: "#{ENV['QS_PLAYERCENTER_BACKEND_URL']}"
+        },
+        {
+          name: "Devcenter",
+          uid: 'l738roicmwq76lm3h42gxnjfye2253h',
+          secret: 'ibeylszv9eicleyhpuwqj819vhkl0l5',
+          redirect_uri: "#{ENV['QS_DEVCENTER_BACKEND_URL']}"
         }
       ]
 
