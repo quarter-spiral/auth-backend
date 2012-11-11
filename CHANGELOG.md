@@ -1,5 +1,6 @@
 # 0.0.11 WIP
 
+* Stops deleting apps from happening when cancelling the confirmation
 * Adds a spiral-galaxy OAuth token for metaserver
 * Adds a devcenter-backend OAuth token for metaserver
 
