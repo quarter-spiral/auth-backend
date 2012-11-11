@@ -1,5 +1,6 @@
 # 0.0.11 WIP
 
+* Adds a spiral-galaxy OAuth token for metaserver
 * Adds a devcenter-backend OAuth token for metaserver
 
 # 0.0.10

@@ -32,6 +32,12 @@ module Auth::Backend
           uid: 'l738roicmwq76lm3h42gxnjfye2253h',
           secret: 'ibeylszv9eicleyhpuwqj819vhkl0l5',
           redirect_uri: "#{ENV['QS_DEVCENTER_BACKEND_URL']}"
+        },
+        {
+          name: "Spiral Galaxy",
+          uid: 'nwwd7pi7lqoiw3utuy1qawgl920xw10',
+          secret: 'kaqrs5nnau2tjnmo4r2w2q86wue3bo7',
+          redirect_uri: "#{ENV['QS_SPIRAL_GALAXY_URL']}/auth/auth_backend/callback"
         }
       ]
 
