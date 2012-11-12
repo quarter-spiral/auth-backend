@@ -1,4 +1,4 @@
-# 0.0.11 WIP
+# 0.0.11
 
 * Renames galaxy-spiral to spiral-galaxy
 * Stops deleting apps from happening when cancelling the confirmation
