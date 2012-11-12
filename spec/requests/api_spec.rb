@@ -52,7 +52,7 @@ describe "Authentication API" do
     it "can get the venue identities of a user" do
       response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@facebook_data))
       response.status.must_equal 201
-      response = client.post("http://auth-backend.dev/api/v1/token/venue/galaxy-spiral", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@galaxy_spiral_data))
+      response = client.post("http://auth-backend.dev/api/v1/token/venue/spiral-galaxy", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@galaxy_spiral_data))
       response.status.must_equal 201
       VenueIdentity.count.must_equal 2
       VenueIdentity.all.each {|vi| vi.user = User.find(@user['id']); vi.save!}
@@ -67,7 +67,7 @@ describe "Authentication API" do
       data['venues'].must_equal(
         'facebook' => {'name' => @facebook_data['name'],
                        'id' => @facebook_data['venue-id']},
-        'galaxy-spiral' => {'name' => @galaxy_spiral_data['name'],
+        'spiral-galaxy' => {'name' => @galaxy_spiral_data['name'],
                             'id' => @galaxy_spiral_data['venue-id']}
       )
     end
@@ -75,13 +75,13 @@ describe "Authentication API" do
     it "can get the venue identities of a bunch of users" do
       response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@facebook_data))
       response.status.must_equal 201
-      response = client.post("http://auth-backend.dev/api/v1/token/venue/galaxy-spiral", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@galaxy_spiral_data))
+      response = client.post("http://auth-backend.dev/api/v1/token/venue/spiral-galaxy", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@galaxy_spiral_data))
       response.status.must_equal 201
       VenueIdentity.count.must_equal 2
       VenueIdentity.all.each {|vi| vi.user = User.find(@user['id']); vi.save!}
 
       @user2 = TEST_HELPERS.create_user!(name: 'Sam', email: 'sam@example.com', password: @password, admin: 'false')
-      response = client.post("http://auth-backend.dev/api/v1/token/venue/galaxy-spiral", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump({
+      response = client.post("http://auth-backend.dev/api/v1/token/venue/spiral-galaxy", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump({
         'venue-id' => '438957380',
         'name' => 'Sam The Man',
         'email' => 'samman@example.com'
@@ -103,14 +103,14 @@ describe "Authentication API" do
           'venues' => {
             'facebook' => {'name' => @facebook_data['name'],
                            'id' => @facebook_data['venue-id']},
-             'galaxy-spiral' => {'name' => @galaxy_spiral_data['name'],
+             'spiral-galaxy' => {'name' => @galaxy_spiral_data['name'],
                                  'id' => @galaxy_spiral_data['venue-id']}
           }
         },
         @user2['uuid'] => {
           'uuid' => @user2['uuid'],
           'venues' => {
-            'galaxy-spiral' => {'name' => 'Sam The Man', 'id' => '438957380'}
+            'spiral-galaxy' => {'name' => 'Sam The Man', 'id' => '438957380'}
           }
         },
         @user3['uuid'] => {
@@ -127,7 +127,7 @@ describe "Authentication API" do
       identities['venues'].empty?.must_equal true
 
       client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('facebook' => @facebook_data))
-      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('galaxy-spiral' => @galaxy_spiral_data))
+      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('spiral-galaxy' => @galaxy_spiral_data))
       posting_body = response.body
 
       response = client.get("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"})
@@ -135,7 +135,7 @@ describe "Authentication API" do
       identities = JSON.parse(response.body)
       identities['venues'].size.must_equal 2
       identities['venues']['facebook']['id'].must_equal @facebook_data['venue-id']
-      identities['venues']['galaxy-spiral']['id'].must_equal @galaxy_spiral_data['venue-id']
+      identities['venues']['spiral-galaxy']['id'].must_equal @galaxy_spiral_data['venue-id']
     end
 
     it "can not attach a venue identity twice" do
@@ -270,7 +270,7 @@ describe "Authentication API" do
           response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
           response.status.must_equal 201
 
-          response = client.post("http://auth-backend.dev/api/v1/token/venue/galaxy-spiral", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
+          response = client.post("http://auth-backend.dev/api/v1/token/venue/spiral-galaxy", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
           response.status.must_equal 201
 
           response = client.post("http://auth-backend.dev/api/v1/token/venue/bullshit", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
