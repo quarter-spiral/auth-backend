@@ -1,3 +1,7 @@
+# 0.0.12 WIP
+
+* Refactors galaxy-spiral to spiral-galaxy in the README
+
 # 0.0.11
 
 * Renames galaxy-spiral to spiral-galaxy

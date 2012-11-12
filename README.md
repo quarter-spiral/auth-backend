@@ -32,7 +32,7 @@ JSON encoded object like this:
       "id": "12345",
       "name": "Peter S"
     },
-    "galaxy-spiral": {
+    "spiral-galaxy": {
        "id": "67890",
        "name": "P Smith"
     }
@@ -67,7 +67,7 @@ JSON encoded object like this:
         "id": "12345",
         "name": "Peter S"
       },
-      "galaxy-spiral": {
+      "spiral-galaxy": {
          "id": "67890",
          "name": "P Smith"
       }
@@ -183,7 +183,7 @@ If there is no user associated for the given venue and venue ID a new one will b
 
 ###### Parameters
 
-- **VENUE** [REQUIRED]: The id of the venue (e.g. ``facebook`` or ``galaxy-spiral``)
+- **VENUE** [REQUIRED]: The id of the venue (e.g. ``facebook`` or ``spiral-galaxy``)
 
 ###### Body
 
