@@ -116,7 +116,9 @@ module Auth::Backend
         body = request.body
         body = body.read if body.respond_to?(:read)
 
-        users = JSON.parse(body).map {|uuid| User.where(uuid: uuid).first}
+        uuids = JSON.parse(body)
+        users = User.where(uuid: uuids).includes(:venue_identities).all
+
         error(404, {error: "A user does not exist!"}) unless users.select {|u| u.nil?}.empty?
 
         Hash[users.map {|u| [u.uuid, {uuid: u.uuid, venues: u.venues}]}].to_json
