@@ -7,7 +7,7 @@ module Auth::Backend
         env['NAMESPACE_INFO'] = '/admin'
 
         authorize!('/login')
-        redirect('/login') unless current_user.admin?
+        redirect('/login') unless has_admin_privileges?
 
         @controller_id = 'admin'
       end
@@ -26,6 +26,18 @@ module Auth::Backend
         @user = User.find(params[:id])
 
         erb :'admin/users/edit'
+      end
+
+      post '/users/:id/impersonate' do
+        user = User.find(params[:id])
+        warden_data[:user] = user.id
+        if user.id == current_user.id
+          flash[:success] = "Impersonating stopped"
+        else
+          flash[:success] = "Now impersonating #{user.name} (#{user.id})"
+        end
+
+        redirect '/admin'
       end
 
       get '/users/new' do

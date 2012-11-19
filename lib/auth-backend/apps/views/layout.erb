@@ -21,7 +21,7 @@
   </head>
 
   <body class="<%= @controller_id ? "controller-#{@controller_id}" : '' %>">
-    <% if current_user && current_user.admin? %>
+    <% if has_admin_privileges? %>
       <div class="container">
         <div class="row">
           <div class="span12">
@@ -33,6 +33,9 @@
                   <li><a href="/admin/apps">Apps</a></li>
                 </ul>
                 <ul class="nav pull-right">
+                  <% if impersonating? %>
+                    <li class="btn-small btn-danger"><a href="/admin/users/<%= admin_user.id %>/impersonate" data-method="post" title="You are currently impersonating <%=h current_user.name %>" style="color:white; text-shadow: none;">Stop Impersonating</a></li>
+                  <% end %>
                   <li><a href="/profile">Your Account</a></li>
                   <li><a href="/logout">Log out</a></li>
                 </ul>

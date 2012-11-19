@@ -35,6 +35,24 @@ module Auth::Backend
 
           erb :'/support/form_field', locals: options
         end
+
+        def warden_data
+          session["warden.user.#{env['warden'].config.default_scope}.key"]
+        end
+
+        def admin_user
+          id = warden_data[:admin_user]
+          return unless id
+          User.find(id)
+        end
+
+        def impersonating?
+          warden_data[:admin_user] && warden_data[:admin_user] != warden_data[:user]
+        end
+
+        def has_admin_privileges?
+          current_user && (current_user.admin? || admin_user)
+        end
       end
 
       def self.registered(app)

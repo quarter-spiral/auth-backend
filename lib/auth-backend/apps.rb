@@ -20,11 +20,12 @@ module Auth::Backend
       end
 
       Warden::Manager.serialize_into_session do |user|
-        user.id
+        {user: user.id, admin_user: user.admin? ? user.id : nil}
       end
 
-      Warden::Manager.serialize_from_session do |id|
-        User.find(id)
+      Warden::Manager.serialize_from_session do |data|
+        data = {user: data} unless data.kind_of?(Hash)
+        User.find(data[:user])
       end
     end
 

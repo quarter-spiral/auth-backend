@@ -24,6 +24,10 @@
                   <i class="icon-pencil"></i>
                 </a>
 
+                <a href="/admin/users/<%= user.id %>/impersonate" data-method="post" class="btn">
+                  <i class="icon-user"></i>
+                </a>
+
                 <a href="/admin/users/<%= user.id %>" data-method="delete" data-confirm="Delete user?" class="btn btn-danger">
                   <i class="icon-trash"></i>
                 </a>
@@ -35,7 +39,7 @@
 
       <%= paginate @users %>
 
-    </div>  
+    </div>
     <div class="span2">
       <a class="btn btn-success" href="/admin/users/new">
         <i class="icon-plus-sign"></i> Add User

@@ -1,5 +1,6 @@
 # 0.0.12 WIP
 
+* Makes it possible as an admin to impersonate other users
 * Fixes random bugs on Heroku by switching from Webrick to Thin
 * Refactors galaxy-spiral to spiral-galaxy in the README
 
