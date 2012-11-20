@@ -1,4 +1,4 @@
-# 0.0.12 WIP
+# 0.0.12
 
 * Makes it possible as an admin to impersonate other users
 * Fixes random bugs on Heroku by switching from Webrick to Thin
