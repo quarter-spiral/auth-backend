@@ -1,3 +1,7 @@
+# 0.0.13 WIP
+
+* Fixes bug when working with legacy sessions
+
 # 0.0.12
 
 * Makes it possible as an admin to impersonate other users

@@ -37,7 +37,8 @@ module Auth::Backend
         end
 
         def warden_data
-          session["warden.user.#{env['warden'].config.default_scope}.key"]
+          hash = session["warden.user.#{env['warden'].config.default_scope}.key"]
+          hash.kind_of?(Hash) ? hash : {user: hash}
         end
 
         def admin_user

@@ -24,6 +24,7 @@ module Auth::Backend
       end
 
       Warden::Manager.serialize_from_session do |data|
+        #TODO: Remove once all sessions are transformed
         data = {user: data} unless data.kind_of?(Hash)
         User.find(data[:user])
       end
