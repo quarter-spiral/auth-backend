@@ -56,7 +56,7 @@ module Auth::Backend
 
     def migrate_db!
       Apps.setup_db!
-      ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
+      Apps.migrate_db!
     end
 
     def delete_existing_users!

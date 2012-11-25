@@ -5,10 +5,7 @@ module Auth::Backend
       setup_warden!
       setup_logging!
 
-      # migrate in tests
-      if ENV['RACK_ENV'] == 'test'
-        ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
-      end
+      migrate_db! if ENV['RACK_ENV'] == 'test'
 
       setup_oauth_api_client_app!
     end
@@ -49,6 +46,15 @@ module Auth::Backend
       end
 
       Authentication.set :database, ENV['DATABASE_URL']
+    end
+
+    def self.migrate_db!
+      migration_dir = `bundle show --paths auth-backend`.chomp
+      migration_dirs = migration_dir.split("\n")
+      if migration_dirs.length > 1
+        migration_dir = migration_dirs.detect {|d| d =~ /auth-backend$/}
+      end
+      ActiveRecord::Migrator.migrate([migration_dir])
     end
 
     def self.setup_logging!
