@@ -56,16 +56,7 @@ module Auth::Backend
 
     def migrate_db!
       Apps.setup_db!
-      @db_file = ENV['DATABASE_URL'].gsub(/^sqlite3:\//, '')
-      @db_dir_existed = File.directory?(File.dirname(@db_file))
-      `mkdir -p #{File.dirname(@db_file)}`
-      `touch #{@db_file}`
-      migration_dir = `bundle show --paths auth-backend`.chomp
-      migration_dirs = migration_dir.split("\n")
-      if migration_dirs.length > 1
-        migration_dir = migration_dirs.detect {|d| d =~ /auth-backend$/}
-      end
-      ActiveRecord::Migrator.migrate(migration_dir, nil)
+      ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
     end
 
     def delete_existing_users!

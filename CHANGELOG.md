@@ -1,3 +1,7 @@
+# 0.0.14 WIP
+
+* Moves tests to in-memory DB that gets automatically migrated on each test run
+
 # 0.0.13
 
 * Fixes bug when working with legacy sessions

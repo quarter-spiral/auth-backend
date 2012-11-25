@@ -4,6 +4,12 @@ module Auth::Backend
       setup_db!
       setup_warden!
       setup_logging!
+
+      # migrate in tests
+      if ENV['RACK_ENV'] == 'test'
+        ActiveRecord::Migrator.migrate(ActiveRecord::Migrator.migrations_paths)
+      end
+
       setup_oauth_api_client_app!
     end
 
@@ -37,7 +43,7 @@ module Auth::Backend
       when 'production'
         raise "No database set!" unless ENV['DATABASE_URL']
       when 'test'
-        ENV['DATABASE_URL'] ||= 'sqlite3:/db/test.db'
+        ENV['DATABASE_URL'] ||= 'sqlite3:/:memory:'
       else
         ENV['DATABASE_URL'] ||= 'sqlite3:/db/development.db'
       end
