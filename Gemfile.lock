@@ -19,7 +19,7 @@ GIT
 PATH
   remote: .
   specs:
-    auth-backend (0.0.16)
+    auth-backend (0.0.17)
       activerecord (>= 3.2.9)
       bcrypt-ruby
       graph-client

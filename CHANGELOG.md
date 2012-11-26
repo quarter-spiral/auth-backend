@@ -1,4 +1,4 @@
-# 0.0.17 WIP
+# 0.0.17
 
 * Explicitly use thin on Heroku
 
