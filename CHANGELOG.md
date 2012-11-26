@@ -1,4 +1,4 @@
-# 0.0.15 WIP
+# 0.0.15
 
 * Fixes bug in the test helpers to make tests work after the switch to an in memory db.
 * Fixes bug that causes the batch venue identity endpoint to not return 404 status codes when users were not found

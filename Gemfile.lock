@@ -19,7 +19,7 @@ GIT
 PATH
   remote: .
   specs:
-    auth-backend (0.0.14)
+    auth-backend (0.0.15)
       activerecord (>= 3.2.9)
       bcrypt-ruby
       graph-client
@@ -169,7 +169,7 @@ GEM
     tzinfo (0.3.35)
     url_mount (0.2.1)
       rack
-    uuid (2.3.5)
+    uuid (2.3.6)
       macaddr (~> 1.0)
     virtus (0.5.2)
       backports (~> 2.6.1)
