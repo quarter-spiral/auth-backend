@@ -1,4 +1,4 @@
-# 0.0.16 WIP
+# 0.0.16
 
 * Let the server run threaded to make circular requests possible
 
