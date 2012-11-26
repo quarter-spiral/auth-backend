@@ -72,9 +72,19 @@ describe "Authentication API" do
       )
     end
 
-    it "returns 404 when retrieving the venue identities of a non-existing user" do
+    it "returns 404 when retrieving the venue identities of a non existing user" do
       non_existing_uuid = '999999999999'
       response = client.get "http://auth-backend.dev/api/v1/users/#{non_existing_uuid}/identities", {'Authorization' => "Bearer #{@token}"}
+      response.status.must_equal 404
+    end
+
+    it "returns 404 when retrieving the venue identities of a bunch non existing user" do
+      response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@facebook_data))
+      response = client.get("http://auth-backend.dev/api/v1/me", {"Authorization" => "Bearer #{JSON.parse(response.body)['token']}"})
+      user1 = JSON.parse(response.body)['uuid']
+
+      non_existing_uuid = '999999999999'
+      response = client.get "http://auth-backend.dev/api/v1/users/batch/identities", {'Authorization' => "Bearer #{@token}"}, JSON.dump([user1, non_existing_uuid])
       response.status.must_equal 404
     end
 
