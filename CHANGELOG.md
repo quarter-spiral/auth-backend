@@ -1,3 +1,7 @@
+# 0.0.17 WIP
+
+* Explicitly use thin on Heroku
+
 # 0.0.16
 
 * Let the server run threaded to make circular requests possible
