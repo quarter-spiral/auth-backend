@@ -68,13 +68,23 @@ module Auth::Backend
           error(422, {error: 'Please provide venue-id and name'}) if venue_id.blank? || name.blank?
 
           token = own_token
+          user = User.new(name: name, email: email)
+          venue_identity = nil
           User.transaction do
-            user = User.new(name: name, email: email)
             user.save!(validate: false)
             venue_identity = VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_id, email: email, name: name)
-            connection.graph.add_role(user.uuid, token, 'player')
-            venue_identity
           end
+
+          # This can't be in the transaction as it reaches out to the graph which checks the just created token
+          # therefore the transaction has to be committed
+          begin
+            connection.graph.add_role(user.uuid, token, 'player')
+          rescue Exception => e
+            user.destroy
+            raise e
+          end
+
+          venue_identity
         rescue ActiveRecord::RecordInvalid => e
           error(422, {error: 'Could not create a token on the given venue with the given venue data'}.to_json)
         end

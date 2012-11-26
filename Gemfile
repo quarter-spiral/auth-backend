@@ -13,6 +13,8 @@ group :production do
   end
 end
 
+gem 'thin'
+
 group :development do
   gem 'rake'
 

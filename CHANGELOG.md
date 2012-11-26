@@ -1,3 +1,7 @@
+# 0.0.16 WIP
+
+* Let the server run threaded to make circular requests possible
+
 # 0.0.15
 
 * Fixes bug in the test helpers to make tests work after the switch to an in memory db.
