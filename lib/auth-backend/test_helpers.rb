@@ -51,7 +51,7 @@ module Auth::Backend
     end
 
     def cleanup!
-      `rm -rf #{File.dirname(@db_file)}` unless @db_dir_existed
+      # Noop for legacy reasons
     end
 
     def migrate_db!
