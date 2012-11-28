@@ -1,4 +1,4 @@
-# 0.0.18 WIP
+# 0.0.18
 
 * Fixes a threading bug with our ActiveRecord setup
 
