@@ -1,3 +1,5 @@
+begin
+
 ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
 
 class ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
@@ -12,5 +14,13 @@ class ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
       raise "Unexpected threading problem with the DB driver!" unless result
     end
     result
+  end
+end
+
+rescue NameError => e
+  if e.message.include? "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
+    #do nothing, we just don't use Postgres. Devmode e.g.
+  else
+    raise e
   end
 end

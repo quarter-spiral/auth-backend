@@ -1,3 +1,7 @@
+# 0.0.19 WIP
+
+* Makes the threading bug workaround only kick in when Postgres is used
+
 # 0.0.18
 
 * Fixes a threading bug with our ActiveRecord setup
