@@ -9,4 +9,8 @@ if ENV['RUNS_ON_METASERVER'] && Auth::Backend.env == 'development'
   Auth::Backend::Metaserver.setup!
 end
 
+$stdout.sync = true if ENV['QS_DEBUG_ENABLED']
+
+require 'auth-backend/nasty_activerecord_fix'
+
 run Auth::Backend::App.new

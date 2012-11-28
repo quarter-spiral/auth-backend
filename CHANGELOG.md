@@ -1,3 +1,7 @@
+# 0.0.18 WIP
+
+* Fixes a threading bug with our ActiveRecord setup
+
 # 0.0.17
 
 * Explicitly use thin on Heroku
