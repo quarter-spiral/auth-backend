@@ -1,5 +1,6 @@
 # 0.0.19 WIP
 
+* Adds Newrelic monitoring and ping middleware
 * Fixes Rakefile for db migrations
 * Makes the threading bug workaround only kick in when Postgres is used
 
