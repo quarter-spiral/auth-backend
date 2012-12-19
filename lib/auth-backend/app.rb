@@ -1,5 +1,6 @@
 require 'newrelic_rpm'
 require 'new_relic/agent/instrumentation/rack'
+require 'ping-middleware'
 
 module Auth::Backend
   class App
@@ -23,6 +24,7 @@ module Auth::Backend
         use Rack::Session::Cookie, secret: 'mpbaMleUTnEeX2CyxDCAF16E7Hl8yKaOqjx7W2EAtxT3aIb4jjGus2TC7NpcpABT', key: 'qs_auth_backend_session', :expire_after => 2592000
 
         use NewRelicMiddleware
+        use Ping::Middleware
 
         if options[:test]
           puts "!!***** WARNING - SECURITY IS AT STAKE! YOU HAVE ENABLED THE TEST MODE *****!!"
