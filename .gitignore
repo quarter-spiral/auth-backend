@@ -17,3 +17,4 @@ tmp
 .DS_Store
 db/*.db
 logs/*.log
+log/*.log

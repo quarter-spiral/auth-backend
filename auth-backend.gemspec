@@ -29,4 +29,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'graph-client'
 
   gem.add_dependency 'thin'
+  gem.add_dependency 'newrelic_rpm'
 end
