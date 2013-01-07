@@ -1,3 +1,7 @@
+# 0.0.20 WIP
+
+* Adds search to the user administration
+
 # 0.0.19
 
 * Adds Newrelic monitoring and ping middleware

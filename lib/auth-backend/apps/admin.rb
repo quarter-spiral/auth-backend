@@ -22,6 +22,14 @@ module Auth::Backend
         erb :'admin/users/index'
       end
 
+      get '/users/search' do
+        @query = params[:q]
+        query = "%#{@query}%"
+        @users = User.where(['users.name LIKE ? OR users.email LIKE ? OR users.uuid LIKE ?', query, query, query]).page(params[:page])
+
+        erb :'admin/users/index'
+      end
+
       get '/users/:id/edit' do
         @user = User.find(params[:id])
 
