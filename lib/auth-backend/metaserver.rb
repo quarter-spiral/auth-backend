@@ -19,7 +19,7 @@ module Auth::Backend
           name: "Canvas",
           uid: 'bmycruwwc96b5otil3fipgh8rcoj9z',
           secret: 'rcghf9way9i7lbdzyakaecly5ow9fau',
-          redirect_uri: ENV['QS_CANVAS_APP_URL']
+          redirect_uri: "#{ENV['QS_CANVAS_APP_URL']}/auth/auth_backend/callback"
         },
         {
           name: "Playercenter",

@@ -1,3 +1,7 @@
+# 0.0.21 WIP
+
+* Makes it possible to login to the canvas-app on meta server
+
 # 0.0.20
 
 * Adds search to the user administration
