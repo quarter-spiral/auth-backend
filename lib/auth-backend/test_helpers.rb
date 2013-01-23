@@ -88,11 +88,7 @@ module Auth::Backend
     end
 
     def create_app!
-      password = 'testtest'
-      name = nil
-      while !name || User.where(name: name).first
-        name = (0...12).map{65.+(rand(25)).chr}.join
-      end
+      name, password = generate_name_and_password
       app_name = "app-for-#{name}"
       user = create_user!(name: name, email: "#{name}@example.com", password: password, admin: 'true')
 
@@ -103,8 +99,28 @@ module Auth::Backend
       apps = Nokogiri::HTML(response.body)
 
       secret = apps.css('.alert.alert-success').first.text.gsub(/.*App secret is: /m, '').gsub(/ .*$/, '').chomp
-      id = apps.css("td:contains('#{app_name}')").first.parent.css('td')[1].text
-      {id: id, secret: secret}
+      tr = apps.css("td:contains('#{app_name}')").first.parent
+      id = tr.css('td')[1].text
+      internal_id = tr.css('a[data-method=delete]').first['href'].split('/').last
+      {id: id, secret: secret, internal_id: internal_id}
+    end
+
+    def set_app_redirect_uri!(id, uri)
+      name, password = generate_name_and_password
+      user = create_user!(name: name, email: "#{name}@example.com", password: password, admin: 'true')
+
+      cookie = login(user['name'], user['password'])
+
+      response = client.put("/admin/apps/#{id}", {'Cookie' => cookie}, 'app[redirect_uri]' => uri)
+    end
+
+    def generate_name_and_password
+      password = 'testtest'
+      name = nil
+      while !name || User.where(name: name).first
+        name = (0...12).map{65.+(rand(25)).chr}.join
+      end
+      [name, password]
     end
   end
 end
