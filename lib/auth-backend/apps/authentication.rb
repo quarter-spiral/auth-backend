@@ -9,6 +9,8 @@ module Auth::Backend
       set :auth_login_template, :'authentication/login'
       enable :auth_use_referrer
 
+      set :protection, :except => [:frame_options, :xss_header]
+
       get '/signup' do
         redirect '/' and return if current_user
 
