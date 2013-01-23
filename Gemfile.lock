@@ -19,7 +19,7 @@ GIT
 PATH
   remote: .
   specs:
-    auth-backend (0.0.20)
+    auth-backend (0.0.21)
       activerecord (>= 3.2.9)
       bcrypt-ruby
       graph-client
@@ -116,7 +116,7 @@ GEM
       os (>= 0.9.6)
       rake (>= 0.8.7)
       rubyzip (>= 0.9.7)
-    newrelic_rpm (3.5.4.33)
+    newrelic_rpm (3.5.4.34)
     nokogiri (1.5.5)
     os (0.9.6)
     padrino-core (0.10.7)

@@ -1,4 +1,4 @@
-# 0.0.21 WIP
+# 0.0.21
 
 * Improves test helpers
 * Makes it possible to login to the canvas-app on meta server
