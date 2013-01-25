@@ -1,4 +1,4 @@
-# 0.0.22 WIP
+# 0.0.22
 
 * Adds login with Facebook
 * Disables login with username/password in production
