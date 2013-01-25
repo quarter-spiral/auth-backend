@@ -5,28 +5,33 @@
     </div>
 
     <div class="body">
+      <a class="btn btn-info" href="/auth/facebook">Login with Facebook</a>
 
-      <form action="/login" method="post" class="form">
-        <div class="control-group">
-          <label class="control-label" for="inputName">Name</label>
-          <div class="controls">
-            <input type="text" id="inputName" placeholder="Name" name="name">
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="inputPassword">Password</label>
-          <div class="controls">
-            <input type="password" id="inputPassword" placeholder="Password" name="password">
-          </div>
-        </div>
-        <div class="control-group">
-          <div class="controls">
-            <button type="submit" class="btn btn-success">Log in</button>
-          </div>
-        </div>
-      </form>
 
-      <p class="option">Not yet a member? <a href="/signup">Sign up...</a></p>
+      <% unless settings.production? %>
+        <h2>Login form only visible in development and test mode!</h2>
+        <form action="/login" method="post" class="form">
+          <div class="control-group">
+            <label class="control-label" for="inputName">Name</label>
+            <div class="controls">
+              <input type="text" id="inputName" placeholder="Name" name="name">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputPassword">Password</label>
+            <div class="controls">
+              <input type="password" id="inputPassword" placeholder="Password" name="password">
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn btn-success">Log in</button>
+            </div>
+          </div>
+        </form>
+
+        <p class="option">Not yet a member? <a href="/signup">Sign up...</a></p>
+      <% end %>
     </div>
   </div>
   <div class="footer">

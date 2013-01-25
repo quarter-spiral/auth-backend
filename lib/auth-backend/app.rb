@@ -51,7 +51,12 @@ module Auth::Backend
     end
 
     def call(env)
-      @app.call(env)
+      result = @app.call(env)
+      if env['omniauth.error']
+        [302, {'Content-Type' => 'text/plain', 'Location' => '/auth/denied'}, ['']]
+      else
+        result
+      end
     end
   end
 end

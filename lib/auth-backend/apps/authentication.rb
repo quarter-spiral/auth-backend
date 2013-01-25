@@ -1,4 +1,6 @@
 require 'uri'
+require 'omniauth'
+require 'omniauth-facebook'
 
 module Auth::Backend
   module Apps
@@ -11,7 +13,14 @@ module Auth::Backend
 
       set :protection, :except => [:frame_options, :xss_header]
 
+      use OmniAuth::Builder do
+        provider :facebook, ENV['QS_FB_APP_ID'], ENV['QS_FB_APP_SECRET'], :scope => 'email'
+      end
+
       get '/signup' do
+        # Do not allow signups in production!
+        redirect '/' and return if settings.production?
+
         redirect '/' and return if current_user
 
         @user = User.new
@@ -19,6 +28,9 @@ module Auth::Backend
       end
 
       post '/signup' do
+        # Do not allow signups in production!
+        redirect '/' and return if settings.production?
+
         redirect '/' and return if current_user
 
         @user = User.new(params[:user])
@@ -43,6 +55,30 @@ module Auth::Backend
         else
           redirect settings.auth_success_path
         end
+      end
+
+      get '/auth/denied' do
+        erb :'authentication/denied'
+      end
+
+      get '/auth/facebook/callback' do
+        fb_data = {}
+        fb_data[:name] = request.env['omniauth.auth']['info']['name']
+        fb_data[:id] = request.env['omniauth.auth']['uid']
+        fb_data[:email] = request.env['omniauth.auth']['info']['email']
+
+        venue_id = VenueIdentity.where(venue: 'facebook', venue_id: fb_data[:id]).includes(:user).first
+
+        unless venue_id
+          user = User.new(name: fb_data[:name], email: fb_data[:email])
+          User.transaction do
+            user.save!(validate: false)
+            venue_id = VenueIdentity.create!(user_id: user.id, venue: 'facebook', venue_id: fb_data[:id], email: user.email, name: user.name)
+          end
+        end
+
+        request.env['warden'].set_user(venue_id.user)
+        redirect '/'
       end
 
       get '/' do

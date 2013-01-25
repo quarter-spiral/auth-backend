@@ -1,3 +1,9 @@
+# 0.0.22 WIP
+
+* Adds login with Facebook
+* Disables login with username/password in production
+* Disabled sign ups in production
+
 # 0.0.21
 
 * Improves test helpers

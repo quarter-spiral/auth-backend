@@ -7,6 +7,8 @@ module Auth::Backend
         u.save!
       end
 
+      ENV['QS_FB_APP_ID'] ||= '239267836207466'
+      ENV['QS_FB_APP_SECRET'] ||= '509a725c46330afdae2b631d196f2b70'
 
       apps = [
         {
