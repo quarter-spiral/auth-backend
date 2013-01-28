@@ -67,11 +67,18 @@ module Auth::Backend
 
     def create_user!(options = {})
       options = DEFAULT_USER.merge(options)
+      no_invitation = options.delete(:no_invitation)
 
       user = JSON.parse(client.post("/_tests_/users", {}, options).body)['user']
 
+      create_user_invitation!(user['id']) unless no_invitation
+
       user['password'] = options[:password]
       user
+    end
+
+    def create_user_invitation!(user_id)
+      invitation = JSON.parse(@client.post("#{@host}/_tests_/user_invitations", {}, 'user_id' => user_id.to_s).body)
     end
 
     def login(user, password)

@@ -1,3 +1,7 @@
+# 0.0.24 WIP
+
+* Makes an invitation mandatory to login
+
 # 0.0.23
 
 * Adds user invitations

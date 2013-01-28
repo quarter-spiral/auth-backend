@@ -68,6 +68,68 @@ describe "Authentication" do
     must_redirect_to('/login', response)
   end
 
+  describe "not invited user" do
+    before do
+      User.destroy_all
+      UserInvitation.destroy_all
+      @password = 'schackalacka'
+      @user = TEST_HELPERS.create_user!(password: @password, admin: 'false', no_invitation: true)
+      Apps.setup_oauth_api_client_app!
+    end
+
+    it "redirects to /invite when user not invited yet" do
+      response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+      must_redirect_to('/invite', response)
+
+      cookie = response.headers["Set-Cookie"]
+      response = client.get('http://auth-backend.dev/', {'Cookie' => cookie})
+      must_redirect_to('/invite', response)
+    end
+
+    it "can not redeem an invalid invitation code" do
+      response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+      cookie = response.headers["Set-Cookie"]
+      response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: 'does-not-exist')
+      cookie = response.headers["Set-Cookie"]
+      response = client.get('http://auth-backend.dev/', {'Cookie' => cookie})
+      must_redirect_to('/invite', response)
+    end
+
+    it "can redeem a valid invitation code" do
+      invitation = UserInvitation.create!
+
+      response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+      cookie = response.headers["Set-Cookie"]
+      response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+
+      cookie = response.headers["Set-Cookie"]
+      response = client.get('http://auth-backend.dev/', {'Cookie' => cookie})
+      response.status.must_equal 200
+
+      invitation.reload
+      invitation.user_id.wont_be_nil
+      invitation.redeemed_at.wont_be_nil
+    end
+
+    it "can not reddem an invitation code twice" do
+      invitation = UserInvitation.create!
+
+      response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+      cookie = response.headers["Set-Cookie"]
+      response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+
+      user2 = TEST_HELPERS.create_user!(name: @user['name'].reverse, email: @user['email'].reverse, password: @password, admin: 'false', no_invitation: true)
+
+      response = client.post("http://auth-backend.dev/login", {}, name: user2['name'], password: @password)
+      cookie = response.headers["Set-Cookie"]
+      response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+
+      cookie = response.headers["Set-Cookie"]
+      response = client.get('http://auth-backend.dev/', {'Cookie' => cookie})
+      must_redirect_to('/invite', response)
+    end
+  end
+
   it "redirects to root after a successful login" do
     response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
     must_redirect_to('/', response)
@@ -77,4 +139,3 @@ describe "Authentication" do
     response.status.must_equal 200
   end
 end
-

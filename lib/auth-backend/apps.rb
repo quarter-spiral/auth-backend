@@ -17,8 +17,19 @@ module Auth::Backend
         end
 
         def authenticate!
-          u = Auth::Backend::User.authenticate(params['name'], params['password'])
-          u.nil? ? fail!("Could not log in") : success!(u)
+          session.delete :uninvited_user
+
+          user = Auth::Backend::User.authenticate(params['name'], params['password'])
+
+          fail!("Could not log in")  and return unless user
+
+          unless user.invited?
+            session[:uninvited_user] = user.id
+            redirect!("/invite")
+            return
+          end
+
+          success!(user)
         end
       end
 

@@ -82,10 +82,52 @@ module Auth::Backend
       end
 
       get '/' do
+        redirect '/invite' and return if session[:uninvited_user]
+
         authorize!('/login')
         redirect '/admin' and return if current_user.admin?
 
         erb :'authentication/index'
+      end
+
+      get '/invite' do
+        if authenticated?
+          session.delete :uninvited_user
+          redirect '/'
+          return
+        end
+
+        redirect '/login' and return unless session[:uninvited_user]
+
+        erb :'authentication/invite'
+      end
+
+      post '/invite' do
+        if authenticated?
+          session[:uninvited_user]
+          redirect '/'
+          return
+        end
+
+        redirect '/login' and return unless session[:uninvited_user]
+
+        uninvited_user = User.find(session[:uninvited_user])
+
+        invitation = UserInvitation.redeemable.where(code: params[:code]).first
+        unless invitation
+          flash[:error] = "Invitation code invalid"
+          redirect '/invite'
+          return
+        end
+
+        if invitation.redeem_for(uninvited_user)
+          session.delete :uninvited_user
+          self.user = uninvited_user
+          redirect '/'
+        else
+          flash[:error] = "Could not redeem the invitation code"
+          redirect '/invite'
+        end
       end
 
       get '/profile' do

@@ -23,6 +23,12 @@ module Auth::Backend
       get '/users' do
         Auth::Backend::User.all.to_json
       end
+
+      post '/user_invitations' do
+        invitation = Auth::Backend::UserInvitation.create!(user_id: params[:user_id], redeemed_at: Time.now)
+
+        invitation.to_json
+      end
     end
   end
 end

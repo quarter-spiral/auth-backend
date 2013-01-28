@@ -34,6 +34,10 @@ module Auth::Backend
       Hash[venue_identities.map {|vi| [vi.venue, {id: vi.venue_id, name: vi.name}]}]
     end
 
+    def invited?
+      user_invitation
+    end
+
     protected
     def set_uuid
       self.uuid = UUID.new.generate

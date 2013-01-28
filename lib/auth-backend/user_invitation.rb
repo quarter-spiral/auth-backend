@@ -10,8 +10,20 @@ module Auth::Backend
 
     before_validation :generate_code
 
+    scope :redeemable, lambda {where("user_invitations.user_id IS NULL")}
+
     def redeemed?
       !!user_id
+    end
+
+    def redeem_for(user)
+      return false if redeemed?
+
+      self.user_id = user.id
+      self.redeemed_at = Time.now
+      save!
+
+      true
     end
 
     protected
