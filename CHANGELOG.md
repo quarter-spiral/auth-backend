@@ -1,4 +1,4 @@
-# 0.0.23 WIP
+# 0.0.23
 
 * Adds user invitations
 
