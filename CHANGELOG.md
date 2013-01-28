@@ -1,3 +1,7 @@
+# 0.0.25 WIP
+
+* Fixes bug for user invitations when logging in with Facebook
+
 # 0.0.24
 
 * Makes an invitation mandatory to login
