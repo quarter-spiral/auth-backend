@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="span10">
+      <h1>Invitations</h1>
+      <table class="table table-striped user-invitations">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Redeemed</th>
+            <th>Tools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @user_invitations.each do |user_invitation| %>
+            <tr>
+              <td><%=h user_invitation.code %></td>
+              <td>
+                <% if user_invitation.redeemed? %>
+                  <%=h user_invitation.user.name %> / <%= user_invitation.redeemed_at %>
+                <% else %>
+                  <i>available</i>
+                <% end %>
+              </td>
+              <td>
+                <a href="/admin/user_invitations/<%= user_invitation.id %>" data-method="delete" data-confirm="Delete invitation?" class="btn btn-danger">
+                  <i class="icon-trash"></i>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <%= paginate @user_invitations %>
+
+    </div>
+    <div class="span2">
+      <form action="/admin/user_invitations" method="post">
+        <button class="btn btn-success">
+          <i class="icon-plus-sign"></i> Create Invitation
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

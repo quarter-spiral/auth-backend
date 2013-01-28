@@ -1,3 +1,7 @@
+# 0.0.23 WIP
+
+* Adds user invitations
+
 # 0.0.22
 
 * Adds login with Facebook

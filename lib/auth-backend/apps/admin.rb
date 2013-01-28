@@ -93,6 +93,28 @@ module Auth::Backend
         end
       end
 
+      get '/user_invitations' do
+        @user_invitations = UserInvitation.includes(:user).order('user_invitations.redeemed_at ASC, user_invitations.created_at DESC').page(params[:page])
+
+        erb :'admin/user_invitations/index'
+      end
+
+      post '/user_invitations' do
+        user_invitation = UserInvitation.create!
+        flash[:success] = "Invitation code #{user_invitation.code} generated."
+
+        redirect '/admin/user_invitations'
+      end
+
+      delete '/user_invitations/:id' do
+        user_invitation = UserInvitation.find(params[:id])
+        user_invitation.destroy
+
+        flash[:success] = "Invitation #{user_invitation.code} deleted."
+
+        redirect '/admin/user_invitations'
+      end
+
       get '/apps' do
         @apps = OauthApp.page(params[:page])
 

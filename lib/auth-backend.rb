@@ -18,6 +18,7 @@ require 'songkick/oauth2/provider'
 
 require "auth-backend/version"
 require "auth-backend/user"
+require "auth-backend/user_invitation"
 require "auth-backend/venue_identity"
 require "auth-backend/oauth_app"
 require "auth-backend/connection"

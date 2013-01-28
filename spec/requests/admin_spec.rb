@@ -189,5 +189,51 @@ describe "Administration" do
         end
       end
     end
+
+    describe "user invitations administration" do
+      before do
+        Auth::Backend::UserInvitation.destroy_all
+      end
+
+      it "can reach the user invitation administration" do
+        response = client.get("http://auth-backend.dev/admin/user_invitations", 'Cookie' => @cookie)
+        response.status.must_equal 200
+      end
+
+      it "can create a new invitation" do
+        response = client.get("http://auth-backend.dev/admin/user_invitations", 'Cookie' => @cookie)
+        invitations = Nokogiri::HTML(response.body)
+        invitations.css("table.user-invitations tbody tr").must_be_empty
+
+        client.post('http://auth-backend.dev/admin/user_invitations', 'Cookie' => @cookie)
+
+        response = client.get('http://auth-backend.dev/admin/user_invitations', 'Cookie' => @cookie)
+        invitations = Nokogiri::HTML(response.body)
+        invitations.css("table.user-invitations tbody tr").wont_be_empty
+      end
+
+      describe "with an app" do
+        before do
+          client.post('http://auth-backend.dev/admin/user_invitations', 'Cookie' => @cookie)
+          response = client.get('http://auth-backend.dev/admin/user_invitations', 'Cookie' => @cookie)
+          invitations = Nokogiri::HTML(response.body)
+          links = invitations.css("table.user-invitations tr a[href]")
+          links.detect {|link| link['href'] =~ /^\/admin\/user_invitations\/(\d+)$/}
+          @invitation_id = $1.to_i
+        end
+
+        it "can delete an invitation" do
+          response = client.get('http://auth-backend.dev/admin/user_invitations', 'Cookie' => @cookie)
+          invitations = Nokogiri::HTML(response.body)
+          invitations.css("table.user-invitations tbody tr").wont_be_empty
+
+          client.delete("http://auth-backend.dev/admin/user_invitations/#{@invitation_id}", 'Cookie' => @cookie)
+
+          response = client.get('http://auth-backend.dev/admin/user_invitations', 'Cookie' => @cookie)
+          invitations = Nokogiri::HTML(response.body)
+          invitations.css("table.user-invitations tbody tr").must_be_empty
+        end
+      end
+    end
   end
 end
