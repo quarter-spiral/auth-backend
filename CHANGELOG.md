@@ -1,4 +1,4 @@
-# 0.0.25 WIP
+# 0.0.25
 
 * Fixes bug for user invitations when logging in with Facebook
 
