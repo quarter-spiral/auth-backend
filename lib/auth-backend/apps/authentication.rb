@@ -80,7 +80,7 @@ module Auth::Backend
         #request.env['warden'].set_user(venue_id.user)
         if venue_id.user.invited?
           self.user = venue_id.user
-          redirect '/'
+          redirect session[:return_to] || '/'
         else
           session[:uninvited_user] = venue_id.user.id
           redirect '/invite'

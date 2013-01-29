@@ -1,3 +1,7 @@
+# 0.0.26 WIP
+
+* Fixes missing redirects back to OAuth apps after login with Facebook
+
 # 0.0.25
 
 * Fixes bug for user invitations when logging in with Facebook
