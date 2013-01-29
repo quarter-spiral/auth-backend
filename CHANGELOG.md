@@ -1,4 +1,4 @@
-# 0.0.26 WIP
+# 0.0.26
 
 * Fixes missing redirects back to OAuth apps after login with Facebook
 
