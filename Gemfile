@@ -27,5 +27,5 @@ group :development do
   end
   gem 'rack-client'
   gem 'nokogiri'
-  gem 'graph-backend', '~> 0.0.11'
+  gem 'graph-backend', '~> 0.0.21'
 end

@@ -17,13 +17,14 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
+  gem.add_dependency 'rack', '~> 1.4.5'
   gem.add_dependency 'sinatra'
   gem.add_dependency 'sinatra-flash'
   gem.add_dependency 'bcrypt-ruby'
   gem.add_dependency 'activerecord', '>= 3.2.9'
   gem.add_dependency 'sinatra-activerecord'
   gem.add_dependency 'uuid'
-  gem.add_dependency 'json'
+  gem.add_dependency 'json', '~> 1.7.7'
   gem.add_dependency 'kaminari'
   gem.add_dependency 'padrino-helpers'
   gem.add_dependency 'graph-client'
