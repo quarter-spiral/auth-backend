@@ -78,13 +78,8 @@ module Auth::Backend
         end
 
         #request.env['warden'].set_user(venue_id.user)
-        if venue_id.user.invited?
-          self.user = venue_id.user
-          redirect session[:return_to] || '/'
-        else
-          session[:uninvited_user] = venue_id.user.id
-          redirect '/invite'
-        end
+        self.user = venue_id.user
+        redirect session[:return_to] || '/'
       end
 
       get '/' do
@@ -98,26 +93,17 @@ module Auth::Backend
 
       get '/invite' do
         if authenticated?
-          session.delete :uninvited_user
-          redirect '/'
+          redirect '/' and return if current_user.invited?
+        else
+          redirect '/login'
           return
         end
-
-        redirect '/login' and return unless session[:uninvited_user]
 
         erb :'authentication/invite'
       end
 
       post '/invite' do
-        if authenticated?
-          session[:uninvited_user]
-          redirect '/'
-          return
-        end
-
-        redirect '/login' and return unless session[:uninvited_user]
-
-        uninvited_user = User.find(session[:uninvited_user])
+        redirect '/login' and return unless authenticated?
 
         invitation = UserInvitation.redeemable.where(code: params[:code]).first
         unless invitation
@@ -126,10 +112,8 @@ module Auth::Backend
           return
         end
 
-        if invitation.redeem_for(uninvited_user)
-          session.delete :uninvited_user
-          self.user = uninvited_user
-          redirect '/'
+        if invitation.redeem_for(current_user)
+          redirect session[:return_to] || '/'
         else
           flash[:error] = "Could not redeem the invitation code"
           redirect '/invite'
@@ -165,12 +149,15 @@ module Auth::Backend
           @oauth2 = Songkick::OAuth2::Provider.parse(@owner, env)
 
           if @oauth2.redirect?
-            redirect @oauth2.redirect_uri, @oauth2.response_status
+            if @oauth2.client.needs_invitation && !@owner.invited?
+              redirect '/invite'
+            else
+              redirect @oauth2.redirect_uri, @oauth2.response_status
+            end
           end
 
           headers @oauth2.response_headers
           status  @oauth2.response_status
-
           if body = @oauth2.response_body
             body
           elsif @oauth2.valid?
@@ -192,6 +179,8 @@ module Auth::Backend
 
         if params['allow'] == '1'
           @auth.grant_access!
+          session[:return_to] = @auth.redirect_uri
+          redirect '/invite' and return if @auth.client.needs_invitation && !current_user.invited?
         else
           @auth.deny_access!
         end

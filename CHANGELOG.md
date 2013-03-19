@@ -1,3 +1,7 @@
+# 0.0.28 WIP
+
+* Moves invitations to a per app basis
+
 # 0.0.27
 
 * Updates rack

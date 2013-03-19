@@ -15,7 +15,8 @@ module Auth::Backend
           name: "Devapp",
           uid: 'f3f2b27f4baed577d2f631e77fd8a068361281ca56edfed07b8cf4392044bd83',
           secret: 'b402c89ec06f9f210f4d6a3d88e71675238bb4a38752375a4fad4c0ab646e122',
-          redirect_uri: "#{ENV['QS_SAMPLE_DEVAPP_URL']}/auth/auth_backend/callback"
+          redirect_uri: "#{ENV['QS_SAMPLE_DEVAPP_URL']}/auth/auth_backend/callback",
+          needs_invitation: true
         },
         {
           name: "Canvas",
@@ -49,6 +50,7 @@ module Auth::Backend
         a.save!
         a.client_id = app[:uid]
         a.client_secret = app[:secret]
+        a.needs_invitation = true if app[:needs_invitation]
         a.save!
       end
     end

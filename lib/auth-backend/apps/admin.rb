@@ -150,6 +150,8 @@ module Auth::Backend
 
         @app.update_attributes(params[:app])
 
+        @app.needs_invitation = params[:app][:needs_invitation] == 'true' if params[:app][:needs_invitation]
+
         if @app.save
           flash[:success] = "App saved."
           redirect '/admin/apps'

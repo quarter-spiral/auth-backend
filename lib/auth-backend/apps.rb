@@ -23,12 +23,6 @@ module Auth::Backend
 
           fail!("Could not log in")  and return unless user
 
-          unless user.invited?
-            session[:uninvited_user] = user.id
-            redirect!("/invite")
-            return
-          end
-
           success!(user)
         end
       end

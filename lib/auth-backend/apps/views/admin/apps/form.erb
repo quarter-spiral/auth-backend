@@ -7,11 +7,13 @@
 <form action="<%=h url %>" method="POST" class="form-horizontal">
   <input type="hidden" name="_method" value="<%= method %>"/>
 
-  
+
 
   <%= form_field 'app', 'name', 'Name', @app.name %>
 
   <%= form_field 'app', 'redirect_uri', 'Redirect URL', @app.redirect_uri %>
+
+  <%= form_field 'app', 'needs_invitation', 'Needs invitation', @app.needs_invitation, type: 'checkbox' %>
 
   <button class="btn"><%= button_label %></button>
 </form>

@@ -1,5 +1,12 @@
 require_relative '../request_spec_helper'
 
+require 'cgi'
+
+def send_auth_for_app(app, cookie)
+  url = CGI::escape(app.redirect_uri)
+  client.get "/oauth/authorize?response_type=code&client_id=#{app.client_id}&redirect_uri=#{url}", {"Cookie" => cookie}
+end
+
 describe "Test Only Interface" do
   before do
     User.destroy_all
@@ -77,56 +84,116 @@ describe "Authentication" do
       Apps.setup_oauth_api_client_app!
     end
 
-    it "redirects to /invite when user not invited yet" do
-      response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
-      must_redirect_to('/invite', response)
-
-      cookie = response.headers["Set-Cookie"]
-      response = client.get('http://auth-backend.dev/', {'Cookie' => cookie})
-      must_redirect_to('/invite', response)
-    end
-
-    it "can not redeem an invalid invitation code" do
+    it "does not redirects to /invite when user not invited yet" do
       response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
       cookie = response.headers["Set-Cookie"]
-      response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: 'does-not-exist')
-      cookie = response.headers["Set-Cookie"]
-      response = client.get('http://auth-backend.dev/', {'Cookie' => cookie})
-      must_redirect_to('/invite', response)
-    end
-
-    it "can redeem a valid invitation code" do
-      invitation = UserInvitation.create!
-
-      response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
-      cookie = response.headers["Set-Cookie"]
-      response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
-
-      cookie = response.headers["Set-Cookie"]
-      response = client.get('http://auth-backend.dev/', {'Cookie' => cookie})
+      response = client.get("http://auth-backend.dev/", {'Cookie' => cookie})
       response.status.must_equal 200
-
-      invitation.reload
-      invitation.user_id.wont_be_nil
-      invitation.redeemed_at.wont_be_nil
     end
 
-    it "can not reddem an invitation code twice" do
-      invitation = UserInvitation.create!
+    describe "with an app that needs an invitation and one which does not" do
+      before do
+        params = {
+          name: "AppNeddingInvitation",
+          redirect_uri: "http://example.com/withinvitation"
+        }
+        @app_that_needs_invitation = OauthApp.new(params)
+        @app_that_needs_invitation.needs_invitation = true
+        @app_that_needs_invitation.save!
 
-      response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
-      cookie = response.headers["Set-Cookie"]
-      response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+        params = {
+          name: "AppNeedsNoInvitation",
+          redirect_uri: "http://example.com/noinvitation",
+        }
+        @app_that_does_not_need_invitation = OauthApp.new(params)
+        @app_that_does_not_need_invitation.save!
 
-      user2 = TEST_HELPERS.create_user!(name: @user['name'].reverse, email: @user['email'].reverse, password: @password, admin: 'false', no_invitation: true)
+        user = User.find(@user['id'])
+        user.grant_access!(@app_that_needs_invitation)
+        user.grant_access!(@app_that_does_not_need_invitation)
+      end
 
-      response = client.post("http://auth-backend.dev/login", {}, name: user2['name'], password: @password)
-      cookie = response.headers["Set-Cookie"]
-      response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+      after do
+        @app_that_needs_invitation.destroy
+        @app_that_does_not_need_invitation.destroy
+      end
 
-      cookie = response.headers["Set-Cookie"]
-      response = client.get('http://auth-backend.dev/', {'Cookie' => cookie})
-      must_redirect_to('/invite', response)
+      it "can not redeem an invalid invitation code" do
+        response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+        response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: 'does-not-exist')
+        cookie = response.headers["Set-Cookie"]
+        response = client.get('http://auth-backend.dev/profile', {'Cookie' => cookie})
+        response.status.must_equal(200)
+
+        response = send_auth_for_app(@app_that_needs_invitation, cookie)
+        must_redirect_to('/invite', response)
+      end
+
+      it "can not reddem an invitation code twice" do
+        invitation = UserInvitation.create!
+
+        response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+        response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+
+        user2 = TEST_HELPERS.create_user!(name: @user['name'].reverse, email: @user['email'].reverse, password: @password, admin: 'false', no_invitation: true)
+        user2_model = User.find(user2['id'])
+        user2_model.grant_access!(@app_that_needs_invitation)
+
+        response = client.post("http://auth-backend.dev/login", {}, name: user2['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+        response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+
+        cookie = response.headers["Set-Cookie"]
+        response = send_auth_for_app(@app_that_needs_invitation, cookie)
+
+        must_redirect_to('/invite', response)
+      end
+
+      it "can redeem a valid invitation code" do
+        response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+
+        invitation = UserInvitation.create!
+        response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+        cookie = response.headers["Set-Cookie"]
+
+        response = send_auth_for_app(@app_that_needs_invitation, cookie)
+        must_redirect_to(@app_that_needs_invitation.redirect_uri, response)
+
+        invitation.reload
+        invitation.user_id.wont_be_nil
+        invitation.redeemed_at.wont_be_nil
+      end
+
+      it "sends to /invite when authorizing an app that needs an invitation" do
+        response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+
+        response = send_auth_for_app(@app_that_needs_invitation, cookie)
+        must_redirect_to('/invite', response)
+      end
+
+      it "redirects to the app when the user has an invitation and the app neds an invitation" do
+        response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+
+        invitation = UserInvitation.create!
+        response = client.post("http://auth-backend.dev/invite", {'Cookie' => cookie}, code: invitation.code)
+        cookie = response.headers["Set-Cookie"]
+
+        response = send_auth_for_app(@app_that_needs_invitation, cookie)
+        must_redirect_to(@app_that_needs_invitation.redirect_uri, response)
+      end
+
+      it "redirects to the app when the app does not need an invitation" do
+        response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+
+        response = send_auth_for_app(@app_that_does_not_need_invitation, cookie)
+        must_redirect_to(@app_that_does_not_need_invitation.redirect_uri, response)
+      end
     end
   end
 
