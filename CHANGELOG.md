@@ -1,4 +1,4 @@
-# 0.0.28 WIP
+# 0.0.28
 
 * Moves invitations to a per app basis
 
