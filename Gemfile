@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 source "https://user:We267RFF7BfwVt4LdqFA@privategems.herokuapp.com/"
 
 # Specify your gem's dependencies in auth-backend.gemspec
@@ -25,7 +25,9 @@ group :development do
   platform :jruby do
     gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
   end
+
   gem 'rack-client'
   gem 'nokogiri'
-  gem 'graph-backend', '~> 0.0.21'
+  gem 'graph-backend', '~> 0.0.25'
+  #gem 'graph-backend', path: '../graph-backend'
 end

@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'json', '~> 1.7.7'
   gem.add_dependency 'kaminari'
   gem.add_dependency 'padrino-helpers'
-  gem.add_dependency 'graph-client'
+  gem.add_dependency 'graph-client', '~> 0.0.12'
 
   gem.add_dependency 'thin'
   gem.add_dependency 'newrelic_rpm'

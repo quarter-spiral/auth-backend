@@ -1,3 +1,7 @@
+# 0.0.29 WIP
+
+* Updates dependencies
+
 # 0.0.28
 
 * Moves invitations to a per app basis
