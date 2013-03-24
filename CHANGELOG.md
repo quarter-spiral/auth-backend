@@ -1,4 +1,4 @@
-# 0.0.29 WIP
+# 0.0.29
 
 * Updates dependencies
 
