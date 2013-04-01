@@ -1,3 +1,6 @@
+# 0.0.30 WIP
+
+* Updates activerecord
 # 0.0.29
 
 * Updates dependencies
