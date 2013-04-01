@@ -38,6 +38,10 @@ module Auth::Backend
       user_invitation
     end
 
+    def password_digest=(digest)
+      write_attribute(:password_digest, digest.force_encoding('utf-8'))
+    end
+
     protected
     def set_uuid
       self.uuid = UUID.new.generate
