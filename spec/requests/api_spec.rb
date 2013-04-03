@@ -32,13 +32,7 @@ describe "Authentication API" do
         "email" => "psmith@example.com"
       }
 
-      app = TEST_HELPERS.create_app!
-
-      authed_client = Rack::Client.new {
-        run Rack::Client::Auth::Basic.new(APP, app[:id], app[:secret], true)
-      }
-      response = authed_client.post('http://auth-backend.dev/api/v1/token/app')
-      @app_token = JSON.parse(response.body)['token']
+      @app_token = get_app_token
     end
 
     it "can get the venue identities of a user" do
@@ -66,7 +60,7 @@ describe "Authentication API" do
 
     it "returns 404 when retrieving the venue identities of a non existing user" do
       non_existing_uuid = '999999999999'
-      response = client.get "http://auth-backend.dev/api/v1/users/#{non_existing_uuid}/identities", {'Authorization' => "Bearer #{@token}"}
+      response = client.get "http://auth-backend.dev/api/v1/users/#{non_existing_uuid}/identities", {'Authorization' => "Bearer #{@app_token}"}
       response.status.must_equal 404
     end
 
@@ -76,7 +70,7 @@ describe "Authentication API" do
       user1 = JSON.parse(response.body)['uuid']
 
       non_existing_uuid = '999999999999'
-      response = client.get "http://auth-backend.dev/api/v1/users/batch/identities", {'Authorization' => "Bearer #{@token}"}, JSON.dump([user1, non_existing_uuid])
+      response = client.get "http://auth-backend.dev/api/v1/users/batch/identities", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump([user1, non_existing_uuid])
       response.status.must_equal 404
     end
 
@@ -101,7 +95,7 @@ describe "Authentication API" do
 
       @user3 = TEST_HELPERS.create_user!(name: 'Jacko', email: 'jacko@example.com', password: @password, admin: 'false')
 
-      response = client.get "http://auth-backend.dev/api/v1/users/batch/identities", {'Authorization' => "Bearer #{@token}"}, JSON.dump([@user['uuid'], @user2['uuid'], @user3['uuid']])
+      response = client.get "http://auth-backend.dev/api/v1/users/batch/identities", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump([@user['uuid'], @user2['uuid'], @user3['uuid']])
       response.status.must_equal 200
 
       data = JSON.parse(response.body)

@@ -12,8 +12,37 @@ require 'graph-backend'
 require 'rack/client'
 include Auth::Backend
 
+class AuthenticationInjector
+  def self.token=(token)
+    @token = token
+  end
+
+  def self.token
+    @token
+  end
+
+  def self.reset!
+    @token = nil
+  end
+
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    if token = self.class.token
+      env['HTTP_AUTHORIZATION'] = "Bearer #{token}"
+    end
+
+    @app.call(env)
+  end
+end
+
 APP = App.new(test: true)
-CLIENT = Rack::Client.new {run APP}
+CLIENT = Rack::Client.new {
+  use AuthenticationInjector
+  run APP
+}
 def CLIENT.get(url, headers = {}, body = '', &block)
   request('GET', url, headers, body, {}, &block)
 end

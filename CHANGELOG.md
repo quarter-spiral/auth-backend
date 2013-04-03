@@ -1,7 +1,8 @@
-# 0.0.30 WIP
+# 0.0.30 / Unreleased
 
 * Updates activerecord
 * Fixes encoding issue with has_secure_password and sqlite
+* Adds authorization
 
 # 0.0.29
 

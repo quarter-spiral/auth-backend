@@ -28,6 +28,6 @@ group :development do
 
   gem 'rack-client'
   gem 'nokogiri'
-  gem 'graph-backend', '~> 0.0.25'
+  gem 'graph-backend', '~> 0.0.26'
   #gem 'graph-backend', path: '../graph-backend'
 end

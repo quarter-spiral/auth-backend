@@ -31,8 +31,30 @@ module Auth::Backend
           end
         end
 
-        def not_authorized!
+        def prevent_access!
           error(403, {error: "Not authorized!"}.to_json)
+        end
+
+        def own_data?(uuid)
+          token_owner.private_info['uuid'] == uuid
+        end
+
+        def system_level_privileges?
+          token_owner.private_info['type'] == 'app'
+        end
+
+        def is_authorized_to_access?(uuid)
+          system_level_privileges? || own_data?(uuid)
+        end
+
+        def owner_only!(uuid = params[:uuid])
+          ensure_authentication!
+          prevent_access! unless is_authorized_to_access?(uuid)
+        end
+
+        def system_privileges_only!
+          ensure_authentication!
+          prevent_access! unless system_level_privileges?
         end
 
         def issue_token_for_user(user)
@@ -58,6 +80,10 @@ module Auth::Backend
 
         def request_token
           @request_token ||= Songkick::OAuth2::Provider.access_token(nil, [], env)
+        end
+
+        def token_owner
+          @token_owner ||= request_token.owner
         end
 
         def create_venue_identity(venue, params)
@@ -120,23 +146,23 @@ module Auth::Backend
       end
 
       get "/users/batch/identities" do
-        ensure_authentication!
-        not_authorized! unless request_token.valid?
+        prevent_access! unless request_token.valid?
 
         body = request.body
         body = body.read if body.respond_to?(:read)
 
         uuids = JSON.parse(body)
-        users = User.where(uuid: uuids).includes(:venue_identities).all
 
+        prevent_access! if !system_level_privileges? && (uuids.size > 1 || uuids[0] != request_token.owner.uuid)
+
+        users = User.where(uuid: uuids).includes(:venue_identities).all
         error(404, {error: "A user does not exist!"}) unless users.size == uuids.size
 
         Hash[users.map {|u| [u.uuid, {uuid: u.uuid, venues: u.venues}]}].to_json
       end
 
       get "/users/:uuid/identities" do
-        ensure_authentication!
-        not_authorized! unless request_token.valid?
+        owner_only!(params[:uuid])
 
         user = User.where(uuid: params[:uuid]).first
         error(404, {error: "User does not exist!"}.to_json) unless user
@@ -145,14 +171,14 @@ module Auth::Backend
       end
 
       post "/users/:uuid/identities" do
-        ensure_authentication!
-        not_authorized! unless request_token.valid?
+        owner_only!(params[:uuid])
 
         body = request.body
         body = body.read if body.respond_to?(:read)
         data = JSON.parse(body)
 
-        user = request_token.owner
+        user = User.where(uuid: params[:uuid]).first
+        error(404, {error: "User does not exist!"}.to_json) unless user
 
         VenueIdentity.transaction do
           data.each do |venue, venue_information|
@@ -171,6 +197,8 @@ module Auth::Backend
       end
 
       post "/uuids/batch" do
+        system_privileges_only!
+
         body = request.body
         body = body.read if body.respond_to?(:read)
         venue_information = JSON.parse(body)
@@ -189,7 +217,7 @@ module Auth::Backend
       end
 
       get '/me' do
-        not_authorized! unless request_token.valid?
+        prevent_access! unless request_token.valid?
 
         request_token.owner.private_info.to_json
       end

@@ -63,8 +63,8 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     arel (3.0.2)
-    auth-client (0.0.14)
-      service-client (>= 0.0.8)
+    auth-client (0.0.15)
+      service-client (>= 0.0.12)
     backports (2.6.7)
     bcrypt-ruby (3.0.1)
     builder (3.0.4)
@@ -89,7 +89,7 @@ GEM
     grape_newrelic (0.0.4)
       grape (>= 0.2.2)
       newrelic_rpm (>= 3.5.4.33)
-    graph-backend (0.0.25)
+    graph-backend (0.0.26)
       auth-client (>= 0.0.14)
       grape (~> 0.4.0)
       grape_newrelic (~> 0.0.4)
@@ -212,7 +212,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-jdbcsqlite3-adapter
   auth-backend!
-  graph-backend (~> 0.0.25)
+  graph-backend (~> 0.0.26)
   nokogiri
   pg
   rack-client

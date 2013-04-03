@@ -13,3 +13,16 @@ def must_redirect_to(path, response)
 
   result.path.must_equal expectation.path
 end
+
+
+AUTH_HELPERS = Auth::Backend::TestHelpers.new(APP)
+OAUTH_APP = AUTH_HELPERS.create_app!
+ENV['QS_OAUTH_CLIENT_ID'] = OAUTH_APP[:id]
+ENV['QS_OAUTH_CLIENT_SECRET'] = OAUTH_APP[:secret]
+
+USER_TOKEN = AUTH_HELPERS.get_token
+
+def get_app_token
+  app = AUTH_HELPERS.create_app!
+  AUTH_HELPERS.get_app_token(app[:id], app[:secret])
+end
