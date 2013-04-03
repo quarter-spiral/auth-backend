@@ -1,4 +1,4 @@
-# 0.0.30 / Unreleased
+# 0.0.30
 
 * Updates activerecord
 * Fixes encoding issue with has_secure_password and sqlite
