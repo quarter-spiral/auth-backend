@@ -1,4 +1,4 @@
-# 0.0.32 / Unreleased
+# 0.0.32 / 2013-04-07
 
 * Switches to Unicorn
 * Pins Ruby version on Heroku
