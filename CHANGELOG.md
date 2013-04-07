@@ -1,4 +1,4 @@
-# 0.0.31 / Unreleased
+# 0.0.31 / 2013-04-07
 
 * Updates oauth2 provider
 
