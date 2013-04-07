@@ -7,6 +7,8 @@ gemspec
 gem 'sinatra_warden', git: 'https://github.com/quarter-spiral/sinatra_warden.git'
 gem 'songkick-oauth2-provider', git: 'https://github.com/quarter-spiral/oauth2-provider.git'
 
+ruby "1.9.3"
+
 group :production do
   platform :ruby do
     gem 'pg', '~> 0.15.0'
