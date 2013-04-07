@@ -29,7 +29,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'padrino-helpers'
   gem.add_dependency 'graph-client', '~> 0.0.12'
 
-  gem.add_dependency 'thin'
+  gem.add_dependency 'unicorn'
   gem.add_dependency 'newrelic_rpm'
   gem.add_dependency 'ping-middleware', '~> 0.0.2'
   gem.add_dependency 'omniauth', '~> 1.1.1'
