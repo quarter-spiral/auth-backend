@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/quarter-spiral/oauth2-provider.git
-  revision: 0960ea1367ec48b9674a2cc562de0522998a4b9c
+  revision: 97dccac6be286896e80b79447af1712b7cc19eb3
   specs:
     songkick-oauth2-provider (0.10.2)
       activerecord
