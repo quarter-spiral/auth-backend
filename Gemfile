@@ -9,7 +9,7 @@ gem 'songkick-oauth2-provider', git: 'https://github.com/quarter-spiral/oauth2-p
 
 group :production do
   platform :ruby do
-    gem 'pg'
+    gem 'pg', '~> 0.15.0'
   end
 end
 
