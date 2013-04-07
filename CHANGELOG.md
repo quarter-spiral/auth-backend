@@ -1,3 +1,8 @@
+# 0.0.32 / Unreleased
+
+* Switches to Unicorn
+* Pins Ruby version on Heroku
+
 # 0.0.31 / 2013-04-07
 
 * Updates oauth2 provider
