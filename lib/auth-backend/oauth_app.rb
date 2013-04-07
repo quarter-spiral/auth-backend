@@ -1,11 +1,13 @@
 require 'delegate'
 
 class Songkick::OAuth2::Model::Client
-    def private_info
-      {
-        'type' => 'app'
-      }
-    end
+  include ::Songkick::OAuth2::Model::ResourceOwner
+
+  def private_info
+    {
+      'type' => 'app'
+    }
+  end
 end
 
 module Auth::Backend

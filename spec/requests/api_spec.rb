@@ -304,10 +304,11 @@ describe "Authentication API" do
           end
 
           it "will only create a user once" do
+            uuid1 = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", {'Authorization' => "Bearer #{@token}"}).body)['uuid']
+
             response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@venue_data))
             new_token = JSON.parse(response.body)['token']
 
-            uuid1 = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", {'Authorization' => "Bearer #{@token}"}).body)['uuid']
             uuid2 = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", {'Authorization' => "Bearer #{new_token}"}).body)['uuid']
 
             uuid1.must_equal uuid2

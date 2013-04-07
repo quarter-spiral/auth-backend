@@ -1,3 +1,7 @@
+# 0.0.31 / Unreleased
+
+* Updates oauth2 provider
+
 # 0.0.30
 
 * Updates activerecord

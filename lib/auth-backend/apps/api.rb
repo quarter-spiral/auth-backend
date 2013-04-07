@@ -58,18 +58,12 @@ module Auth::Backend
         end
 
         def issue_token_for_user(user)
-          oauth = Songkick::OAuth2::Model::Authorization.new
-          oauth.owner = user
-          oauth.client = OauthApp.api_client
-          oauth.save!
+          oauth = Songkick::OAuth2::Model::Authorization.for(user, OauthApp.api_client)
           oauth.generate_access_token
         end
 
         def issue_token_for_app(app)
-          oauth = Songkick::OAuth2::Model::Authorization.new
-          oauth.owner = app
-          oauth.client = app
-          oauth.save!
+          oauth = Songkick::OAuth2::Model::Authorization.for(app, app)
           oauth.generate_access_token
         end
 
