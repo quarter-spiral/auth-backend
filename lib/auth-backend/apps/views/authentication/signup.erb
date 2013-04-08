@@ -1,31 +1,21 @@
-<div class="narrow">
-	<div class="page">
-	  <div class="header">
-	    <h1>Sign Up</h1>
-	    <p></p>
+<div class="row">
+	<div class="span12">
+    <h1>Sign Up</h1>
 
-	  </div>
+		<form action="/signup" method="POST" class="form">
 
-	  <div class="body">
+		  <%= form_field 'user', 'name', 'Name', @user.name %>
 
-			<form action="/signup" method="POST" class="form">
+		  <%= form_field 'user', 'email', 'eMail', @user.email, type: 'email' %>
 
-			  <%= form_field 'user', 'name', 'Name', @user.name %>
+		  <%= form_field 'user', 'password', 'Password', '', type: 'password' %>
 
-			  <%= form_field 'user', 'email', 'eMail', @user.email, type: 'email' %>
+		  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
 
-			  <%= form_field 'user', 'password', 'Password', '', type: 'password' %>
+		  <button class="btn btn-success">Sign up</button>
+		</form>
 
-			  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
+		<p class="option">Already registered? <a href="/login">Log in...</a></p>
 
-			  <button class="btn btn-success">Sign up</button>
-			</form>
-
-			<p class="option">Already registered? <a href="/login">Log in...</a></p>
-
-		</div>
 	</div>
-	<div class="footer">
-    <p>&copy; 2012 Quarter Spiral, Inc.</p>
-  </div>
 </div>

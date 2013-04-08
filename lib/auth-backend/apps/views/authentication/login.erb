@@ -1,41 +1,31 @@
-<div class="narrow">
-  <div class="page">
-    <div class="header">
-      <h1>Log in</h1>
-    </div>
-
-    <div class="body">
-      <a class="btn btn-info" href="/auth/facebook">Login with Facebook</a>
-
-
-      <% unless settings.production? %>
-        <h2>Login form only visible in development and test mode!</h2>
-        <form action="/login" method="post" class="form">
-          <div class="control-group">
-            <label class="control-label" for="inputName">Name</label>
-            <div class="controls">
-              <input type="text" id="inputName" placeholder="Name" name="name">
-            </div>
+<div class="row">
+  <div class="span6 offset3">
+    <h1>Log in to Quarter Spiral</h1>
+    <p><a class="btn btn-primary btn-large" href="/auth/facebook"><i class="icon-white icon-arrow-right"></i> Login with your Facebook account</a></p>
+    <% unless settings.production? %>
+      <h2>Login form only visible in development and test mode!</h2>
+      <form action="/login" method="post" class="form">
+        <div class="control-group">
+          <label class="control-label" for="inputName">Name</label>
+          <div class="controls">
+            <input type="text" id="inputName" placeholder="Name" name="name">
           </div>
-          <div class="control-group">
-            <label class="control-label" for="inputPassword">Password</label>
-            <div class="controls">
-              <input type="password" id="inputPassword" placeholder="Password" name="password">
-            </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword">Password</label>
+          <div class="controls">
+            <input type="password" id="inputPassword" placeholder="Password" name="password">
           </div>
-          <div class="control-group">
-            <div class="controls">
-              <button type="submit" class="btn btn-success">Log in</button>
-            </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn btn-success">Log in</button>
           </div>
-        </form>
+        </div>
+      </form>
 
-        <p class="option">Not yet a member? <a href="/signup">Sign up...</a></p>
-      <% end %>
-    </div>
-  </div>
-  <div class="footer">
-    <p>&copy; 2012 Quarter Spiral, Inc.</p>
+      <p class="option">Not yet a member? <a href="/signup">Sign up...</a></p>
+    <% end %>
   </div>
 </div>
 

@@ -1,15 +1,11 @@
-<div class="narrow">
-	<div class="page">
-	  <div class="header">
-	    <h1>Your account</h1>
-	    <p></p>
+<div class="row">
+	<div class="span6 offset3">
+    <h1>Your account</h1>
 
-	  </div>
-
-	  <div class="body">
+    <div class="box">
 
 			<form action="/profile" method="POST" class="form">
-        <input type="hidden" name="_method" value="put"/>
+	      <input type="hidden" name="_method" value="put"/>
 
 			  <%= form_field 'user', 'name', 'Name', @user.name %>
 
@@ -19,11 +15,9 @@
 
 			  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
 
-			  <button class="btn btn-success">Save updates</button>
+			  <button class="btn btn-success">Update</button>
+			  <a class="btn" href="/">Cancel</a>
 			</form>
 		</div>
 	</div>
-	<div class="footer">
-    <p>&copy; 2012 Quarter Spiral, Inc.</p>
-  </div>
 </div>

@@ -2,13 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Quarter Spiral - Login</title>
+    <title>Quarter Spiral ID</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Le styles -->
     <link href="/assets/stylesheets/bootstrap.min.css" rel="stylesheet">
-
-    <link href="/assets/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/stylesheets/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="/assets/stylesheets/main.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -21,47 +20,70 @@
   </head>
 
   <body class="<%= @controller_id ? "controller-#{@controller_id}" : '' %>">
-    <% if has_admin_privileges? %>
-      <div class="container">
-        <div class="row">
-          <div class="span12">
-            <div class="navbar">
-              <div class="navbar-inner">
+    <div class="container">
+      <div class="row">
+        <div class="span12">
+          <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+              <% if has_admin_privileges? %>
                 <ul class="nav">
-                  <li><a href="/admin">Administration</a></li>
+                  <li><a href="/admin">QS ID</a></li>
                   <li><a href="/admin/users">Users</a></li>
                   <li><a href="/admin/user_invitations">Invitations</a></li>
                   <li><a href="/admin/apps">Apps</a></li>
                 </ul>
-                <ul class="nav pull-right">
-                  <% if impersonating? %>
-                    <li class="btn-small btn-danger"><a href="/admin/users/<%= admin_user.id %>/impersonate" data-method="post" title="You are currently impersonating <%=h current_user.name %>" style="color:white; text-shadow: none;">Stop Impersonating</a></li>
-                  <% end %>
-                  <li><a href="/profile">Your Account</a></li>
-                  <li><a href="/logout">Log out</a></li>
+              <% else current_user %>
+                <ul class="nav">
+                  <li><a href="/"><strong>Quarter Spiral ID</strong></a></li>
                 </ul>
-              </div>
+              <% end %>
+              <ul class="nav pull-right">
+                <% if impersonating? %>
+                  <li class="btn-small btn-danger"><a href="/admin/users/<%= admin_user.id %>/impersonate" data-method="post" title="You are currently impersonating <%=h current_user.name %>" style="color:white; text-shadow: none;">Stop Impersonating</a></li>
+                <% end %>
+                <li><a href="/profile">Your Account</a></li>
+                <li><a href="/logout">Log out</a></li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
-    <% end %>
 
-    <% if flash[:error] %>
-      <div class="alert">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>Warning!</strong> <%= flash[:error] %>
-      </div>
-    <% end %>
+      <% if flash[:error] %>
+        <div class="row">
+          <div class="span12">
+            <div class="alert">
+              <button type="button" class="close" data-dismiss="alert">×</button>
+              <strong>Warning!</strong> <%= flash[:error] %>
+            </div>
+          </div>
+        </div>
+      <% end %>
 
-    <% if flash[:success] %>
-      <div class="alert alert-success">
-        <button type="button" class="close" data-dismiss="notice">×</button>
-        <%= flash[:success] %>
-      </div>
-    <% end %>
+      <% if flash[:success] %>
+        <div class="row">
+          <div class="span12">
+            <div class="alert alert-success">
+              <button type="button" class="close" data-dismiss="notice">×</button>
+              <%= flash[:success] %>
+            </div>
+          </div>
+        </div>
+      <% end %>
 
-    <%= yield %>
+      <%= yield %>
+
+    </div>
+
+    <div class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="span12">
+            <p>&copy; 2012 Quarter Spiral, Inc.</p>
+          </div>
+        </div>
+      </div> 
+    </div>
 
     <!-- Le javascript
     ================================================== -->

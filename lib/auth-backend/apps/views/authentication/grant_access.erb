@@ -1,29 +1,25 @@
-<div class="narrow">
-  <div class="page">
-    <div class="header">
-      <h1>Authorization Request</h1>
-    </div>
+<div class="row">
+  <div class="span6 offset3">
+    <h1>Authorization Request</h1>
 
-    <div class="body">
-
-      <p class="large"><strong><%= @oauth2.client.name %></strong> would like to access your Quarter Spiral Accout.</p>
+    <div class="box">
+      <p><strong><%= @oauth2.client.name %></strong> would like to access your Quarter Spiral Accout.</p>
 
       <ul>
         <% @oauth2.scopes.each do |scope| %>
           <li><%= PERMISSION_UI_STRINGS[scope] %></li>
         <% end %>
-        <li>hey</li>
-        <li>Hello no!</li>
       </ul>
 
       <form action="/oauth/allow" method="post">
         <% @oauth2.params.each do |key, value| %>
           <input type="hidden" name="<%= key %>" value="<%= value %>" />
         <% end %>
-        <button class="btn btn-success" name="allow" value='1'>Allow</button>
-        <button class="btn btn-danger" name="allow" value='0'>Deny</button>
+        <p>
+          <button class="btn btn-success" name="allow" value='1'>Allow</button>
+          <button class="btn btn-danger" name="allow" value='0'>Deny</button>
+        </p>
       </form>
-
     </div>
 
   </div>

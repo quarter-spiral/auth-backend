@@ -1,71 +1,38 @@
 @import "mixins";
 
 body {
-	background:#000000 url('../images/stars_dark.jpg') no-repeat left top;
-	padding-top:20px;
+	//background:#000000 url('../images/stars_dark.jpg') no-repeat left top;
+	background-color: #EEE;
+	padding-top:60px;
 	&.controller-admin {
 		background-image: none;
 		background: #FFF;
 	}
 }
 
-
-.narrow {
-	width:600px;
-	margin:0px auto;
+.logo {
+	text-align: center;
 }
 
-.page {
-	margin-top:40px;
-	margin-bottom: 20px;
-	background-color:#DDD;
-	.box-shadow(0px, 2px, 4px, rgba(0,0,0,0.5));
-	.gradient(#B9D7D9,#FFF);
+h1 {
+	margin:1em 0px;
+	font-size: 1.3em;
 }
 
+h2 {
+	margin:1.5em 0 0.5em 0;
+	font-size: 1.2em;
+}
 
-
-.header {
-	width:300px;
-	float:left;
-	.text-shadow(0px, 1px, 0px, rgba(255,255,255,0.7));
-	h1 {
-		padding:20px 30px;
-		margin:0px;
-		color:#668284;
-	}
-	p {
-		padding:20px 30px;
-	}
+.box {
+	background-color: #FFF;
+	padding:30px 30px 20px;
+	.rounded-corners (5px);
 }
 
 .footer {
 	text-align: center;
-	font-size:1.2em;
-	color:#AAA;
-}
-
-.body {
-	border-left:1px solid #B9D7D9;
-	margin-left: 300px;
-	background-color:#FFF;
-	padding:20px;
-	form {
-	}
-	p.option {
-		margin-top:20px;
-		font-size:0.9em;
-		color:#999;
-		text-align:right;
-	}
-	p.large {
-		font-size:1.2em;
-		line-height:1.5em;
-		margin-bottom:20px;
-	}
-	ul {
-		margin:10px 0px 30px 20px;
-		color:#999;
-	}
-
+	font-size:1em;
+	padding:4em 0 4em 0;
+	color:#999;
 }

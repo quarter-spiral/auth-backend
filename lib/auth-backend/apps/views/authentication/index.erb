@@ -1,28 +1,16 @@
-<div class="narrow">
-  <div class="page">
-    <div class="header">
-      <h1>Hey <%=h current_user.name %></h1>
+<div class="row">
+  <div class="span6 offset3">
+     <h1>Welcome <%=h current_user.name %></h1>
+    <div class="box">
+     
 
+    	<p>This is your Quarter Spiral Accout. Use it to login into any Quarter Spiral service.</p>
+
+      <ul>
+        <li><a href="/profile">Your Account</a></li>
+        <li><a href="/logout">Log out</a></li>
+      </ul>
     </div>
 
-    <div class="body">
-
-    	<p>This is your Quarter Spiral Accout.</p>
-			<ul>
-			  <% if current_user %>
-			    <li><a href="/profile">Edit Account</a></li>
-			    <li><a href="/logout">Sign out</a></li>
-			  <% end %>
-			  <% if current_user && current_user.admin? %>
-			      <li><a href="/admin">Administration</a></li>
-			  <% end %>
-			</ul>
-
-
-    </div>
-  </div>
-  <div class="footer">
-    <p>&copy; 2012 Quarter Spiral, Inc.</p>
   </div>
 </div>
-
