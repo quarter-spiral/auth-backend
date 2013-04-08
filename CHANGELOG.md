@@ -1,4 +1,4 @@
-# 0.0.34 / Unreleased
+# 0.0.34 / 2013-04-08
 
 * Changed presentation of most pages
 
