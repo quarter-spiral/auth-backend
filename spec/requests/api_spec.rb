@@ -139,24 +139,6 @@ describe "Authentication API" do
       identities['venues']['facebook']['id'].must_equal @facebook_data['venue-id']
       identities['venues']['spiral-galaxy']['id'].must_equal @spiral_galaxy_data['venue-id']
     end
-
-    it "can not attach a venue identity twice" do
-      uuid = @user['uuid']
-      response = client.post("http://auth-backend.dev/api/v1/token/venue/facebook", {'Authorization' => "Bearer #{@app_token}"}, JSON.dump(@facebook_data))
-      response.status.must_equal 201
-
-      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('facebook' => @facebook_data))
-      response.status.must_equal 422
-    end
-
-    it "can only add one identity per venue to any user" do
-      uuid = @user['uuid']
-      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('facebook' => @facebook_data))
-      response.status.must_equal 201
-
-      response = client.post("http://auth-backend.dev/api/v1/users/#{uuid}/identities", {"Authorization" => "Bearer #{@token}"}, JSON.dump('facebook' => @spiral_galaxy_data))
-      response.status.must_equal 422
-    end
   end
 
   describe "OAuth API" do

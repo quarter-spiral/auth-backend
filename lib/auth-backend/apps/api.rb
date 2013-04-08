@@ -58,13 +58,21 @@ module Auth::Backend
         end
 
         def issue_token_for_user(user)
-          oauth = Songkick::OAuth2::Model::Authorization.for(user, OauthApp.api_client)
-          oauth.generate_access_token
+          oauth = Songkick::OAuth2::Model::Authorization.send(:new)
+          oauth.owner = user
+          oauth.client = OauthApp.api_client
+          oauth.access_token = Songkick::OAuth2::Model::Authorization.create_access_token
+          oauth.save!
+          oauth.access_token
         end
 
         def issue_token_for_app(app)
-          oauth = Songkick::OAuth2::Model::Authorization.for(app, app)
-          oauth.generate_access_token
+          oauth = Songkick::OAuth2::Model::Authorization.send(:new)
+          oauth.owner = app
+          oauth.client = app
+          oauth.access_token = Songkick::OAuth2::Model::Authorization.create_access_token
+          oauth.save!
+          oauth.access_token
         end
 
         def respond_with_token(token)
@@ -178,11 +186,9 @@ module Auth::Backend
           data.each do |venue, venue_information|
             existing_identity = find_venue_identity(venue, venue_information)
 
-            error(422, {error: "Venue identity for #{venue} id #{existing_identity.venue_id} already exists!"}.to_json) if existing_identity
-
-            error(422, {error: "User already has an identity on #{venue}!"}.to_json) if user.venue_identities.where(venue: venue).first
-
-            VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_information['venue-id'], email: venue_information['email'] || 'unknown@example.com', name: venue_information['name'])
+            if !existing_identity && !user.venue_identities.where(venue: venue).first
+              VenueIdentity.create!(user_id: user.id, venue: venue, venue_id: venue_information['venue-id'], email: venue_information['email'] || 'unknown@example.com', name: venue_information['name'])
+            end
           end
         end
 

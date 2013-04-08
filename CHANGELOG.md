@@ -1,3 +1,7 @@
+# 0.0.33 / Unreleased
+
+* Fixes some issues with auth tokens, etc
+
 # 0.0.32 / 2013-04-07
 
 * Switches to Unicorn
