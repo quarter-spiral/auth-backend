@@ -1,4 +1,4 @@
-# 0.0.33 / Unreleased
+# 0.0.33 / 2013-04-08
 
 * Fixes some issues with auth tokens, etc
 
