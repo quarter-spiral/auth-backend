@@ -1,5 +1,6 @@
 # 0.0.34 / 2013-04-08
 
+* changed IE specific link to google to use https
 * Changed presentation of most pages
 
 # 0.0.33 / 2013-04-08
