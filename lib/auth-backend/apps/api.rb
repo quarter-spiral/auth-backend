@@ -237,6 +237,10 @@ module Auth::Backend
           error(403, {error: 'Authentication failed!'}.to_json)
         end
 
+        unless user.accepted_current_tos?
+          error(403, {error: 'Must accept terms of service! Use the web interface to do so.'}.to_json)
+        end
+
         token = issue_token_for_user(user)
         respond_with_token(token)
       end

@@ -73,6 +73,7 @@ describe "Administration" do
         new_new_cookie.wont_be_nil
 
         response = client.get("http://auth-backend.dev/profile", 'Cookie' => new_new_cookie)
+
         response.status.must_equal 200
         response.body.must_include @user['name']
         response.body.wont_include @user2['name']

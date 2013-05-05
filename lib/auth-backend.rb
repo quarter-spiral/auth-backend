@@ -1,6 +1,7 @@
 module Auth
   module Backend
     ROOT = File.expand_path('../', File.dirname(__FILE__))
+    TOS_VERSION = '0.0'
 
     def self.root
       ROOT

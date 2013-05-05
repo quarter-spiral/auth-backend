@@ -1,3 +1,7 @@
+# 0.0.35 / Unreleased
+
+* Users must now accept the current TOS before doing anything in the system
+
 # 0.0.34 / 2013-04-08
 
 * changed IE specific link to google to use https

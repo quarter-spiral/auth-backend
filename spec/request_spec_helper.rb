@@ -6,7 +6,9 @@ require 'uri'
 def must_redirect_to(path, response)
   response.status.must_equal 302
   expectation = URI.parse(path)
-  result = URI.parse(response.headers['Location'].gsub(/^http:\/\/:\//, 'http:///'))
+  location = response.headers['Location']
+  location = location.gsub(/^http:\/\/(:+)(0?)\//, 'http:///')
+  result = URI.parse(location)
 
   result.host.must_equal expectation.host if expectation.host
   result.query.must_equal expectation.query if expectation.query

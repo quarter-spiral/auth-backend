@@ -17,6 +17,15 @@ module Auth::Backend
         provider :facebook, ENV['QS_FB_APP_ID'], ENV['QS_FB_APP_SECRET'], :scope => 'email'
       end
 
+      before do
+        break if request.path_info == "/accept-tos"
+
+        if current_user && !current_user.accepted_current_tos?
+          session[:after_tos_acceptance_url] = request.url
+          redirect '/accept-tos'
+        end
+      end
+
       get '/signup' do
         # Do not allow signups in production!
         redirect '/' and return if settings.production?
@@ -77,7 +86,6 @@ module Auth::Backend
           end
         end
 
-        #request.env['warden'].set_user(venue_id.user)
         self.user = venue_id.user
         redirect session[:return_to] || '/'
       end
@@ -118,6 +126,18 @@ module Auth::Backend
           flash[:error] = "Could not redeem the invitation code"
           redirect '/invite'
         end
+      end
+
+      get '/accept-tos' do
+        erb :'authentication/accept_tos'
+      end
+
+      post '/accept-tos' do
+        current_user.accept_current_tos!(params['accept-tos'])
+        current_user.save!
+
+        after_tos_acceptance_url = session.delete(:after_tos_acceptance_url)
+        redirect after_tos_acceptance_url || '/'
       end
 
       get '/profile' do

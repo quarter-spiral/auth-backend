@@ -20,6 +20,9 @@ module Auth::Backend
 
       migrate_db!
       Auth::Backend::Apps.setup!
+      ActiveRecord::Base.descendants.each do |model_class|
+        model_class.reset_column_information
+      end
 
       OauthApp.destroy_all
       VenueIdentity.destroy_all
@@ -68,12 +71,16 @@ module Auth::Backend
     def create_user!(options = {})
       options = DEFAULT_USER.merge(options)
       no_invitation = options.delete(:no_invitation)
+      tos_not_accepted = options.delete(:tos_not_accepted)
 
       user = JSON.parse(client.post("/_tests_/users", {}, options).body)['user']
 
       create_user_invitation!(user['id']) unless no_invitation
 
       user['password'] = options[:password]
+
+      accept_tos!(user) unless tos_not_accepted
+
       user
     end
 
@@ -119,6 +126,11 @@ module Auth::Backend
       cookie = login(user['name'], user['password'])
 
       response = client.put("/admin/apps/#{id}", {'Cookie' => cookie}, 'app[redirect_uri]' => uri)
+    end
+
+    def accept_tos!(user)
+      cookie = login(user['name'], user['password'])
+      client.post("/accept-tos", {'Cookie' => cookie}, {'accept-tos' => Auth::Backend::TOS_VERSION})
     end
 
     def generate_name_and_password

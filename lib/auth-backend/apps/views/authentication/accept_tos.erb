@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="span12">
+    <h1>Terms of Service</h1>
+    <% if current_user.accepted_tos_version %>
+      <p>Hey, we have updated our terms of service. Please read through our new version and accept them to continue.</p>
+    <% else %>
+      <p>Heya friend, it's just one more step! We need you to read through our terms of service and accept them to finally sign you up. Thanks!</p>
+    <% end %>
+    <form action="/accept-tos" method="post" class="form">
+      <div class="control-group">
+        <label class="checkbox" for="acceptTos">
+          <input type="checkbox" id="acceptTos" name="accept-tos" value="<%=h Auth::Backend::TOS_VERSION %>"/>
+          I accept the <a href="https://docs.google.com/document/d/1oWjZK6Z6p8gn5WRiHDup6uD9HuKDKNz-yuCtjfTI924/pub" target="_blank">Quarter Spiral terms of service</a>.</label>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-success">Continue</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+

@@ -194,6 +194,39 @@ describe "Authentication" do
         response = send_auth_for_app(@app_that_does_not_need_invitation, cookie)
         must_redirect_to(@app_that_does_not_need_invitation.redirect_uri, response)
       end
+
+      it "has to accept terms and conditions" do
+        User.destroy_all
+        @user = TEST_HELPERS.create_user!(password: @password, admin: 'false', tos_not_accepted: true)
+        user = User.find(@user['id'])
+        user.grant_access!(@app_that_does_not_need_invitation)
+
+        response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+
+        response = client.get("http://auth-backend.dev/", {'Cookie' => cookie})
+        must_redirect_to('/accept-tos', response)
+
+        response = send_auth_for_app(@app_that_does_not_need_invitation, cookie)
+        cookie = response.headers["Set-Cookie"]
+        # this should actually set the target to redirect to after accepting the TOS to the
+        # auth backend OAUTH handler (at /oauth/authorize)...
+        must_redirect_to('/accept-tos', response)
+
+        client.post("http://auth-backend.dev/accept-tos", {'Cookie' => cookie})
+        # this should NOT change the redirect target...
+        response = send_auth_for_app(@app_that_does_not_need_invitation, cookie)
+        cookie = response.headers["Set-Cookie"]
+        must_redirect_to('/accept-tos', response)
+
+        response = client.post("http://auth-backend.dev/accept-tos", {'Cookie' => cookie}, {"accept-tos" => Auth::Backend::TOS_VERSION})
+        cookie = response.headers["Set-Cookie"]
+        # and now we should be redirected to the app as we've accepted the TOS
+        must_redirect_to("/oauth/authorize", response)
+
+        response = send_auth_for_app(@app_that_does_not_need_invitation, cookie)
+        must_redirect_to(@app_that_does_not_need_invitation.redirect_uri, response)
+      end
     end
   end
 

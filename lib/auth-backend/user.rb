@@ -42,6 +42,14 @@ module Auth::Backend
       write_attribute(:password_digest, digest.force_encoding('utf-8'))
     end
 
+    def accepted_current_tos?
+      accepted_tos_version && accepted_tos_version == TOS_VERSION
+    end
+
+    def accept_current_tos!(accepted_version)
+      self.accepted_tos_version = accepted_version if accepted_version == TOS_VERSION
+    end
+
     protected
     def set_uuid
       self.uuid = UUID.new.generate
