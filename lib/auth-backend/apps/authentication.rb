@@ -18,10 +18,10 @@ module Auth::Backend
       end
 
       before do
-        break if request.path_info == "/accept-tos"
+        break if request.path_info == "/accept-tos" || request.path_info.start_with?('/assets/')
 
         if current_user && !current_user.accepted_current_tos?
-          session[:after_tos_acceptance_url] = request.url
+          session[:after_tos_acceptance_url] ||= request.url
           redirect '/accept-tos'
         end
       end
@@ -134,7 +134,7 @@ module Auth::Backend
 
       post '/accept-tos' do
         current_user.accept_current_tos!(params['accept-tos'])
-        current_user.save!
+        current_user.save!(validate: false)
 
         after_tos_acceptance_url = session.delete(:after_tos_acceptance_url)
         redirect after_tos_acceptance_url || '/'
@@ -169,7 +169,7 @@ module Auth::Backend
           @oauth2 = Songkick::OAuth2::Provider.parse(@owner, env)
 
           if @oauth2.redirect?
-            if @oauth2.client.needs_invitation && !@owner.invited?
+            if @oauth2.client.needs_invitation && @owner && !@owner.invited?
               redirect '/invite'
             else
               redirect @oauth2.redirect_uri, @oauth2.response_status

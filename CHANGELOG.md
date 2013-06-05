@@ -1,3 +1,7 @@
+# 0.0.36 / Unreleased
+
+* Fixes bug that caused TOS acceptance to always fail
+
 # 0.0.35 / 2013-05-05
 
 * Users must now accept the current TOS before doing anything in the system
