@@ -1,4 +1,4 @@
-# 0.0.36 / Unreleased
+# 0.0.36 / 2013-06-05
 
 * Fixes bug that caused TOS acceptance to always fail
 
