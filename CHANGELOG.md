@@ -1,4 +1,4 @@
-# 0.0.37 / Unreleased
+# 0.0.37 / 2013-06-05
 
 * Fixes bug when deleted users are in someone's network of friends
 
