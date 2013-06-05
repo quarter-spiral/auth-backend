@@ -158,7 +158,6 @@ module Auth::Backend
         prevent_access! if !system_level_privileges? && (uuids.size > 1 || uuids[0] != request_token.owner.uuid)
 
         users = User.where(uuid: uuids).includes(:venue_identities).all
-        error(404, {error: "A user does not exist!"}) unless users.size == uuids.size
 
         Hash[users.map {|u| [u.uuid, {uuid: u.uuid, venues: u.venues}]}].to_json
       end

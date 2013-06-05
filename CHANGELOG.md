@@ -1,3 +1,7 @@
+# 0.0.37 / Unreleased
+
+* Fixes bug when deleted users are in someone's network of friends
+
 # 0.0.36 / 2013-06-05
 
 * Fixes bug that caused TOS acceptance to always fail
