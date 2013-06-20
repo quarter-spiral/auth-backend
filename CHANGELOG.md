@@ -1,3 +1,7 @@
+# 0.0.38 / 2013-06-20
+
+* much improved UI
+
 # 0.0.37 / 2013-06-05
 
 * Fixes bug when deleted users are in someone's network of friends
