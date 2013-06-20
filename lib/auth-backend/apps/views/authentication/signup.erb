@@ -1,21 +1,22 @@
 <div class="row">
-	<div class="span12">
-    <h1>Sign Up</h1>
+	<div class="span6 offset3">
+    <h1>Quarter Spiral ID</h1>
+    <p>Create a new Quarter Spiral ID to log into any Quarter Spiral powered application. If you already have one you can <a href="/login">log in here</a>.</p>
 
-		<form action="/signup" method="POST" class="form">
+		<form action="/signup" method="POST" class="form signUpForm">
 
-		  <%= form_field 'user', 'name', 'Name', @user.name %>
-
-		  <%= form_field 'user', 'email', 'eMail', @user.email, type: 'email' %>
-
-		  <%= form_field 'user', 'password', 'Password', '', type: 'password' %>
-
-		  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
-
-		  <button class="btn btn-success">Sign up</button>
+      <input type="text" id="inputName" placeholder="Enter a user name" name="user[name]" value="" class="input-block-level" />
+			<input type="email" id="inputEmail" placeholder="Enter your email" name="user[email]" value="" class="input-block-level" />
+			<input type="password" id="inputPassword" placeholder="Enter a password" name="user[password]" value="" class="input-block-level" />
+			<input type="password" id="inputPassword_confirmation" placeholder="Confirm the password" name="user[password_confirmation]" value="" class="input-block-level" />
+			<div class="customFormActions">
+				<a href="/login" class="btn">Cancel</a>
+			  <button class="btn btn-success"><i class="icon-arrow-right icon-white"></i> Sign up</button>
+			</div>
 		</form>
 
-		<p class="option">Already registered? <a href="/login">Log in...</a></p>
+
+
 
 	</div>
 </div>

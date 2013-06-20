@@ -1,6 +1,13 @@
-body{background-color:#EEE;padding-top:60px;}body.controller-admin{background-image:none;background:#FFF;}
+body{background-color:#FFF;padding-bottom:20px;}
+.loginOptions{margin:20px 0 0 0;}
+.loginOption{margin-bottom:1px;}
+.loginOptionLink{display:block;padding:15px 20px;background-color:#39F;color:#FFF;font-weight:bold;}.loginOptionLink i{display:none;}
+.loginOptionLink:hover{text-decoration:none;background-color:#06F;color:#FFF;}.loginOptionLink:hover i{display:block;}
+.loginForm,.signUpForm,.accountForm{margin:30px 0 0 0;}
+.moreOptions{color:#999;margin:20px 0;}
 .logo{text-align:center;}
+.customFormActions{margin-top:15px;text-align:right;}
 h1{margin:1em 0px;font-size:1.3em;}
 h2{margin:1.5em 0 0.5em 0;font-size:1.2em;}
 .box{background-color:#FFF;padding:30px 30px 20px;border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
-.footer{text-align:center;font-size:1em;padding:4em 0 4em 0;color:#999;}
+#footer{text-align:center;font-size:1em;padding:10px 0 0 0;color:#999;}

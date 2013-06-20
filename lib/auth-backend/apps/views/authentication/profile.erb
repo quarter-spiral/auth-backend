@@ -1,23 +1,26 @@
 <div class="row">
 	<div class="span6 offset3">
-    <h1>Your account</h1>
+    <h1>Your Quarter Spiral ID Details</h1>
+    <p>You can make changes to your account below. Leave the password fields empty if you do not wish to change your password.</p>
+		<form action="/profile" method="POST" class="form accountForm">
+			<input type="hidden" name="_method" value="put"/>
 
-    <div class="box">
+			<label for="inputName">User Name</label>
+			<input type="text" id="inputName" placeholder="Name" name="user[name]" value="test" class="input-block-level" />
 
-			<form action="/profile" method="POST" class="form">
-	      <input type="hidden" name="_method" value="put"/>
+			<label for="inputEmail">Email</label>
+			<input type="email" id="inputEmail" placeholder="eMail" name="user[email]" value="test@test.de" class="input-block-level" />
 
-			  <%= form_field 'user', 'name', 'Name', @user.name %>
+			<hr />
 
-			  <%= form_field 'user', 'email', 'eMail', @user.email, type: 'email' %>
-
-			  <%= form_field 'user', 'password', 'Password', '', type: 'password' %>
-
-			  <%= form_field 'user', 'password_confirmation', 'Password Confirmation', '', type: 'password' %>
-
-			  <button class="btn btn-success">Update</button>
-			  <a class="btn" href="/">Cancel</a>
-			</form>
-		</div>
+			<label for="inputPassword">New password</label>
+			<input type="password" id="inputPassword" placeholder="Enter a new password" name="user[password]" value="" class="input-block-level" />
+			<input type="password" id="inputPassword_confirmation" placeholder="Confirm your new password" name="user[password_confirmation]" value="" class="input-block-level" 	/>
+			<div class="customFormActions">
+				<a class="btn" href="/">Cancel</a>
+				<button class="btn btn-success"><i class="icon-arrow-right icon-white"></i> Save Changes</button>
+				
+			</div>
+		</form>
 	</div>
 </div>

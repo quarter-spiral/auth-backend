@@ -19,35 +19,31 @@
     <link rel="shortcut icon" href="/assets/ico/favicon.ico">
   </head>
 
-  <body class="<%= @controller_id ? "controller-#{@controller_id}" : '' %>">
+  <body class="<%= @controller_id ? "controller-#{@controller_id}" : '' %>" ng-app="authApp">
     <div class="container">
-      <div class="row">
-        <div class="span12">
-          <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-              <% if has_admin_privileges? %>
+      <% if has_admin_privileges? %>
+        <div class="row">
+          <div class="span12">
+            <div class="navbar">
+              <div class="navbar-inner">
                 <ul class="nav">
                   <li><a href="/admin">QS ID</a></li>
                   <li><a href="/admin/users">Users</a></li>
                   <li><a href="/admin/user_invitations">Invitations</a></li>
                   <li><a href="/admin/apps">Apps</a></li>
                 </ul>
-              <% else current_user %>
-                <ul class="nav">
-                  <li><a href="/"><strong>Quarter Spiral ID</strong></a></li>
+                <ul class="nav pull-right">
+                  <% if impersonating? %>
+                    <li class="btn-small btn-danger"><a href="/admin/users/<%= admin_user.id %>/impersonate" data-method="post" title="You are currently impersonating <%=h current_user.name %>" style="color:white; text-shadow: none;">Stop Impersonating</a></li>
+                  <% end %>
+                  <li><a href="/profile">Your Account</a></li>
+                  <li><a href="/logout">Log out</a></li>
                 </ul>
-              <% end %>
-              <ul class="nav pull-right">
-                <% if impersonating? %>
-                  <li class="btn-small btn-danger"><a href="/admin/users/<%= admin_user.id %>/impersonate" data-method="post" title="You are currently impersonating <%=h current_user.name %>" style="color:white; text-shadow: none;">Stop Impersonating</a></li>
-                <% end %>
-                <li><a href="/profile">Your Account</a></li>
-                <li><a href="/logout">Log out</a></li>
-              </ul>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
 
       <% if flash[:error] %>
         <div class="row">
@@ -75,21 +71,15 @@
 
     </div>
 
-    <div class="footer">
-      <div class="container">
-        <div class="row">
-          <div class="span12">
-            <p>&copy; 2012 Quarter Spiral, Inc.</p>
-          </div>
-        </div>
-      </div> 
-    </div>
+
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
     <script src="/assets/javascripts/jquery-1.8.1.min.js"></script>
     <script src="/assets/javascripts/bootstrap.min.js"></script>
     <script src="/assets/javascripts/application.js"></script>
+    <script src="/assets/javascripts/controllers.js"></script>
   </body>
 </html>
