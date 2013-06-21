@@ -19,7 +19,7 @@ GIT
 PATH
   remote: .
   specs:
-    auth-backend (0.0.37)
+    auth-backend (0.0.38)
       activerecord (>= 3.2.13)
       bcrypt-ruby
       graph-client (~> 0.0.12)
@@ -101,7 +101,7 @@ GEM
       service-client (>= 0.0.12)
     hashie (1.2.0)
     highline (1.6.16)
-    hike (1.2.2)
+    hike (1.2.3)
     http_router (0.10.2)
       rack (>= 1.0.0)
       url_mount (~> 0.2.1)
