@@ -21,7 +21,12 @@ module Auth::Backend
 
           user = Auth::Backend::User.authenticate(params['name'], params['password'])
 
-          fail!("Could not log in")  and return unless user
+          unless user
+            env['x-rack.flash'] ||= {}
+            env['x-rack.flash'][:failed_login_username] = params['name']
+            fail!("Could not log in")
+            return
+          end
 
           success!(user)
         end

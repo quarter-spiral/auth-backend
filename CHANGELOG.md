@@ -1,4 +1,4 @@
-# 0.0.38 / 2013-06-20
+# 0.0.38 / Unreleased
 
 * much improved UI
 

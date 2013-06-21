@@ -1,4 +1,4 @@
-<div class="row" ng-controller="loginController" ng-init="showLogin = false;">
+<div class="row" ng-controller="loginController" ng-init="showLogin = <%= (env['x-rack.flash'] || {})[:failed_login_username] != nil ? 'true' : 'false' %>;">
   <div class="span6 offset3">
     <h1>Quarter Spiral ID</h1>
     <div ng-hide="showLogin">
@@ -13,23 +13,23 @@
     </div>
     <div ng-show="showLogin">
       <p>Sign in using your user name and password below. If you do not have an account yet you can <a href="/signup">create a new account</a>.</p>
-      
+
       <form action="/login" method="post" class="form loginForm">
 
-          <input type="text" id="inputName" placeholder="Enter your user name" name="name" class="input-block-level">
+          <input type="text" id="inputName" placeholder="Enter your user name" name="name" class="input-block-level" value="<%= (env['x-rack.flash'] || {})[:failed_login_username] %>">
           <input type="password" id="inputPassword" placeholder="Enter your password" name="password" class="input-block-level">
           <div class="customFormActions">
             <a href="#" ng-click="showLogin = false;" class="btn">Cancel</a>
             <button type="submit" class="btn btn-success"><i class="icon-arrow-right icon-white"></i> Log in</button>
-            
+
           </div>
-         
-        
+
+
       </form>
-     
-      
+
+
     </div>
-    
+
   </div>
 </div>
 
