@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'uuid'
   gem.add_dependency 'json', '~> 1.7.7'
   gem.add_dependency 'kaminari'
-  gem.add_dependency 'padrino-helpers'
+  gem.add_dependency 'padrino-helpers', '>= 0.11.2'
   gem.add_dependency 'graph-client', '~> 0.0.12'
 
   gem.add_dependency 'unicorn'
