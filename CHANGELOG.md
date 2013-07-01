@@ -1,4 +1,4 @@
-# 0.0.39 / Unreleased
+# 0.0.39 / 2013-07-01
 
 * Bumps padrino dependency to avoid errors
 * minor tweak to the auth interface
