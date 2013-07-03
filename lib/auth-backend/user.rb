@@ -21,13 +21,19 @@ module Auth::Backend
       find_by_name(name).try(:authenticate, password)
     end
 
-    def private_info
+    def private_identity
       {
         'name' => name,
         'email' => email,
-        'uuid' => uuid,
-        'type' => 'user'
+        'uuid' => uuid
       }
+    end
+
+    def private_info
+      private_identity.merge(
+        'type' => 'user',
+        'firebase-token' => firebase_token
+      )
     end
 
     def venues
@@ -48,6 +54,33 @@ module Auth::Backend
 
     def accept_current_tos!(accepted_version)
       self.accepted_tos_version = accepted_version if accepted_version == TOS_VERSION
+    end
+
+    def firebase_token
+      token = read_attribute(:firebase_token)
+
+      return token if token && !firebase_token_expired?
+
+      firebase_secret = ENV['QS_FIREBASE_SECRET']
+
+      one_day = 24 * 60 * 60
+      in_one_week =  Time.now.to_i + (one_day * 7)
+
+      if firebase_secret
+        generator = Firebase::FirebaseTokenGenerator.new(firebase_secret)
+        token = generator.create_token(private_identity, :expires => in_one_week)
+      else
+        token = "123-456-#{rand(999)}"
+      end
+
+      write_attribute(:firebase_token_expires_at, in_one_week)
+      write_attribute(:firebase_token, token)
+      save!(validate: false) unless new_record?
+      token
+    end
+
+    def firebase_token_expired?
+      !firebase_token_expires_at || firebase_token_expires_at < Time.now.to_i
     end
 
     protected

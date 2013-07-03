@@ -1,3 +1,7 @@
+# 0.0.40 / Unreleased
+
+* Adds firebase tokens to token owner introspection
+
 # 0.0.39 / 2013-07-01
 
 * Bumps padrino dependency to avoid errors

@@ -175,6 +175,15 @@ describe "Authentication API" do
         user['type'].must_equal 'user'
       end
 
+      it "has a persisted firebase token" do
+        user = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{@token}").body)
+        firebase_token = user['firebase-token']
+        firebase_token.wont_be_empty
+
+        user = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{@token}").body)
+        user['firebase-token'].must_equal firebase_token
+      end
+
       it "can verify a token" do
         response = client.get("http://auth-backend.dev/api/v1/verify", 'Authorization' => "Bearer #{@token.reverse}")
         response.status.wont_equal 200

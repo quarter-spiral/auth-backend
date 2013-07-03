@@ -34,4 +34,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'ping-middleware', '~> 0.0.2'
   gem.add_dependency 'omniauth', '~> 1.1.1'
   gem.add_dependency 'omniauth-facebook', '~> 1.4.1'
+  gem.add_dependency 'firebase_token_generator'
 end
