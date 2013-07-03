@@ -16,6 +16,7 @@ end
 require 'graph-client'
 
 require 'songkick/oauth2/provider'
+require 'firebase_token_generator'
 
 require "auth-backend/version"
 require "auth-backend/user"
