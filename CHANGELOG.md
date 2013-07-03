@@ -1,4 +1,4 @@
-# 0.0.40 / Unreleased
+# 0.0.40 / 2013-07-04
 
 * Adds firebase tokens to token owner introspection
 
