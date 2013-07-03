@@ -1,4 +1,4 @@
-# 0.0.41 / Unreleased
+# 0.0.41 / 2013-07-04
 
 * Fixes problem on production
 
