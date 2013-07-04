@@ -60,7 +60,7 @@ module Auth::Backend
         logout
         env['x-rack.flash'][:success] = settings.auth_success_message if defined?(Rack::Flash)
         if params[:redirect_uri]
-          redirect URI.decode(params[:redirect_uri])
+          redirect ::URI.decode(params[:redirect_uri])
         else
           redirect settings.auth_success_path
         end
