@@ -1,4 +1,4 @@
-# 0.0.42 / Unreleased
+# 0.0.42 / 2013-07-04
 
 * Fixes namespace error when logging out
 
