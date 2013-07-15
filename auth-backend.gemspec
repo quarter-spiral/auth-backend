@@ -35,4 +35,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'omniauth', '~> 1.1.1'
   gem.add_dependency 'omniauth-facebook', '~> 1.4.1'
   gem.add_dependency 'firebase_token_generator'
+  gem.add_dependency 'futuroscope', '>= 0.1.3'
+  gem.add_dependency 'facebook-client', '>= 0.0.5'
+  gem.add_dependency 'playercenter-client', '0.0.4'
 end

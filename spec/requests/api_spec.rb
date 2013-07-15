@@ -267,7 +267,7 @@ describe "Authentication API" do
 
           uuid = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", {"Authorization" => "Bearer #{token}"}).body)['uuid']
 
-          connection = Connection.create('http://graph-backend.dev')
+          connection = Connection.create
           connection.graph.uuids_by_role(@app_token, 'player').must_include uuid
         end
 

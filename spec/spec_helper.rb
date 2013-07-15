@@ -6,8 +6,10 @@ require 'minitest/autorun'
 require 'nokogiri'
 
 require 'auth-backend'
-
 require 'graph-backend'
+require 'datastore-backend'
+require 'devcenter-backend'
+require 'playercenter-backend'
 
 require 'rack/client'
 include Auth::Backend
@@ -59,6 +61,11 @@ TEST_MOUNT = '/_tests_'
 require 'auth-backend/test_helpers'
 TEST_HELPERS = TestHelpers.new(APP)
 
+DATASTORE_BACKEND = Datastore::Backend::API.new
+GRAPH_BACKEND = Graph::Backend::API.new
+PLAYERCENTER_BACKEND = Playercenter::Backend::API.new
+DEVCENTER_BACKEND = Devcenter::Backend::API.new
+
 module Auth
   class Client
     alias raw_initialize initialize
@@ -68,7 +75,54 @@ module Auth
   end
 end
 
-GRAPH_BACKEND = Graph::Backend::API.new
+module Datastore::Backend
+  class Connection
+    alias raw_initialize initialize
+    def initialize(*args)
+      raw_initialize(*args)
+      @auth = Auth::Client.new('http://auth-backend.dev', adapter: [:rack, APP])
+    end
+  end
+end
+
+module Graph::Backend
+  class Connection
+    alias raw_initialize initialize
+    def initialize(*args)
+      raw_initialize(*args)
+      @auth = Auth::Client.new('http://auth-backend.dev', adapter: [:rack, APP])
+    end
+  end
+end
+
+module Devcenter::Backend
+  class Connection
+    alias raw_initialize initialize
+    def initialize(*args)
+      result = raw_initialize(*args)
+
+      @datastore.client.raw.adapter = Service::Client::Adapter::Faraday.new(adapter: [:rack, DATASTORE_BACKEND])
+      @graph.client.raw.adapter = Service::Client::Adapter::Faraday.new(adapter: [:rack, GRAPH_BACKEND])
+      @auth = Auth::Client.new('http://auth-backend.dev', adapter: [:rack, APP])
+
+      result
+    end
+  end
+end
+
+module Playercenter::Backend
+  class Connection
+    alias raw_initialize initialize
+    def initialize(*args)
+      raw_initialize(*args)
+
+      @graph.client.raw.adapter = Service::Client::Adapter::Faraday.new(adapter: [:rack, GRAPH_BACKEND])
+      @devcenter.client.raw.adapter = Service::Client::Adapter::Faraday.new(adapter: [:rack, DEVCENTER_BACKEND])
+      @auth = Auth::Client.new('http://auth-backend.dev', adapter: [:rack, APP])
+    end
+  end
+end
+
 module Auth::Backend
   class Connection
     alias raw_initialize initialize
@@ -78,7 +132,8 @@ module Auth::Backend
       graph_adapter = Service::Client::Adapter::Faraday.new(adapter: [:rack, GRAPH_BACKEND])
       @graph.client.raw.adapter = graph_adapter
 
-      result
+      playercenter_adapter = Service::Client::Adapter::Faraday.new(adapter: [:rack, PLAYERCENTER_BACKEND])
+      @playercenter.client.raw.adapter = playercenter_adapter
     end
   end
 end

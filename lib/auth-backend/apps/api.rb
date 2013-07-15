@@ -7,7 +7,7 @@ module Auth::Backend
 
       helpers do
         def connection
-          @connection ||= Connection.create(ENV['QS_GRAPH_BACKEND_URL'])
+          @connection ||= Connection.create
         end
 
         def own_token

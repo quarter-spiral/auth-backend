@@ -14,6 +14,8 @@ module Auth
 end
 
 require 'graph-client'
+require 'facebook-client'
+require 'playercenter-client'
 
 require 'songkick/oauth2/provider'
 require 'firebase_token_generator'

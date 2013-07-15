@@ -1,3 +1,7 @@
+# 0.0.43  / Unreleased
+
+*  Adds facebook friends on login with FB
+
 # 0.0.42 / 2013-07-04
 
 * Fixes namespace error when logging out

@@ -31,5 +31,8 @@ group :development do
   gem 'rack-client'
   gem 'nokogiri'
   gem 'graph-backend', '~> 0.0.26'
+  gem 'datastore-backend', '~> 0.0.19'
+  gem 'devcenter-backend', '~> 0.0.54'
   #gem 'graph-backend', path: '../graph-backend'
+  gem 'playercenter-backend', '~> 0.0.32'
 end

@@ -1,6 +1,7 @@
 require 'uri'
 require 'omniauth'
 require 'omniauth-facebook'
+require 'futuroscope'
 
 module Auth::Backend
   module Apps
@@ -15,6 +16,17 @@ module Auth::Backend
 
       use OmniAuth::Builder do
         provider :facebook, ENV['QS_FB_APP_ID'], ENV['QS_FB_APP_SECRET'], :scope => 'email'
+      end
+
+      helpers do
+        def issue_token_for_user(user)
+          oauth = Songkick::OAuth2::Model::Authorization.send(:new)
+          oauth.owner = user
+          oauth.client = ::Auth::Backend::OauthApp.api_client
+          oauth.access_token = Songkick::OAuth2::Model::Authorization.create_access_token
+          oauth.save!
+          oauth.access_token
+        end
       end
 
       before do
@@ -83,6 +95,23 @@ module Auth::Backend
           User.transaction do
             user.save!(validate: false)
             venue_id = VenueIdentity.create!(user_id: user.id, venue: 'facebook', venue_id: fb_data[:id], email: user.email, name: user.name)
+          end
+        end
+
+        fb_token = request.env['omniauth.auth']['credentials']['token'].clone
+        fb_uuid = fb_data[:id].clone
+        qs_token = issue_token_for_user(venue_id.user)
+        qs_uuid = venue_id.user.uuid.clone
+
+        Futuroscope::Future.new do
+          begin
+            facebook_client = ::Facebook::Client.new(ENV['QS_FB_APP_ID'], ENV['QS_FB_APP_SECRET'])
+            authenticated_client = facebook_client.authenticated_by(fb_token)
+            friends = authenticated_client.friends_of(fb_uuid)
+            friends.map! {|f| {"venue-id" => f.identifier, "name" => f.name, "email" => f.email}}
+            ::Auth::Backend::Connection.create.playercenter.update_friends_of(qs_uuid, qs_token, 'facebook', friends)
+          rescue Exception => e
+            $STDERR.puts "Error in FB friend update: #{e.message} / #{e.inspect}"
           end
         end
 

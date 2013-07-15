@@ -81,7 +81,7 @@ describe Auth::Backend::Apps::API do
     AUTH_HELPERS.create_user!
     AuthenticationInjector.reset!
 
-    connection = Connection.create('http://graph-backend.dev')
+    connection = Connection.create
 
     @user2_options = {name: "AnotherUser", email: "another@example.com", password: "anotherpassword"}
     @user2 = AUTH_HELPERS.create_user!(@user2_options)
