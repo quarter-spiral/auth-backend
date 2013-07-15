@@ -1,4 +1,4 @@
-# 0.0.43  / Unreleased
+# 0.0.43  / 2013-07-15
 
 *  Adds facebook friends on login with FB
 
