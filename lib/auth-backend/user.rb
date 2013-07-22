@@ -25,13 +25,14 @@ module Auth::Backend
       {
         'name' => name,
         'email' => email,
-        'uuid' => uuid
+        'uuid' => uuid,
+        'type' => 'user',
+        'admin' => admin
       }
     end
 
     def private_info
       private_identity.merge(
-        'type' => 'user',
         'firebase-token' => firebase_token
       )
     end

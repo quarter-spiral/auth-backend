@@ -1,5 +1,6 @@
 # 0.0.44 / Unreleased
 
+* Adds admin field to private user info
 * Creates a new Firebase token 24h before the existing token expires
 
 # 0.0.43  / 2013-07-15

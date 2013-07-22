@@ -173,6 +173,25 @@ describe "Authentication API" do
         user['email'].must_equal @user['email']
         user['uuid'].must_equal @user['uuid']
         user['type'].must_equal 'user'
+        user['admin'].must_equal false
+      end
+
+      it "has true for the admin field when retrieving info for admins" do
+        admin_user = TEST_HELPERS.create_user!(name: 'Adminoo', email: 'jacko@example.com', password: @password, admin: 'true')
+
+        authed_client = Rack::Client.new {
+          run Rack::Client::Auth::Basic.new(APP, admin_user['name'], admin_user['password'], true)
+        }
+
+        response = authed_client.post("http://auth-backend.dev/api/v1/token")
+        response.status.must_equal 201
+        admin_token = JSON.parse(response.body)['token']
+
+        response = client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{admin_token}")
+        response.status.must_equal 200
+        user = JSON.parse(response.body)
+        user['type'].must_equal 'user'
+        user['admin'].must_equal true
       end
 
       it "has a persisted firebase token" do
