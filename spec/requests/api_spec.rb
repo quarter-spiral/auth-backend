@@ -184,6 +184,34 @@ describe "Authentication API" do
         user['firebase-token'].must_equal firebase_token
       end
 
+      it "refreshes firebase token a day before it expires" do
+        creation_time = Time.now
+        old_firebase_token = nil
+
+        Time.stub :now, creation_time do
+          user = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{@token}").body)
+          firebase_token = user['firebase-token']
+          firebase_token.wont_be_empty
+          old_firebase_token = firebase_token
+        end
+
+        one_day = 24 * 60 * 60
+        nearly_6_days_later = Time.at(creation_time.to_i + (6 * one_day) - 1)
+
+        Time.stub :now, nearly_6_days_later do
+          user = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{@token}").body)
+          user['firebase-token'].must_equal old_firebase_token
+        end
+
+        a_little_more_than_6_days_later = Time.at(nearly_6_days_later + 2)
+
+        Time.stub :now, a_little_more_than_6_days_later do
+          user = JSON.parse(client.get("http://auth-backend.dev/api/v1/me", 'Authorization' => "Bearer #{@token}").body)
+          user['firebase-token'].wont_be_empty
+          user['firebase-token'].wont_equal old_firebase_token
+        end
+      end
+
       it "can verify a token" do
         response = client.get("http://auth-backend.dev/api/v1/verify", 'Authorization' => "Bearer #{@token.reverse}")
         response.status.wont_equal 200

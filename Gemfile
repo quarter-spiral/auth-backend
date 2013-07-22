@@ -19,6 +19,7 @@ gem 'thin'
 
 group :development do
   gem 'rake'
+  gem 'minitest'
 
   platform :ruby, :rbx do
     gem 'sqlite3'

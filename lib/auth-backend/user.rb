@@ -80,7 +80,10 @@ module Auth::Backend
     end
 
     def firebase_token_expired?
-      !firebase_token_expires_at || firebase_token_expires_at < Time.now.to_i
+      # It's expired when it's valid for less than a day
+      in_one_day = Time.now.to_i + (24 * 60 * 60)
+      !firebase_token_expires_at || firebase_token_expires_at < in_one_day
+    end
     end
 
     protected

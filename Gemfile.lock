@@ -173,6 +173,7 @@ GEM
     macaddr (1.6.1)
       systemu (~> 2.5.0)
     mime-types (1.23)
+    minitest (4.7.0)
     minuteman (1.0.2)
       redis (~> 3.0.2)
     mongoid (3.1.4)
@@ -327,6 +328,7 @@ DEPENDENCIES
   datastore-backend (~> 0.0.19)
   devcenter-backend (~> 0.0.54)
   graph-backend (~> 0.0.26)
+  minitest
   nokogiri
   pg (~> 0.15.0)
   playercenter-backend (~> 0.0.32)

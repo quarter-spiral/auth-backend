@@ -1,3 +1,7 @@
+# 0.0.44 / Unreleased
+
+* Creates a new Firebase token 24h before the existing token expires
+
 # 0.0.43  / 2013-07-15
 
 *  Adds facebook friends on login with FB
