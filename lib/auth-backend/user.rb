@@ -57,12 +57,12 @@ module Auth::Backend
       self.accepted_tos_version = accepted_version if accepted_version == TOS_VERSION
     end
 
-    def firebase_token
+    def firebase_token(firebase_secret = nil)
       token = read_attribute(:firebase_token)
 
       return token if token && !firebase_token_expired?
 
-      firebase_secret = ENV['QS_FIREBASE_SECRET']
+      firebase_secret ||= ENV['QS_FIREBASE_SECRET']
 
       one_day = 24 * 60 * 60
       in_one_week =  Time.now.to_i + (one_day * 7)
@@ -85,6 +85,11 @@ module Auth::Backend
       in_one_day = Time.now.to_i + (24 * 60 * 60)
       !firebase_token_expires_at || firebase_token_expires_at < in_one_day
     end
+
+    def refresh_firebase_token!(firebase_secret = nil)
+      self.firebase_token_expires_at = nil
+      self.firebase_token = nil
+      firebase_token(firebase_secret)
     end
 
     protected

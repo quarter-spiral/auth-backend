@@ -1,5 +1,6 @@
 # 0.0.44 / Unreleased
 
+* Adds Firebase token administration to users' edit page
 * Adds admin field to private user info
 * Creates a new Firebase token 24h before the existing token expires
 

@@ -36,6 +36,18 @@ module Auth::Backend
         erb :'admin/users/edit'
       end
 
+      post '/users/:id/refresh_firebase_token' do
+        id = params[:id]
+
+        firebase_secret = (params[:firebase] || {})['secret']
+        firebase_secret = nil if firebase_secret && firebase_secret.match(/^\s*$/)
+
+        @user = User.find(id)
+        @user.refresh_firebase_token!(firebase_secret)
+
+        redirect("/admin/users/#{id}/edit")
+      end
+
       post '/users/:id/impersonate' do
         user = User.find(params[:id])
         warden_data[:user] = user.id

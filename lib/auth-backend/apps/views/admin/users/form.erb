@@ -24,3 +24,19 @@
 
   <button class="btn"><%= button_label %></button>
 </form>
+
+<% if current_user.admin? && !@user.new_record? %>
+  <hr/>
+  <form action="/admin/users/<%=h @user.id %>/refresh_firebase_token" method="POST">
+    <div class="control-group">
+      <label class="control-label">Firebase Token</label>
+      <div class="controls">
+        Expires at: <%= @user.firebase_token_expires_at ? Time.at(@user.firebase_token_expires_at) : 'No expiration set' %>
+        <pre><%=h @user.firebase_token %></pre>
+      </div>
+    </div>
+    <%= form_field 'firebase', 'secret', 'Overwrite Firebase Secret', '', type: 'password' %>
+
+    <button class="btn">Refresh token</button>
+  </form>
+<% end %>
