@@ -1,4 +1,4 @@
-# 0.0.44 / Unreleased
+# 0.0.44 / 2013-07-22
 
 * Adds Firebase token administration to users' edit page
 * Adds admin field to private user info

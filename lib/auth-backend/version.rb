@@ -1,5 +1,5 @@
 module Auth
   module Backend
-    VERSION = "0.0.43"
+    VERSION = "0.0.44"
   end
 end
