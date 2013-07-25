@@ -56,7 +56,7 @@ module Auth::Backend
 
         @user = User.new(params[:user])
 
-        if @user.save
+        if @user.save and VenueIdentity.new(:user_id => @user.id, :venue_id => @user.uuid, :name => @user.name, :email => @user.email, :venue => 'embedded').save
           flash[:success] = "Signed up!"
 
           redirect '/'

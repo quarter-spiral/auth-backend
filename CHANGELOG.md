@@ -1,5 +1,6 @@
 # 0.0.45 / Unreleased
 
+* Adds venue identities on signups
 * Enables signups and logins with username/password again
 
 # 0.0.44 / 2013-07-22
