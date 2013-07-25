@@ -1,5 +1,6 @@
 # 0.0.45 / Unreleased
 
+* Fixes profile fields
 * Adds venue identities on signups
 * Enables signups and logins with username/password again
 

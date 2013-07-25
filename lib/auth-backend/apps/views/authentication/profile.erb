@@ -6,10 +6,10 @@
 			<input type="hidden" name="_method" value="put"/>
 
 			<label for="inputName">User Name</label>
-			<input type="text" id="inputName" placeholder="Name" name="user[name]" value="test" class="input-block-level" />
+			<input type="text" id="inputName" placeholder="Name" name="user[name]" value="<%=h @user.name %>" class="input-block-level" />
 
 			<label for="inputEmail">Email</label>
-			<input type="email" id="inputEmail" placeholder="eMail" name="user[email]" value="test@test.de" class="input-block-level" />
+			<input type="email" id="inputEmail" placeholder="eMail" name="user[email]" value="<%=h @user.email %>" class="input-block-level" />
 
 			<hr />
 
@@ -19,7 +19,7 @@
 			<div class="customFormActions">
 				<a class="btn" href="/">Cancel</a>
 				<button class="btn btn-success"><i class="icon-arrow-right icon-white"></i> Save Changes</button>
-				
+
 			</div>
 		</form>
 	</div>
