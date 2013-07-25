@@ -40,7 +40,7 @@ module Auth::Backend
 
       get '/signup' do
         # Do not allow signups in production!
-        redirect '/' and return if settings.production?
+        # redirect '/' and return if settings.production?
 
         redirect '/' and return if current_user
 
@@ -50,7 +50,7 @@ module Auth::Backend
 
       post '/signup' do
         # Do not allow signups in production!
-        redirect '/' and return if settings.production?
+        # redirect '/' and return if settings.production?
 
         redirect '/' and return if current_user
 

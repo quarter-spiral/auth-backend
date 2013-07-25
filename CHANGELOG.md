@@ -1,3 +1,7 @@
+# 0.0.45 / Unreleased
+
+* Enables signups and logins with username/password again
+
 # 0.0.44 / 2013-07-22
 
 * Adds Firebase token administration to users' edit page
