@@ -1,26 +1,39 @@
 <div class="row">
-	<div class="span6 offset3">
+  <div class="span6 offset3">
     <h1>Your Quarter Spiral ID Details</h1>
     <p>You can make changes to your account below. Leave the password fields empty if you do not wish to change your password.</p>
-		<form action="/profile" method="POST" class="form accountForm">
-			<input type="hidden" name="_method" value="put"/>
+    <form action="/profile" method="POST" class="form accountForm">
+      <input type="hidden" name="_method" value="put"/>
 
-			<label for="inputName">User Name</label>
-			<input type="text" id="inputName" placeholder="Name" name="user[name]" value="<%=h @user.name %>" class="input-block-level" />
+      <label for="inputName">User Name</label>
+      <input type="text" id="inputName" placeholder="Name" name="user[name]" value="<%=h @user.name %>" class="input-block-level" />
 
-			<label for="inputEmail">Email</label>
-			<input type="email" id="inputEmail" placeholder="eMail" name="user[email]" value="<%=h @user.email %>" class="input-block-level" />
+      <div class="<% if !@user.errors[:email].empty? %>error<% end %>">
+        <label for="inputEmail">Email</label>
+        <% if !@user.errors[:email].empty? %>
+          <div class="error-message"><%= @user.errors[:email].map {|e| "Email #{e}"}.join(". ")%></div>
+        <% end %>
+        <input type="email" id="inputEmail" placeholder="Email" name="user[email]" value="<%=h @user.email %>" class="input-block-level" />
+      </div>
 
-			<hr />
+      <hr />
 
-			<label for="inputPassword">New password</label>
-			<input type="password" id="inputPassword" placeholder="Enter a new password" name="user[password]" value="" class="input-block-level" />
-			<input type="password" id="inputPassword_confirmation" placeholder="Confirm your new password" name="user[password_confirmation]" value="" class="input-block-level" 	/>
-			<div class="customFormActions">
-				<a class="btn" href="/">Cancel</a>
-				<button class="btn btn-success"><i class="icon-arrow-right icon-white"></i> Save Changes</button>
+      <div class="<% if !@user.errors[:password_digest].empty? || !@user.errors[:password].empty? %>error<% end %>">
+        <label for="inputPassword">New password</label>
+        <% if !@user.errors[:password_digest].empty? %>
+          <div class="error-message">Please set a password to save your profile.</div>
+        <% end %>
+        <% if !@user.errors[:password].empty? %>
+          <div class="error-message"><%= @user.errors[:password].map {|e| "Password #{e}"}.join(". ")%></div>
+        <% end %>
+        <input type="password" id="inputPassword" placeholder="Enter a new password" name="user[password]" value="" class="input-block-level" />
+        <input type="password" id="inputPassword_confirmation" placeholder="Confirm your new password" name="user[password_confirmation]" value="" class="input-block-level"  />
+      </div>
+      <div class="customFormActions">
+        <a class="btn" href="/">Cancel</a>
+        <button class="btn btn-success"><i class="icon-arrow-right icon-white"></i> Save Changes</button>
 
-			</div>
-		</form>
-	</div>
+      </div>
+    </form>
+  </div>
 </div>

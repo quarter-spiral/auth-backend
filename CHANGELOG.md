@@ -1,3 +1,7 @@
+# 0.0.46 / Unreleased
+
+* Improves error messages on profile changes
+
 # 0.0.45 / 2013-07-25
 
 * Fixes profile fields
