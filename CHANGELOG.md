@@ -1,4 +1,4 @@
-# 0.0.46 / Unreleased
+# 0.0.46 / 2013-07-26
 
 * Improves error messages on profile changes
 
