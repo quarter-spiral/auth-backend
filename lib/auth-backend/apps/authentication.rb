@@ -30,7 +30,7 @@ module Auth::Backend
       end
 
       before do
-        break if request.path_info == "/accept-tos" || request.path_info.start_with?('/assets/')
+        break if request.path_info == "/accept-tos" || request.path_info.start_with?('/assets/') || request.url.match(/favicon\.ico$/)
 
         if current_user && !current_user.accepted_current_tos?
           session[:after_tos_acceptance_url] ||= request.url
@@ -186,7 +186,8 @@ module Auth::Backend
           flash[:success] = 'Profile updated.'
           redirect '/profile'
         else
-          flash.now[:error] = "Could not save your profile"
+          flash.now[:error] = "Could not save your profile."
+
           erb :'authentication/profile'
         end
       end
