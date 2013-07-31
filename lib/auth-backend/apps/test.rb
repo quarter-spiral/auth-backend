@@ -8,6 +8,7 @@ module Auth::Backend
       post '/users' do
         user = Auth::Backend::User.new(params)
         params.each do |key, value|
+          value = value == 'true' if key.to_s == 'admin'
           user.send("#{key}=", value)
         end
         user.save!

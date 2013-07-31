@@ -1,5 +1,6 @@
 # 0.0.47 / Unreleased
 
+* Makes test helper viable to create admin users
 * Fixes bcrypt dependency
 
 # 0.0.46 / 2013-07-26

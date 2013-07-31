@@ -69,7 +69,12 @@ module Auth::Backend
     end
 
     def create_user!(options = {})
-      options = DEFAULT_USER.merge(options)
+      options = DEFAULT_USER.merge(Hash[options.map {|k,v| [k.to_sym, v]}])
+      options = Hash[options.map do |k,v|
+        v = 'true' if v == true
+        [k,v]
+      end]
+
       no_invitation = options.delete(:no_invitation)
       tos_not_accepted = options.delete(:tos_not_accepted)
 
