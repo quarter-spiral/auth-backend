@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rack', '~> 1.4.5'
   gem.add_dependency 'sinatra'
   gem.add_dependency 'sinatra-flash'
-  gem.add_dependency 'bcrypt-ruby'
+  gem.add_dependency 'bcrypt-ruby', '~> 3.0.0'
   gem.add_dependency 'activerecord', '>= 3.2.13'
   gem.add_dependency 'sinatra-activerecord'
   gem.add_dependency 'uuid'
