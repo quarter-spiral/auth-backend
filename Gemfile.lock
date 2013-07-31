@@ -19,9 +19,9 @@ GIT
 PATH
   remote: .
   specs:
-    auth-backend (0.0.46)
+    auth-backend (0.0.47)
       activerecord (>= 3.2.13)
-      bcrypt-ruby
+      bcrypt-ruby (~> 3.0.0)
       facebook-client (>= 0.0.5)
       firebase_token_generator
       futuroscope (>= 0.1.3)
