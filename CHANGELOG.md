@@ -1,4 +1,4 @@
-# 0.0.48 / Unreleased
+# 0.0.48 / 2013-08-08
 
 * small copy and layout tweaks to make signup / login more clear
 
