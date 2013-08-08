@@ -1,3 +1,7 @@
+# 0.0.48 / Unreleased
+
+* small copy and layout tweaks to make signup / login more clear
+
 # 0.0.47 / 2013-07-31
 
 * Makes test helper viable to create admin users
