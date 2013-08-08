@@ -2,7 +2,9 @@
   <div class="span6 offset3">
     <h1>Quarter Spiral ID</h1>
     <div ng-hide="showLogin">
-      <p>Use your Quarter Spiral ID to log into any Quarter Spiral powered application. You can sign in or create a new ID with any of these options:</p>
+      <p>With a Quarter Spiral ID you can log into any Quarter Spiral powered application.</p>
+      <hr />
+      <p>You can <strong>sign in or create a new ID</strong> with any of these options:</p>
       <ul class="loginOptions unstyled">
           <li class="loginOption"><a href="#" ng-click="showLogin = true;" class="loginOptionLink"><i class="icon-white icon-arrow-right pull-right"></i> User Name and Password</a></li>
         <li class="loginOption"><a class="loginOptionLink" href="/auth/facebook"><i class="icon-white icon-arrow-right pull-right"></i> Facebook</a></li>
@@ -10,7 +12,7 @@
       <p class="moreOptions">More options coming soon...</p>
     </div>
     <div ng-show="showLogin">
-      <p>Sign in using your user name and password below. If you do not have an account yet you can <a href="/signup">create a new account</a>.</p>
+      <p>If you do not have an account yet you can <strong><a href="/signup">create a new account</a>.</strong></p>
 
       <form action="/login" method="post" class="form loginForm">
 
