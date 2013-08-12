@@ -38,5 +38,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'futuroscope', '>= 0.1.3'
   gem.add_dependency 'facebook-client', '>= 0.0.5'
   gem.add_dependency 'playercenter-client', '0.0.5'
-  gem.add_dependency 'qs-request-tracker'
+  gem.add_dependency 'qs-request-tracker', '>= 0.0.2'
+  gem.add_dependency 'sentry-raven'
 end

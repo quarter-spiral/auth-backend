@@ -34,8 +34,9 @@ PATH
       padrino-helpers (>= 0.11.2)
       ping-middleware (~> 0.0.2)
       playercenter-client (= 0.0.5)
-      qs-request-tracker
+      qs-request-tracker (>= 0.0.2)
       rack (~> 1.4.5)
+      sentry-raven
       sinatra
       sinatra-activerecord
       sinatra-flash
@@ -238,7 +239,7 @@ GEM
       rack-fake-method (~> 0.0.1)
     playercenter-client (0.0.5)
       service-client (>= 0.0.14)
-    qs-request-tracker (0.0.1)
+    qs-request-tracker (0.0.2)
       uuid
     rack (1.4.5)
     rack-accept (0.4.5)
@@ -272,6 +273,10 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rubyzip (0.9.9)
+    sentry-raven (0.6.0)
+      faraday (>= 0.7.6)
+      hashie (>= 1.1.0)
+      uuidtools
     service-client (0.0.14)
       faraday (= 0.8.1)
       json

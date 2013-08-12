@@ -1,5 +1,7 @@
 # 0.0.49 / Unreleased
 
+* Adds getsentry.com exception tracking
+* Adds getsentry error tracker
 * Adds request id tracker
 * Updates to newest service-client to carry request ids through service calls
 
