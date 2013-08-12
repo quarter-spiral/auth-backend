@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'json', '~> 1.7.7'
   gem.add_dependency 'kaminari'
   gem.add_dependency 'padrino-helpers', '>= 0.11.2'
-  gem.add_dependency 'graph-client', '~> 0.0.12'
+  gem.add_dependency 'graph-client', '~> 0.0.13'
 
   gem.add_dependency 'unicorn'
   gem.add_dependency 'newrelic_rpm'
@@ -37,5 +37,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'firebase_token_generator'
   gem.add_dependency 'futuroscope', '>= 0.1.3'
   gem.add_dependency 'facebook-client', '>= 0.0.5'
-  gem.add_dependency 'playercenter-client', '0.0.4'
+  gem.add_dependency 'playercenter-client', '0.0.5'
 end

@@ -25,7 +25,7 @@ PATH
       facebook-client (>= 0.0.5)
       firebase_token_generator
       futuroscope (>= 0.1.3)
-      graph-client (~> 0.0.12)
+      graph-client (~> 0.0.13)
       json (~> 1.7.7)
       kaminari
       newrelic_rpm
@@ -33,7 +33,7 @@ PATH
       omniauth-facebook (~> 1.4.1)
       padrino-helpers (>= 0.11.2)
       ping-middleware (~> 0.0.2)
-      playercenter-client (= 0.0.4)
+      playercenter-client (= 0.0.5)
       rack (~> 1.4.5)
       sinatra
       sinatra-activerecord
@@ -77,7 +77,7 @@ GEM
       iron_cache (= 1.4.0)
       json (>= 1.7)
     cache-client (0.0.4)
-    commander (4.1.3)
+    commander (4.1.5)
       highline (~> 1.6.11)
     daemons (1.1.9)
     datastore-backend (0.0.19)
@@ -118,7 +118,7 @@ GEM
       fb_graph
     faraday (0.8.1)
       multipart-post (~> 1.1)
-    fb_graph (2.7.7)
+    fb_graph (2.7.8)
       httpclient (>= 2.2.0.2)
       multi_json (>= 1.3)
       rack-oauth2 (>= 0.14.4)
@@ -145,9 +145,9 @@ GEM
       json (~> 1.7.7)
       neography (= 1.0.9)
       ping-middleware (~> 0.0.2)
-    graph-client (0.0.12)
+    graph-client (0.0.13)
       commander
-      service-client (>= 0.0.12)
+      service-client (>= 0.0.14)
     hashie (1.2.0)
     highline (1.6.19)
     hike (1.2.3)
@@ -235,8 +235,8 @@ GEM
       ping-middleware (~> 0.0.2)
       rack-crossdomain-xml (~> 0.0.1)
       rack-fake-method (~> 0.0.1)
-    playercenter-client (0.0.4)
-      service-client (>= 0.0.12)
+    playercenter-client (0.0.5)
+      service-client (>= 0.0.14)
     rack (1.4.5)
     rack-accept (0.4.5)
       rack (>= 0.4)
@@ -269,7 +269,7 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rubyzip (0.9.9)
-    service-client (0.0.12)
+    service-client (0.0.14)
       faraday (= 0.8.1)
       json
     sinatra (1.4.3)
