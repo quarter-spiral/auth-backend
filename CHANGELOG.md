@@ -1,5 +1,6 @@
 # 0.0.49 / Unreleased
 
+* Adds request id tracker
 * Updates to newest service-client to carry request ids through service calls
 
 # 0.0.48 / 2013-08-08

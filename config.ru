@@ -13,4 +13,5 @@ $stdout.sync = true if ENV['QS_DEBUG_ENABLED']
 
 require 'auth-backend/nasty_activerecord_fix'
 
+use Qs::Request::Tracker::Middleware
 run Auth::Backend::App.new

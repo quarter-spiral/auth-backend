@@ -34,6 +34,7 @@ PATH
       padrino-helpers (>= 0.11.2)
       ping-middleware (~> 0.0.2)
       playercenter-client (= 0.0.5)
+      qs-request-tracker
       rack (~> 1.4.5)
       sinatra
       sinatra-activerecord
@@ -237,6 +238,8 @@ GEM
       rack-fake-method (~> 0.0.1)
     playercenter-client (0.0.5)
       service-client (>= 0.0.14)
+    qs-request-tracker (0.0.1)
+      uuid
     rack (1.4.5)
     rack-accept (0.4.5)
       rack (>= 0.4)

@@ -16,6 +16,8 @@ end
 require 'graph-client'
 require 'facebook-client'
 require 'playercenter-client'
+require 'qs/request/tracker'
+require 'qs/request/tracker/service_client_extension'
 
 require 'songkick/oauth2/provider'
 require 'firebase_token_generator'
