@@ -22,7 +22,8 @@ module Auth::Backend
           name: "Canvas",
           uid: 'bmycruwwc96b5otil3fipgh8rcoj9z',
           secret: 'rcghf9way9i7lbdzyakaecly5ow9fau',
-          redirect_uri: "#{ENV['QS_CANVAS_APP_URL']}/auth/auth_backend/callback"
+          redirect_uri: "#{ENV['QS_CANVAS_APP_URL']}/auth/auth_backend/callback",
+          automatic_authorization: true
         },
         {
           name: "Playercenter",
@@ -52,6 +53,7 @@ module Auth::Backend
         a.client_id = app[:uid]
         a.client_secret = app[:secret]
         a.needs_invitation = true if app[:needs_invitation]
+        a.automatic_authorization = true if app[:automatic_authorization]
         a.save!
       end
     end

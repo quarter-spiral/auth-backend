@@ -215,7 +215,12 @@ module Auth::Backend
               session[:return_to] = "#{request.path}?#{request.query_string}"
               redirect '/login'
             else
-              erb :'authentication/grant_access'
+              if @oauth2.client.automatic_authorization
+                @oauth2.grant_access!
+                redirect @oauth2.redirect_uri
+              else
+                erb :'authentication/grant_access'
+              end
             end
           else
             erb 'An error occured'

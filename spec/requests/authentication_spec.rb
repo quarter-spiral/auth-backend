@@ -91,6 +91,30 @@ describe "Authentication" do
       response.status.must_equal 200
     end
 
+    describe "with an app that neither needs an invitation not authorization" do
+      before do
+        params = {
+          name: "AppNeedsNoInvitation",
+          redirect_uri: "http://example.com/noinvitation"
+        }
+        @app_that_does_not_need_invitation = OauthApp.new(params)
+        @app_that_does_not_need_invitation.automatic_authorization = true
+        @app_that_does_not_need_invitation.save!
+      end
+
+      after do
+        @app_that_does_not_need_invitation.destroy
+      end
+
+      it "sends you to the app when the app after login" do
+        response = client.post("http://auth-backend.dev/login", {}, name: @user['name'], password: @password)
+        cookie = response.headers["Set-Cookie"]
+
+        response = send_auth_for_app(@app_that_does_not_need_invitation, cookie)
+        must_redirect_to(@app_that_does_not_need_invitation.redirect_uri, response)
+      end
+    end
+
     describe "with an app that needs an invitation and one which does not" do
       before do
         params = {
