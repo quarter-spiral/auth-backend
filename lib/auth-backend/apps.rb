@@ -59,11 +59,7 @@ module Auth::Backend
     end
 
     def self.migrate_db!
-      migration_dir = `bundle show --paths auth-backend`.chomp
-      migration_dirs = migration_dir.split("\n")
-      if migration_dirs.length > 1
-        migration_dir = migration_dirs.detect {|d| d =~ /auth-backend$/}
-      end
+      migration_dir = File.expand_path('../../../db/migrate', __FILE__)
       ActiveRecord::Migrator.migrate([migration_dir])
     end
 
