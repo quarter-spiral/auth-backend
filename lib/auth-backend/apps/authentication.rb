@@ -55,6 +55,12 @@ module Auth::Backend
         redirect '/' and return if current_user
 
         @user = User.new(params[:user])
+        @user.accepted_tos_version = params[:user][:'accept-tos'] if params[:user] && params[:user][:'accept-tos']
+
+        unless @user.accepted_current_tos?
+          flash.now[:error] = "Please accept our terms of service to continue"
+          return erb(:'authentication/signup')
+        end
 
         if @user.save and VenueIdentity.new(:user_id => @user.id, :venue_id => @user.uuid, :name => @user.name, :email => @user.email, :venue => 'embedded').save
           flash[:success] = "Signed up!"

@@ -1,19 +1,27 @@
 <div class="row">
-	<div class="span6 offset3">
+  <div class="span6 offset3">
     <h1>Quarter Spiral ID</h1>
     <p>Create a new Quarter Spiral ID to log into any Quarter Spiral powered application.</p>
 
-		<form action="/signup" method="POST" class="form signUpForm">
+    <form action="/signup" method="POST" class="form signUpForm">
 
-      <input type="text" id="inputName" placeholder="Enter a user name" name="user[name]" value="" class="input-block-level" />
-			<input type="email" id="inputEmail" placeholder="Enter your email" name="user[email]" value="" class="input-block-level" />
-			<input type="password" id="inputPassword" placeholder="Enter a password" name="user[password]" value="" class="input-block-level" />
-			<input type="password" id="inputPassword_confirmation" placeholder="Confirm the password" name="user[password_confirmation]" value="" class="input-block-level" />
-			<div class="customFormActions">
-				<a href="/login" class="btn">Cancel</a>
-			  <button class="btn btn-success"><i class="icon-arrow-right icon-white"></i> Sign up</button>
-			</div>
-		</form>
+      <input type="text" id="inputName" placeholder="Enter a user name" name="user[name]" value="<%=h @user.name %>" class="input-block-level" />
+      <input type="email" id="inputEmail" placeholder="Enter your email" name="user[email]" value="<%=h @user.email %>" class="input-block-level" />
+      <input type="password" id="inputPassword" placeholder="Enter a password" name="user[password]" value="" class="input-block-level" />
+      <input type="password" id="inputPassword_confirmation" placeholder="Confirm the password" name="user[password_confirmation]" value="" class="input-block-level" />
 
-	</div>
+      <% if @user.new_record? %>
+        <div class="control-group">
+          <label class="checkbox" for="acceptTos">
+            <input type="checkbox" id="acceptTos" name="user[accept-tos]" value="<%=h Auth::Backend::TOS_VERSION %>"/>
+            I accept the <a href="https://docs.google.com/document/d/1oWjZK6Z6p8gn5WRiHDup6uD9HuKDKNz-yuCtjfTI924/pub" target="_blank">Quarter Spiral terms of service</a>.</label>
+        </div>
+      <% end %>
+      <div class="customFormActions">
+        <a href="/login" class="btn">Cancel</a>
+        <button class="btn btn-success"><i class="icon-arrow-right icon-white"></i> Sign up</button>
+      </div>
+    </form>
+
+  </div>
 </div>

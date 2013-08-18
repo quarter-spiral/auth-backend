@@ -1,3 +1,7 @@
+# 0.0.51 / Unreleased
+
+* Makes tos acceptance part of the signup page
+
 # 0.0.50 / 2013-08-18
 
 * Optionally adds automatic authorization for apps
