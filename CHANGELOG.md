@@ -1,4 +1,4 @@
-# 0.0.50 / Unreleased
+# 0.0.50 / 2013-08-18
 
 * Optionally adds automatic authorization for apps
 * Adds favicon
