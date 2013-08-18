@@ -64,8 +64,8 @@ module Auth::Backend
 
         if @user.save and VenueIdentity.new(:user_id => @user.id, :venue_id => @user.uuid, :name => @user.name, :email => @user.email, :venue => 'embedded').save
           flash[:success] = "Signed up!"
-
-          redirect '/'
+          self.user = @user
+          redirect session[:return_to] || '/'
         else
           flash.now[:error] = "Could not sign you up!"
 

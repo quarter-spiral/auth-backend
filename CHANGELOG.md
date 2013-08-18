@@ -1,5 +1,7 @@
 # 0.0.51 / Unreleased
 
+* Logs users in automatically after signups
+* When signing in with OAuth and signing up for a new account users are send back afterwards
 * Makes tos acceptance part of the signup page
 
 # 0.0.50 / 2013-08-18
