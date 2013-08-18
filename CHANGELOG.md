@@ -1,4 +1,4 @@
-# 0.0.51 / Unreleased
+# 0.0.51 / 2013-08-18
 
 * Logs users in automatically after signups
 * When signing in with OAuth and signing up for a new account users are send back afterwards
