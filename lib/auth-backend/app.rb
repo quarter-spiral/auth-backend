@@ -18,7 +18,7 @@ module Auth::Backend
     def initialize(options = {})
       @app = Rack::Builder.new do
         map '/assets' do
-          use Rack::Static, :urls => ["/stylesheets", "/images", "/javascripts"], :root => "lib/auth-backend/apps/assets"
+          use Rack::Static, :urls => ["/stylesheets", "/images", "/javascripts", "/ico"], :root => "lib/auth-backend/apps/assets"
         end
 
         use Rack::Session::Cookie, secret: ENV['QS_COOKIE_SECRET'] || 'some-secret', key: 'qs_auth_backend_session', :expire_after => 2592000

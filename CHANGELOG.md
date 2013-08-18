@@ -1,3 +1,7 @@
+# 0.0.50 / Unreleased
+
+* Adds favicon
+
 # 0.0.49 / 2013-08-12
 
 * Adds getsentry.com exception tracking
