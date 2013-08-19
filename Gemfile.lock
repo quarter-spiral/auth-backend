@@ -36,6 +36,7 @@ PATH
       playercenter-client (= 0.0.5)
       qs-request-tracker (>= 0.0.2)
       rack (~> 1.4.5)
+      rack-ssl
       sentry-raven
       sinatra
       sinatra-activerecord
@@ -261,6 +262,8 @@ GEM
       multi_json (>= 1.3.6)
       rack (>= 1.1)
     rack-protection (1.5.0)
+      rack
+    rack-ssl (1.3.3)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)

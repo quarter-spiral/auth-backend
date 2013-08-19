@@ -4,6 +4,11 @@ require 'auth-backend'
 
 Auth::Backend::Apps.setup!
 
+if ENV['RACK_ENV'] == 'production'
+  require 'rack/ssl'
+  use Rack::SSL
+end
+
 if ENV['RUNS_ON_METASERVER'] && Auth::Backend.env == 'development'
   require 'auth-backend/metaserver'
   Auth::Backend::Metaserver.setup!

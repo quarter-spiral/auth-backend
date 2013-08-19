@@ -1,3 +1,7 @@
+# 0.0.52 / Unreleased
+
+* Forces SSL/HTTPS
+
 # 0.0.51 / 2013-08-18
 
 * Logs users in automatically after signups

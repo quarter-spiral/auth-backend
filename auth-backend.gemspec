@@ -40,4 +40,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'playercenter-client', '0.0.5'
   gem.add_dependency 'qs-request-tracker', '>= 0.0.2'
   gem.add_dependency 'sentry-raven'
+  gem.add_dependency 'rack-ssl'
 end
