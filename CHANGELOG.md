@@ -1,4 +1,4 @@
-# 0.0.52 / Unreleased
+# 0.0.52 / 2013-08-19
 
 * Forces SSL/HTTPS
 
