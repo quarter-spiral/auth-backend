@@ -35,6 +35,10 @@
             <td><%=h user.uuid %></td>
             <td><%= user.admin ? 'Admin' : 'User' %></td>
             <td>
+              <a href="/admin/users/<%= user.id %>/venue-identities" class="btn">
+                <i class="icon-tag"></i>
+              </a>
+
               <a href="/admin/users/<%= user.id %>/edit" class="btn">
                 <i class="icon-pencil"></i>
               </a>

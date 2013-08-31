@@ -82,6 +82,34 @@ module Auth::Backend
         end
       end
 
+      get '/users/:id/venue-identities' do
+        @user = User.find(params[:id])
+
+        erb :'admin/users/venue-identities/index'
+      end
+
+      get '/users/:id/venue-identities/:venue_identity_id/edit' do
+        @venue_identity = VenueIdentity.where(id: params[:venue_identity_id], user_id: params[:id]).first
+        redirect '/admin/users' and return unless @venue_identity
+
+        erb :'admin/users/venue-identities/edit'
+      end
+
+      put '/users/:id/venue-identities/:venue_identity_id' do
+        @venue_identity = VenueIdentity.where(id: params[:venue_identity_id], user_id: params[:id]).first
+        redirect '/admin/users' and return unless @venue_identity
+
+        @venue_identity.update_attributes(params[:venue_identity])
+
+        if @venue_identity.save
+          flash[:success] = "Identity saved."
+          redirect "/admin/users/#{@venue_identity.user.id}/venue-identities"
+        else
+          flash.now[:error] = "Could not save identity!"
+          erb :'admin/users/venue-identities/edit'
+        end
+      end
+
       delete '/users/:id' do
         @user = User.find(params[:id])
         @user.destroy

@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="span12">
+    <h2>Venue identities of <%=h @user.name %> (ID: <%= @user.id %> | UUID: <%= @user.uuid %>)</h2>
+  </div>
+</div>
+
+<% if @user.venue_identities.empty? %>
+No venue identities attached.
+<% else %>
+  <div class="row">
+    <div class="span12">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Venue</th>
+            <th>Venue ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Tools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @user.venue_identities.each do |venue_identity| %>
+            <tr>
+              <td><%=h venue_identity.venue %></td>
+              <td><%=h venue_identity.venue_id %></td>
+              <td><%=h venue_identity.name %></td>
+              <td><%=h venue_identity.email %></td>
+              <td>
+                <a href="/admin/users/<%= @user.id %>/venue-identities/<%= venue_identity.id %>/edit" class="btn">
+                  <i class="icon-pencil"></i>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+  	</div>
+  </div>
+<% end %>

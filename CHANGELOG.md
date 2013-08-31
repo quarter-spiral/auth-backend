@@ -1,3 +1,7 @@
+# 0.0.53 / Unreleased
+
+* Adds venue identity administration
+
 # 0.0.52 / 2013-08-19
 
 * Forces SSL/HTTPS

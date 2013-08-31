@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="span12">
+    <h1><%=h @venue_identity.venue %> identity of <%=h @venue_identity.user.name %></h1>
+
+    <form action="/admin/users/<%= @venue_identity.user.id %>/venue-identities/<%= @venue_identity.id %>" method="POST" class="form">
+      <input type="hidden" name="_method" value="put"/>
+
+      <%= form_field 'venue_identity', 'name', 'Name', @venue_identity.name %>
+
+      <%= form_field 'venue_identity', 'email', 'Email', @venue_identity.email %>
+
+      <button class="btn">Save <%= @venue_identity.venue %> identity</button>
+    </form>
+  </div>
+</div>
