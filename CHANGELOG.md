@@ -1,4 +1,4 @@
-# 0.0.53 / Unreleased
+# 0.0.53 / 2013-08-31
 
 * Adds venue identity administration
 
