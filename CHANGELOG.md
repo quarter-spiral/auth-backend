@@ -1,4 +1,4 @@
-# 0.0.54 / Unreleased
+# 0.0.54 / 2013-09-03
 
 * Fixes some API issues for EW notifications
 
