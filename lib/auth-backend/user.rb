@@ -38,7 +38,7 @@ module Auth::Backend
     end
 
     def venues
-      Hash[venue_identities.map {|vi| [vi.venue, {id: vi.venue_id, name: vi.name}]}]
+      Hash[venue_identities.map {|vi| [vi.venue, {id: vi.venue_id, name: vi.name, email: vi.email}]}]
     end
 
     def invited?

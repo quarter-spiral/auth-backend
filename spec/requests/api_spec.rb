@@ -52,9 +52,11 @@ describe "Authentication API" do
       data['uuid'].must_equal uuid
       data['venues'].must_equal(
         'facebook' => {'name' => @facebook_data['name'],
-                       'id' => @facebook_data['venue-id']},
+                       'id' => @facebook_data['venue-id'],
+                       'email' => @facebook_data['email']},
         'spiral-galaxy' => {'name' => @spiral_galaxy_data['name'],
-                            'id' => @spiral_galaxy_data['venue-id']}
+                            'id' => @spiral_galaxy_data['venue-id'],
+                            'email' => @spiral_galaxy_data['email']}
       )
     end
 
@@ -94,15 +96,17 @@ describe "Authentication API" do
           'uuid' => @user['uuid'],
           'venues' => {
             'facebook' => {'name' => @facebook_data['name'],
-                           'id' => @facebook_data['venue-id']},
+                           'id' => @facebook_data['venue-id'],
+                           'email' => @facebook_data['email']},
              'spiral-galaxy' => {'name' => @spiral_galaxy_data['name'],
-                                 'id' => @spiral_galaxy_data['venue-id']}
+                                 'id' => @spiral_galaxy_data['venue-id'],
+                                 'email' => @spiral_galaxy_data['email']}
           }
         },
         @user2['uuid'] => {
           'uuid' => @user2['uuid'],
           'venues' => {
-            'spiral-galaxy' => {'name' => 'Sam The Man', 'id' => '438957380'}
+            'spiral-galaxy' => {'name' => 'Sam The Man', 'id' => '438957380', 'email' => 'samman@example.com'}
           }
         },
         @user3['uuid'] => {

@@ -153,7 +153,7 @@ module Auth::Backend
         body = request.body
         body = body.read if body.respond_to?(:read)
 
-        uuids = JSON.parse(body)
+        uuids = JSON.parse(body.empty? ? params[:uuids] : body)
 
         prevent_access! if !system_level_privileges? && (uuids.size > 1 || uuids[0] != request_token.owner.uuid)
 

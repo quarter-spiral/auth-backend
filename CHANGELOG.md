@@ -1,3 +1,7 @@
+# 0.0.54 / Unreleased
+
+* Fixes some API issues for EW notifications
+
 # 0.0.53 / 2013-08-31
 
 * Adds venue identity administration
